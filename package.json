@@ -1,0 +1,33 @@
+{
+  "name": "feria-del-empleo-ucb",
+  "version": "1.0.0",
+  "description": "El sitio web de la Feria del Empleo está destinada a la interacción entre sus participantes: instituciones, estudiantes y/o graduados UCB, emprendimientos de graduados UCB, autoridades y administrativos",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.30.1",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.2.47",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.38.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "node-sass": "^8.0.0",
+    "sass-loader": "^13.2.2"
+  }
+}
