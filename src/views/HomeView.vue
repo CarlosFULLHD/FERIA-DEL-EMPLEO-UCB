@@ -11,6 +11,9 @@
         <hr />
       </div>
     </section>
+    <section>
+      <!--mas contenido-->
+    </section>
   </div>
 </template>
 
