@@ -19,13 +19,13 @@
             <dic class="icons">
               <font-awesome-icon :icon="['fad', 'calendar-days']" size="lg" style="--fa-primary-color: #71a1f4; --fa-secondary-color: #2e3748;" />
             </dic>
-            <router-link class="link" :to="{name:'Home'}">Home</router-link>
+            <router-link class="linkD" :to="{name:'Home'}">Home</router-link>
           </li>
         <li>
-          <router-link class="link" :to="{name:''}">Empresas</router-link>
+          <router-link class="linkD" :to="{name:''}">Empresas</router-link>
         </li>
         <li>
-          <router-link class="link" :to="{name:''}">Reuniones</router-link>
+          <router-link class="linkD" :to="{name:''}">Reuniones</router-link>
         </li> 
         </ul>
       </transition>
@@ -79,8 +79,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@import url(
+  'https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap'
+  );
+
 header{
-  background-color: rgba(0,0,0,0.8);
+  background-color: #001f3f;
+  opacity: 0.9;
   z-index:99;
   width: 100%;
   position: fixed;
@@ -112,12 +118,54 @@ header{
   }
   .link{
     font-size: 14px;
+    background: transparent;
+    border: none;
+    padding: 1em 1.5em;
+    color: #ffedd3;
+    text-transform: uppercase;
+    position: relative;
+    transition: .5s ease;
+    font-style: 'Raleway',normal;
+    /*font-size: 14px;
     transition: 0.5s ease all;
     padding-bottom: 4px;
     border-bottom: 1px solid transparent;
     &:hover{
-      color:#00afea;
-      border-color: #00afea;
+      color:#ffd717;
+      border-color: #ffd717;
+    }*/
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      width: 0;
+      background-color: #ffc506;
+      transition: .5s ease;
+    }
+    &:hover {
+      color: #1e1e2b;
+      transition-delay: .5s;
+    }
+    &:hover::before {
+      width: 100%;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 0;
+      width: 100%;
+      background-color: #ffc506;
+      transition: .4s ease;
+      z-index: -1;
+    }
+    &:hover::after {
+      height: 100%;
+      transition-delay: 0.4s;
+      color: aliceblue;
     }
   }
   .branding{
@@ -159,15 +207,39 @@ header{
     flex-direction: column;
     position: fixed;
     width: 100%;
-    max-width: 250px;
+    max-width: 200px;
     height: 100%;
-    background-color: #fff;
+    background-color: #ffd717;
+    opacity: 0.9;
     top: 0;
     left: 0;
+    padding-top: 80px;
     li{
       margin-left: 0;
-      .link{
+      .linkD{
+        font-size: 14px;
+        transition: 0.5s ease all;
+        padding-bottom: 4px;
+        border-bottom: 1px solid transparent;
         color: #000;
+        font-style: 'Raleway',normal;
+        text-decoration:none;
+        &:hover{
+          color:#0d63a5;
+        }
+        &::before{
+          background-color: #0d63a5;
+          content: "";
+          display: inline-block;
+          height: 1px;
+          margin-right: 5px;
+          transition: all .42s cubic-bezier(.25,.8,.25,1);
+          width: 0;
+        }
+        &:hover::before{
+          background-color: #0d63a5;
+          width: 3rem;
+        }
       }
     }
 
