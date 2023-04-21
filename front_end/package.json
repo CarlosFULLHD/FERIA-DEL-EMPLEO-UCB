@@ -1,8 +1,8 @@
 {
   "name": "front-end",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "Feria U.C.B",
+  "productName": "Feria U.C.B",
   "author": "ss",
   "private": true,
   "scripts": {

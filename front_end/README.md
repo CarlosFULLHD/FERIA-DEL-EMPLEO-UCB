@@ -1,6 +1,6 @@
-# Quasar App (front-end)
+# Feria U.C.B (front-end)
 
-A Quasar Project
+Feria U.C.B
 
 ## Install the dependencies
 ```bash

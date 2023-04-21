@@ -140,9 +140,9 @@ module.exports = configure(function (ctx) {
       
 
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
-        description: `A Quasar Project`,
+        name: `Feria U.C.B`,
+        short_name: `Feria U.C.B`,
+        description: `Feria U.C.B`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
