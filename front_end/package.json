@@ -1,41 +1,36 @@
 {
-  "name": "front-end",
-  "version": "0.0.1",
-  "description": "Feria U.C.B",
-  "productName": "Feria U.C.B",
-  "author": "ss",
-  "private": true,
+  "name": "feria-del-empleo-ucb",
+  "version": "1.0.0",
+  "description": "El sitio web de la Feria del Empleo está destinada a la interacción entre sus participantes: instituciones, estudiantes y/o graduados UCB, emprendimientos de graduados UCB, autoridades y administrativos",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0",
-    "dev": "quasar dev",
-    "build": "quasar build"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "axios": "^1.2.1",
-    "pinia": "^2.0.11",
-    "@quasar/extras": "^1.0.0",
-    "core-js": "^3.6.5",
-    "quasar": "^2.6.0",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "axios": "^1.3.6",
+    "core-js": "^3.30.1",
+    "vm-browserify": "^1.1.2",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vuetify": "^3.1.15",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@quasar/app-webpack": "^3.0.0"
-  },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
-  ],
-  "engines": {
-    "node": ">= 12.22.1",
-    "npm": ">= 6.13.4",
-    "yarn": ">= 1.21.1"
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.2.47",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.38.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "node-sass": "^8.0.0",
+    "sass-loader": "^13.2.2"
   }
 }
