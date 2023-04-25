@@ -1,6 +1,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 node_modules
+=======
+front_end\node_modules
+back_end\node_modules
+>>>>>>> origin/Frontend-backend
 =======
 front_end\node_modules
 back_end\node_modules
