@@ -1,9 +1,8 @@
 <template>
   <div class="app">
     <Navigation />
-    
+    <router-view />
   </div>
-  <router-view />
 </template>
 
 <script>

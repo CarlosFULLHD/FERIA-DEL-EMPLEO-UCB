@@ -89,7 +89,7 @@ header{
   opacity: 0.9;
   z-index:99;
   width: 100%;
-  position: fixed;
+  position: relative;
   transition: 0.5s ease all;
   color: #fff;
   nav{
