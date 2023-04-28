@@ -1,3 +1,5 @@
+//exportamos la conexion de la base de datos
+
 module.exports = {
     port : process.env.PORT || 5174,
     db: {
