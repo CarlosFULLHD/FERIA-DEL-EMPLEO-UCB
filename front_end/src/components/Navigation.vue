@@ -8,6 +8,7 @@
       <ul v-show="!mobile" class="navigation">
         <li><router-link class="link" :to="{name:'Home'}">Home</router-link></li>
         <li><router-link class="link" :to="{name:'Empresas'}">Empresas</router-link></li>
+        <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
         <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
         <li><router-link class="link" :to="{name:'Login'}">Login</router-link></li> 
         <li><router-link class="link" :to="{name:''}">Contactos</router-link></li>
@@ -24,6 +25,7 @@
             <router-link class="linkD" :to="{name:'Home'}">Home</router-link>
           </li>
           <li><router-link class="linkD" :to="{name:'Empresas'}">Empresas</router-link></li>
+          <li><router-link class="linkD" :to="{name:'Chat'}">Chat</router-link></li> 
           <li><router-link class="linkD" :to="{name:'Calendario'}">Calendario</router-link></li> 
           <li><router-link class="linkD" :to="{name:'Login'}">Login</router-link></li> 
           <li><router-link class="linkD" :to="{name:''}">Contactos</router-link></li>
