@@ -20,7 +20,7 @@
             </div>
           </div>
           <div class="input">
-            <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Escribe tu mensaje...">
+            <input type="text" v-model="newMessage" @keyup.enter="sendMessage" v-on:input="validateNumber" placeholder="Escribe tu mensaje...">
             <button class="send" @click="sendMessage">Enviar</button>
           </div>
         </div>
@@ -66,10 +66,26 @@
         this.selectedChat.messages.push(message);
         this.newMessage = "";
         setTimeout(() => {
-          const reply = { text: "I'm sorry, I didn't understand your message.", type: "bot" };
-          this.selectedChat.messages.push(reply);
+          if (this.newMessage === '1') {
+            const reply = { text: "Que tal este es mi link", type: "bot" };
+            this.selectedChat.messages.push(reply);
+          }
+          else if (this.newMessage == '2') {
+            const reply = { text: "Que tal esta es mi informacion de contacto 777XXXXX ", type: "bot" };
+            this.selectedChat.messages.push(reply);
+          }
+          else{
+            const reply = { text: "Lo siento, porfavor ingresa solo numeros", type: "bot" };
+            this.selectedChat.messages.push(reply);
+          }
         }, 1000);
+      },
+      validateNumber: function () {
+        if (this.selectedNumber !== '1' && this.selectedNumber !== '2') {
+          this.selectedNumber = '';
+        }
       }
+      
     }
   };
   </script>
