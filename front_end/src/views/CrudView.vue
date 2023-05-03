@@ -60,7 +60,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.calories"
-                      label="Calories"
+                      label="Empresas"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -70,7 +70,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.fat"
-                      label="Fat (g)"
+                      label="Descripcion"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -80,7 +80,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.carbs"
-                      label="Carbs (g)"
+                      label="Telefono"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -90,7 +90,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.protein"
-                      label="Protein (g)"
+                      label="Logo"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -165,15 +165,15 @@
       dialogDelete: false,
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'Empresas',
           align: 'start',
           sortable: false,
           value: 'name',
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Email', value: 'email' },
+        { text: 'Telefono', value: 'number' },
+        { text: 'Logo', value: 'img' },
+        { text: 'Ubicacion', value: 'direccion' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       desserts: [],
@@ -217,75 +217,13 @@
       initialize () {
         this.desserts = [
           {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
+            name: 'Banco Bisa',
+            email: 'bancobisa@gobo',
+            number: 64684800,
+            Logo: 24,
+            direccion: 'Miraflores av. Buch',
           },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-          },
+          
         ]
       },
 
