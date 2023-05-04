@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-
+    <ApiTest/>
     <section class="hero">
       <div class="hero-text container">
         <h4>Vue Responsive Nav Menu</h4>
@@ -20,10 +20,12 @@
 
 <script>
 // @ is an alias to /src
-
+import ApiTest from "@/components/TarjetasEmpresas.vue";
 export default {
   name: "HomeView",
-  components: {},
+  components: {
+    ApiTest,
+  },
 };
 </script>
 

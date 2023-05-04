@@ -1,0 +1,22 @@
+CREATE DATABASE IF NOT EXISTS feria;
+
+USE feria;
+
+CREATE TABLE instituciones (
+    instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre varchar(200)  NOT NULL,
+    email varchar(200)  NOT NULL,
+    institucion varchar(200)  NOT NULL,
+    telefono varchar(50)  NOT NULL,
+    resena varchar(280)  NOT NULL,
+    telefonowp varchar(50)  NOT NULL,
+    ubicacion varchar(280)  NOT NULL
+);
+DESCRIBE instituciones;
+
+INSERT INTO instituciones values 
+  (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
+  (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
+  (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
+
+SELECT * FROM employee;

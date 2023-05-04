@@ -13,6 +13,7 @@
             md="4"
             lg="3"
           >
+          v-for
           <v-hover v-slot="{ hover }">
             <div class="card">
             <v-card

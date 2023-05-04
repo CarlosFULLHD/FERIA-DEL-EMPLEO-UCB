@@ -1,48 +1,33 @@
-console.log("hello")
+import express from "express";
+import morgan from "morgan";
+import bodyParser from 'body-parser'// PROCESS JSON DATA VERY EASLY
+import cors from 'cors'
 
-// INCLUDING REQUIRED PROGRAMS FROM BIN
-const express = require('express')
-const bodyParser = require('body-parser')// PROCESS JSON DATA VERY EASLY
-const cors = require('cors')
-const morgan = require('morgan')
+import institucionesRoutes from "./routes/instituciones.routes.js";
+import indexRoutes from "./routes/index.routes.js";
 
+//Aqui es donde corre todo el backend
+//digamos carpeta 1
 
-// MYSQL CONNECTION
-const {sequelize} = require('./models')
-const config = require('./config/config')
+const app = express();
 
-
-
-// BUILDING AN EXPRESS SERVER
-const app = express()
-app.use(morgan('combined'))
+// Middlewares
+app.use(morgan("dev"));
+app.use(express.json());
 app.use(bodyParser.json())
 app.use(cors())
 
+// Routes+
 
-require('./routes')(app) // LINKING ROUTES END POINTS OF EXPRESS APPLICATION
-// GET METHOD EXAMPLE
-//app.get('/status', (req, res) => {
-//    res.send({
-//        message:"Hello world!"
-//    })
-//})
+//solo funcionara cuando usemos la ruta "localhost:3000/api/entidades"
 
+app.use("/", indexRoutes);
+//middleware para evitar que alguien no logueado no acceda,
+//es decir el admin tendra /api
+app.use("/api", institucionesRoutes);
 
-// POST METHOD EXAMPLE
-//app.post('/login', (req, res) => {
-//    res.send({
-//        message: `El usuario ${req.body.email} esta logeado`
-//    })
-//})
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Not found" });
+});
 
-// METHOD TO CONNECT TO THE DATABASE
-sequelize.sync()
-    .then (() => {
-        app.listen(config.port)
-        console.log(`El servidor inicio en ${config.port}`)
-    })
-
-
-//app.listen(process.env.PORT || 5174)
-
+export default app;

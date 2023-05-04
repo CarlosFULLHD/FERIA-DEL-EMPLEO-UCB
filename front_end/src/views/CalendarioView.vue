@@ -100,6 +100,7 @@
                 <v-btn @click="deleteEvent(selectedEvent.id)" icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
+                <!-- eslint-disable-next-line -->
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
