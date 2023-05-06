@@ -4,59 +4,58 @@ import { pool } from "../db.js";
 //con el export mandamos estas funciones asincronas a la carpeta 2
 
 //crear institucion
-export const createCuenta = async (req, res) => {
+export const createImg = async (req, res) => {
     try {
       //aqui se obtienen esos datos
-      const {cuenta,pwd,superusuario,email} = req.body;
+      const {url,instituciones_instituciones_id} = req.body;
       const [rows] = await pool.query(
         
-        "INSERT INTO cuenta(cuenta_id, cuenta,pwd,superusuario,email) VALUES (NULL, ?, ?, ?, ?)",
-        [cuenta,pwd,superusuario,email]
+        "INSERT INTO instituciones_tiene_imagenes(imagenin_id, url,instituciones_instituciones_id) VALUES (NULL, ?, ?)",
+        [imagenin_id, url,instituciones_instituciones_id]
       );
       res.status(201).json({
-          cuenta_id: rows.insertId,
-          cuenta,
-          pwd,
-          superusuario,
-          email,
+        imagenin_id: rows.insertId,
+          url,
+          instituciones_instituciones_id
       });
     } catch (error) {
       return res.status(500).json({error, message: "Algo fue mal en la creacion" });
     }
   };
 //obtener institucion por id
-export const getCuenta = async (req, res) => {
+export const getImg = async (req, res) => {
     try {
       //creamos una const para guardar el parametro 
-      const { cuenta,pwd } = req.params;
+      const { id } = req.params;
       const [rows] = await pool.query(
-        "SELECT * FROM cuenta WHERE BINARY cuenta = ? and BINARY pwd = ?",
-        [cuenta,pwd]
+        "SELECT * FROM instituciones_tiene_imagenes WHERE imagenin_id = ?",
+        [id]
       );
   
       if (rows.length <= 0) {
-        return res.status(404).json({ message: "No existe la cuenta" });
+        return res.status(404).json({ message: "No existe la imagen " });
       }
   
       res.json(rows[0]);
     } catch (error) {
       return res
         .status(500)
-        .json({error, message: "Algo fue mal al verificar la cuenta" });
+        .json({error, message: "Algo fue mal al verificar la imagen" });
     }
   };
 
+  export const getImagenes = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM instituciones_tiene_imagenes");
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Algo fue mal" });
+  }
+};
 
   //OTROS================================================================
 
-// export const getCuentas = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query("SELECT * FROM cuenta");
-//     res.json(rows);
-//   } catch (error) {
-//     return res.status(500).json({ message: "Algo fue mal" });
-//   }
-// };
+
 
 // //se necesita id para le delete
 // export const deleteInstitucion = async (req, res) => {

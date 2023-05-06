@@ -46,16 +46,26 @@ CREATE TABLE cuenta (
 
 
 -- Table: Institucion_tiene_links para formularios, linkedin otros
+
 CREATE TABLE Institucion_tiene_links (
-    linkin bigint  NOT NULL,
+    linkin bigint NOT NULL AUTO_INCREMENT,
     url varchar(280)  NOT NULL,
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT Institucion_tiene_links_pk PRIMARY KEY (linkin)
 );
 
+-- Table: instituciones_tiene_imagenes
+CREATE TABLE instituciones_tiene_imagenes (
+    imagenin_id bigint  NOT NULL AUTO_INCREMENT,
+    url varchar(255)  NOT NULL,
+    instituciones_instituciones_id bigint  NOT NULL,
+    CONSTRAINT instituciones_tiene_imagenes_pk PRIMARY KEY (imagenin_id),
+    CONSTRAINT instituciones_instituciones_id FOREIGN KEY(instituciones_instituciones_id) REFERENCES (instituciones)
+);
+
 -- Table: instituciones_tiene_videos
 CREATE TABLE instituciones_tiene_videos (
-    videoin_id bigint  NOT NULL,
+    videoin_id bigint  NOT NULL AUTO_INCREMENT,
     videos blob  NOT NULL,
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT instituciones_tiene_videos_pk PRIMARY KEY (videoin_id)
