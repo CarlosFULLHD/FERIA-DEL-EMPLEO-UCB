@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'// PROCESS JSON DATA VERY EASLY
 import cors from 'cors'
 
 import institucionesRoutes from "./routes/instituciones.routes.js";
+import cuentaRoutes from "./routes/cuenta.routes.js";
 import indexRoutes from "./routes/index.routes.js";
 
 //Aqui es donde corre todo el backend
@@ -25,6 +26,8 @@ app.use("/", indexRoutes);
 //middleware para evitar que alguien no logueado no acceda,
 //es decir el admin tendra /api
 app.use("/api", institucionesRoutes);
+app.use("/api", cuentaRoutes);
+
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
