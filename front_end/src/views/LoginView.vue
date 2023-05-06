@@ -122,10 +122,6 @@ export default {
       console.log(correo)
 
 
-      cuenta = "PERRO"
-      superusuario = true
-      correo = "NEGRO"
-
     }
 
 
