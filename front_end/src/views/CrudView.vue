@@ -128,8 +128,12 @@
                 Crear
               </v-btn>
             </v-card-actions>
+
+            
           </v-card>
         </v-dialog>
+
+        <!-- DELETE ITEM DIALOG -->
         <v-dialog v-model="dialogDelete" max-width="550px">
           <v-card>
             <v-card-title class="text-h5">¿Seguro que quiere borrar esta institución?</v-card-title>
@@ -141,6 +145,118 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        
+
+        <!-- ADD MEDIA DIALOG -->
+        <v-dialog v-model="dialogMedia" max-width="550px">
+          <v-card>
+            <v-toolbar flat color="#001f3f" dark>
+              <v-toolbar-title>Multimedia y links</v-toolbar-title>
+            </v-toolbar>
+            <v-tabs vertical>
+              <v-tab>
+                <v-icon left>
+                  mdi-image-outline
+                </v-icon>
+                Imagenes
+              </v-tab>
+              <v-tab>
+                <v-icon left>
+                  mdi-youtube
+                </v-icon>
+                Videos
+              </v-tab>
+              <v-tab>
+                <v-icon left>
+                  mdi-link-plus
+                </v-icon>
+                Links
+              </v-tab>
+
+              <!-- IMAGE TAB -->
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="closeMedia"
+                      >
+                        Cancelar
+                      </v-btn>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="saveImage"
+                      >
+                        Guardar imagenes
+                      </v-btn>
+                    <vue-dropzone 
+                      id="imgDropzone" 
+                      ref="imgDropzone" 
+                      :options="dropzoneOptions" 
+                      @vdropzone-complete="afterComplete">
+                    </vue-dropzone>
+                    <div v-if="images.length >0">
+                      <div v-for="image in images" :key="image.src">
+                        <img :src="image.src">
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+
+              <!-- VIDEO TAB -->
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                   
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="closeMedia"
+                      >
+                        Cancelar
+                      </v-btn>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="save"
+                      >
+                        Guardar videos
+                      </v-btn>
+
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                   
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="closeMedia"
+                      >
+                        Cancelar
+                      </v-btn>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="save"
+                      >
+                        Guardar links
+                      </v-btn>
+
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+            </v-tabs>
+          </v-card>
+        </v-dialog>
+
+
+        
       </v-toolbar>
     </template>
 
@@ -157,7 +273,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="editItem(item)"
+        @click="mediaItem(item)"
       >
       mdi mdi-file-image-plus
       </v-icon>
@@ -168,11 +284,9 @@
       >
         mdi-delete
       </v-icon>
-
-
-
-
     </template>
+
+    
     <template v-slot:no-data>
       <v-btn
         color="primary"
@@ -181,6 +295,8 @@
         Reiniciar
       </v-btn>
     </template>
+
+
   </v-data-table>
 </v-app>
 </div>
@@ -189,11 +305,40 @@
 
 <script>
 import Instituciones from '@/services/Instituciones'
-
+import vue2Dropzone from "vue2-dropzone"
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+let uuid = require("uuid")
+import firebase from "firebase";
   export default {
+    components: {
+      vueDropzone: vue2Dropzone
+    },
     data: () => ({
       dialog: false,
       dialogDelete: false,
+      dialogMedia: false,
+      tab: null,
+      images: [],
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        thumbnailWidth: 250,
+        thumbnailHeight: 250,
+        addRemoveLinks: true,
+        maxFiles:5,
+        acceptedFiles: ".jpg, .jpeg, .png",
+        dictDefaultMessage: 'Arrastra archivos aquí o haz clic para subir.',
+        dictFallbackMessage: 'Tu navegador no soporta arrastrar y soltar para subir archivos.',
+        dictFallbackText: 'Por favor, utiliza el formulario de reserva de abajo para subir tus archivos.',
+        dictFileTooBig: 'El archivo es demasiado grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.',
+        dictInvalidFileType: 'No puedes subir archivos de este tipo.',
+        dictResponseError: 'El servidor respondió con {{statusCode}} código.',
+        dictCancelUpload: 'Cancelar subida',
+        dictCancelUploadConfirmation: '¿Estás seguro que quieres cancelar esta subida?',
+        dictRemoveFile: 'Eliminar archivo',
+        dictMaxFilesExceeded: 'No puedes subir más archivos.',
+        dictUploadCanceled: 'Subida cancelada',
+      
+      },
       headers: [
         {
           text: 'Institución',
@@ -247,6 +392,9 @@ import Instituciones from '@/services/Instituciones'
       dialog (val) {
         val || this.close()
       },
+      dialogMedia(val) {
+        val || this.closeMedia()
+      },
       dialogDelete (val) {
         val || this.closeDelete()
       },
@@ -282,6 +430,12 @@ import Instituciones from '@/services/Instituciones'
         this.dialog = true
       },
 
+      mediaItem(item){
+        this.editedIndex = this.axiosJson.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialogMedia = true
+      },
+
       deleteItem (item) {
         this.editedIndex = this.axiosJson.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -296,7 +450,7 @@ import Instituciones from '@/services/Instituciones'
         this.closeDelete()
       },
 
-      // ACTUALIZAR INSTITUCIÓN
+      // CERRAR ACTUALIZAR INSTITUCIÓN
       close () {
         this.dialog = false
         this.$nextTick(async () => {
@@ -318,6 +472,15 @@ import Instituciones from '@/services/Instituciones'
           } 
           this.editedItem = Object.assign({}, this.defaultItem)
           
+          this.editedIndex = -1
+        })
+      },
+
+      closeMedia (){
+        this.dialogMedia = false
+        this.$refs.imgDropzone.removeAllFiles();
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
       },
@@ -361,6 +524,37 @@ import Instituciones from '@/services/Instituciones'
         }
         this.close()
       },
-    },
+
+      async saveImage () {
+        console.log("HOLA")
+        this.$refs.imgDropzone.processQueue();
+
+        const files = this.$refs.imgDropzone.getAcceptedFiles();
+
+
+        var metaData = {
+          contentType: "image/png"
+        }
+
+        console.log(files.length)
+
+        files.forEach(async (element)=> {
+          const imageName = uuid.v1();
+          const storageRef = firebase.storage().ref();
+          const imageRef = storageRef.child(`images/${imageName}.png`)
+
+          await imageRef.put(element, metaData);
+
+          const downloadUrl = await imageRef.getDownloadURL()
+          
+          this.images.push({src: downloadUrl});
+          console.log(this.images)
+          this.$refs.imgDropzone.removeFile(element);
+          console.log(element)
+        })
+
+
+      },
+    }
   }
 </script>

@@ -13,6 +13,7 @@
         <li><router-link class="link" :to="{name:'Login'}">Login</router-link></li> 
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
         <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
+        
       </ul>
       <div class="icon">
         <i @click="toggleMobileNav" v-show="mobile" class="far fa-bars" :class="{'icon-active' : mobileNav}"></i>
