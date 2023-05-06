@@ -45,9 +45,9 @@ firebase.initializeApp(firebaseConfig);
 
 
 
-export var cuenta = ''
-export var superusuario = false
-export var correo = ''
+export let cuenta = 'hola'
+export let superusuario = false
+export let correo = 'si'
 
 new Vue({
   router,

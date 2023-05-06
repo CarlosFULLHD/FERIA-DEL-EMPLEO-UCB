@@ -4,7 +4,7 @@
 <v-app>
   <v-sheet width="300" class="mx-auto">
     <h1>Creación de cuenta</h1>
-    <v-form ref="form" @submit.prevent="submit">
+    <v-form ref="form" @submit.prevent="loginForm">
       <v-text-field
         v-model="cuenta"
         hint="Nombre de cuenta"
@@ -28,90 +28,23 @@
         clearable
         @click:append="show1 = !show1"
       ></v-text-field>
-      
-      <v-text-field
-        v-model="confpassword"
-        :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.confirmPassword]"
-        :type="show2 ? 'text' : 'password'"
-        prepend-icon="mdi mdi-lock-alert-outline"
-        hint="Al menos 8 caracteres "
-        label="Confirmar Contraseña"
-        clearable
-        @click:append="show2 = !show2"
-      ></v-text-field>
-
-      <v-text-field
-        v-model="email"
-        prepend-icon="mdi mdi-email-outline"
-        :rules="[rules.required, rules.email]"
-        label="E-mail"
-        clearable
-      >
-
-        
-      </v-text-field>
-
-
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || '¡Debes aceptar los términos para continuar!']"
-        required
-        color="green">
-      <template v-slot:label>
-              <div @click.stop="">
-                ¿Aceptas los 
-                <a
-                  href="#"
-                  @click.prevent="terminos = true"
-                >términos</a>
-                y 
-                <a
-                  href="#"
-                  @click.prevent="condiciones = true"
-                >condiciones?</a>
-              </div>
-      </template>
-
-
-      </v-checkbox>
-
-
-
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="validate"
-      >
-        Validate
-      </v-btn>
-  
+    
       <v-btn
         color="error"
         class="mr-4"
         @click="reset"
       >
-        Reset Form
+        Limpiar
+      </v-btn>
+
+      <v-btn
+        color="success"
+        class="mr-4"
+        @click="loginForm"
+      >
+        Login
       </v-btn>
   
-      <v-btn
-        color="warning"
-        @click="resetValidation"
-      >
-        Reset Validation
-      </v-btn>
-
-
-
-      <v-btn
-      :disabled="!formIsValid"
-      text
-      color="primary"
-      type="submit"
-      >
-      Crear cuenta
-      </v-btn>
     </v-form>
   </v-sheet>
 </v-app>
@@ -134,12 +67,14 @@
   </style>
 
 <script>
+
+import { cuenta, superusuario, correo } from '@/main'
 export default {
   name:"LoginView",
     data () {
 
       const defaultForm = Object.freeze({
-        cuenta:'',
+        account:'',
         password: '',
         confpassword: '',
         email:'',
@@ -179,6 +114,22 @@ export default {
     resetValidation () {
       this.$refs.form.resetValidation()
     },
+
+    async loginForm(){
+      console.log("ESTAS EN LOGIN")
+      console.log(cuenta)
+      console.log(superusuario)
+      console.log(correo)
+
+
+      cuenta = "PERRO"
+      superusuario = true
+      correo = "NEGRO"
+
+    }
+
+
+
   },
 }
 

@@ -34,7 +34,7 @@
 <script>
 // @ is an alias to /src
 import ApiTest from "@/components/TarjetasEmpresas.vue";
-
+import { cuenta, superusuario, correo } from '@/main'
 export default {
   name: "HomeView",
   components: {
@@ -63,6 +63,19 @@ export default {
       ],
     };
   },
+  created() {
+      this.initialize();
+      
+  },
+  methods: {
+    initialize(){
+      console.log("ESTAS EN HOME")
+      console.log(cuenta)
+      console.log(superusuario)
+      console.log(correo)
+    }
+  }
+
 };
 </script>
 

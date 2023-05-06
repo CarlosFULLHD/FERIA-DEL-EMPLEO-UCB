@@ -10,7 +10,6 @@ export const createCuenta = async (req, res) => {
       const {cuenta,pwd,superusuario,email} = req.body;
       const [rows] = await pool.query(
         
-        "INSERT INTO instituciones(cuenta_id, cuenta,pwd,superusuario,email) VALUES (NULL,?, ?, ?, ?)",
         "INSERT INTO cuenta(cuenta_id, cuenta,pwd,superusuario,email) VALUES (NULL, ?, ?, ?, ?)",
         [cuenta,pwd,superusuario,email]
       );
