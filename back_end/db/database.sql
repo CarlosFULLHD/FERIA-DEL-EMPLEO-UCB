@@ -110,7 +110,7 @@ CREATE TABLE instituciones_tiene_imagenes (
 -- Table: instituciones_tiene_videos
 CREATE TABLE instituciones_tiene_videos (
     videoin_id bigint  NOT NULL AUTO_INCREMENT,
-    videos blob  NOT NULL,
+    url varchar(255) NOT NULL,
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT instituciones_tiene_videos_pk PRIMARY KEY (videoin_id)
 );

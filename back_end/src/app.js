@@ -6,8 +6,9 @@ import cors from 'cors'
 import institucionesRoutes from "./routes/instituciones.routes.js";
 import cuentaRoutes from "./routes/cuenta.routes.js";
 import indexRoutes from "./routes/index.routes.js";
-import imagenRoutes from "./routes/img.routes.js";
 import inst_linkRoutes from "./routes/inst_links.routes.js";
+import inst_imagesRoutes from "./routes/inst_img.routes.js";
+import inst_videosRoutes from "./routes/inst_videos.routes.js";
 //Aqui es donde corre todo el backend
 //digamos carpeta 1
 
@@ -30,8 +31,10 @@ app.use("/", indexRoutes);
 //Se llaman a todas las RUTAS
 app.use("/api", institucionesRoutes);
 app.use("/api", cuentaRoutes);
-app.use("/api", imagenRoutes);
+
 app.use("/api", inst_linkRoutes);
+app.use("/api", inst_imagesRoutes);
+app.use("/api", inst_videosRoutes);
 
 
 app.use((req, res, next) => {
