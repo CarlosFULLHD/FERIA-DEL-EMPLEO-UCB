@@ -6,6 +6,7 @@ import cors from 'cors'
 import institucionesRoutes from "./routes/instituciones.routes.js";
 import cuentaRoutes from "./routes/cuenta.routes.js";
 import indexRoutes from "./routes/index.routes.js";
+import imagenRoutes from "./routes/img.routes.js";
 
 //Aqui es donde corre todo el backend
 //digamos carpeta 1
@@ -27,6 +28,7 @@ app.use("/", indexRoutes);
 //es decir el admin tendra /api
 app.use("/api", institucionesRoutes);
 app.use("/api", cuentaRoutes);
+app.use("/api", imagenRoutes);
 
 
 app.use((req, res, next) => {

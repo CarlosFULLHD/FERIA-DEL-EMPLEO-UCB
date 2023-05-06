@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // GET para que te de los datos de UNA SOLA CUENTA - se necesita ID
-router.get("/cuenta/:id", getCuenta);
+router.get("/cuenta/:cuenta/:pwd", getCuenta);
 // INSERTAR/Crear una cuenta nueva 
 router.post("/cuenta", createCuenta);
 
