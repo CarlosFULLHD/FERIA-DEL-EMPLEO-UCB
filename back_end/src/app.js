@@ -13,8 +13,7 @@ import institucionesJOINRoutes from "./routes/inst_join.routes.js";
 import institucionescalendarioRoutes from "./routes/calendario.routes.js"
 import charlasRoutes from "./routes/charlas.routes.js"
 import charlaslinksRoutes from "./routes/char_links.routes.js"
-//Aqui es donde corre todo el backend
-//digamos carpeta 1
+//Carpeta 1
 
 const app = express();
 
@@ -24,24 +23,25 @@ app.use(express.json());
 app.use(bodyParser.json())
 app.use(cors())
 
-// Routes+
-
-//solo funcionara cuando usemos la ruta "localhost:3000/api/entidades"
-
 app.use("/", indexRoutes);
-//middleware para evitar que alguien no logueado no acceda,
-//es decir el admin tendra /api
 
-//Se llaman a todas las RUTAS
+//Para instituciones CRUD
 app.use("/api", institucionesRoutes);
+//Para cuenta login
 app.use("/api", cuentaRoutes);
 
+//Para instituciones link, imagenes, videos
 app.use("/api", inst_linkRoutes);
 app.use("/api", inst_imagesRoutes);
 app.use("/api", inst_videosRoutes);
+
+//Para las tarjetas
 app.use("/api", institucionesJOINRoutes);
+//pal calendario checkbox
 app.use("/api", institucionescalendarioRoutes);
+//Para charlas
 app.use("/api", charlasRoutes);
+//Para link de las charlas
 app.use("/api", charlaslinksRoutes);
 
 app.use((req, res, next) => {
