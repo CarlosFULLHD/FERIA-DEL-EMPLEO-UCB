@@ -70,7 +70,7 @@ export const createInstituciones = async (req, res) => {
       telefono,
       resena,
       telefonowp,
-      ubicacion,
+      ubicacion
     });
   } catch (error) {
     return res.status(500).json({error, message: "Algo fue mal en la creacion" });
