@@ -143,3 +143,45 @@ ALTER TABLE instituciones_tiene_imagenes ADD CONSTRAINT instituciones_tiene_imag
 -- Reference: instituciones_tiene_videos_instituciones (table: instituciones_tiene_videos)
 ALTER TABLE instituciones_tiene_videos ADD CONSTRAINT instituciones_tiene_videos_instituciones FOREIGN KEY instituciones_tiene_videos_instituciones (instituciones_instituciones_id)
     REFERENCES instituciones (instituciones_id);    
+
+
+
+--PRUEBITAS:
+INSERT INTO instituciones_tiene_imagenes values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+
+INSERT INTO instituciones_tiene_videos values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+INSERT INTO Institucion_tiene_links values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+
+--Querys PRO
+--join maestro
+SELECT i.instituciones_id, i.nombre, i.email, i.institucion,  i.telefono, i.resena, i.telefonowp , i.ubicacion,
+l.linkin,l.url, m.imagenin_id, m.url, v.videoin_id, v.url,
+c.charlas_id , c.nombrecharla ,c.link,c.fechaInicio ,c.fechaFina ,c.Cupos_charla,c.Cupos_disponibles,c.instituciones_instituciones_id
+FROM instituciones i
+INNER JOIN Institucion_tiene_links l
+ON i.instituciones_id=l.instituciones_instituciones_id 
+INNER JOIN instituciones_tiene_imagenes m
+ON m.instituciones_instituciones_id=i.instituciones_id
+INNER JOIN instituciones_tiene_videos v
+ON v.instituciones_instituciones_id=i.instituciones_id
+INNER JOIN charlas c
+ON c.instituciones_instituciones_id=i.instituciones_id
+ORDER BY i.instituciones_id;
