@@ -33,13 +33,13 @@ TRUNCATE TABLE INSTITUCIONES_TIENE_IMAGENES;
                                             
 											
 
---==================================================================================
+
 -- Table: cuenta
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
     cuenta varchar(200)  NOT NULL,
     pwd varchar(200)  NOT NULL,
-    superusuario bool  NOT NULL,
+    superusuario int  NOT NULL,
     email varchar(200)  NOT NULL,
     CONSTRAINT cuenta_pk PRIMARY KEY (cuenta_id)
 );

@@ -319,6 +319,7 @@ import firebase from "firebase";
       dialogMedia: false,
       tab: null,
       images: [],
+      institucion_id : -1,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 250,
@@ -433,6 +434,7 @@ import firebase from "firebase";
       mediaItem(item){
         this.editedIndex = this.axiosJson.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        this.institucion_id = this.editedItem.institucionid
         this.dialogMedia = true
       },
 
@@ -458,7 +460,6 @@ import firebase from "firebase";
           const instId = this.editedItem.institucionid
           
           if (typeof instId !== "undefined"){
-            console.log(this.editedItem)
             const dataUp = {
               nombre: this.editedItem.institucion,
               email: this.editedItem.email,
@@ -525,18 +526,19 @@ import firebase from "firebase";
         this.close()
       },
 
-      async saveImage () {
-        console.log("HOLA")
+
+      // SAVE IMAGE INTO FIREBASE AND MYSQL 
+      saveImage () {
         this.$refs.imgDropzone.processQueue();
 
         const files = this.$refs.imgDropzone.getAcceptedFiles();
 
-
+        var idApi = this.institucion_id
+        this.institucion_id -1
         var metaData = {
           contentType: "image/png"
         }
 
-        console.log(files.length)
 
         files.forEach(async (element)=> {
           const imageName = uuid.v1();
@@ -546,14 +548,9 @@ import firebase from "firebase";
           await imageRef.put(element, metaData);
 
           const downloadUrl = await imageRef.getDownloadURL()
+          console.log(` ID: ${idApi} --> URL : ${downloadUrl}`)
           
-          this.images.push({src: downloadUrl});
-          console.log(this.images)
-          this.$refs.imgDropzone.removeFile(element);
-          console.log(element)
         })
-
-
       },
     }
   }
