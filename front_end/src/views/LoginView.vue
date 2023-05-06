@@ -120,8 +120,6 @@ export default {
       console.log(cuenta)
       console.log(superusuario)
       console.log(correo)
-
-
     }
 
 

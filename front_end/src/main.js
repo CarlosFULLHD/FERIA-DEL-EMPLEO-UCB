@@ -6,9 +6,7 @@ import VueTextareaAutosize from 'vue-textarea-autosize'
 //import firebase from 'firebase/app'
 //import 'firebase/firestore'
 import firebase from 'firebase'
-
-
-
+import store from '@/store'
 
 Vue.use(VueTextareaAutosize); // VUE TEXT AREA INITIALIZER
 
@@ -45,12 +43,9 @@ firebase.initializeApp(firebaseConfig);
 
 
 
-export let cuenta = 'hola'
-export let superusuario = false
-export let correo = 'si'
-
 new Vue({
   router,
   vuetify,
+  store,
   render: h => h(App)
 }).$mount('#app')
