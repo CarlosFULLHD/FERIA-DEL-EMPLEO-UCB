@@ -10,6 +10,9 @@ import inst_linkRoutes from "./routes/inst_links.routes.js";
 import inst_imagesRoutes from "./routes/inst_img.routes.js";
 import inst_videosRoutes from "./routes/inst_videos.routes.js";
 import institucionesJOINRoutes from "./routes/inst_join.routes.js";
+import institucionescalendarioRoutes from "./routes/calendario.routes.js"
+import charlasRoutes from "./routes/charlas.routes.js"
+import charlaslinksRoutes from "./routes/char_links.routes.js"
 //Aqui es donde corre todo el backend
 //digamos carpeta 1
 
@@ -37,7 +40,9 @@ app.use("/api", inst_linkRoutes);
 app.use("/api", inst_imagesRoutes);
 app.use("/api", inst_videosRoutes);
 app.use("/api", institucionesJOINRoutes);
-
+app.use("/api", institucionescalendarioRoutes);
+app.use("/api", charlasRoutes);
+app.use("/api", charlaslinksRoutes);
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
