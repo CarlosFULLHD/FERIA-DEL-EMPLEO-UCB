@@ -3,7 +3,7 @@
 
 <v-app>
   <v-sheet width="300" class="mx-auto">
-    <h1>Creación de cuenta</h1>
+    <h1>Iniciar Sesion</h1>
     <v-form ref="form" @submit.prevent="loginForm">
       <v-text-field
         v-model="cuenta"
@@ -69,6 +69,7 @@
 <script>
 
 import { cuenta, superusuario, correo } from '@/main'
+import Cuentas from '@/services/Cuenta'
 export default {
   name:"LoginView",
     data () {
@@ -114,6 +115,24 @@ export default {
     resetValidation () {
       this.$refs.form.resetValidation()
     },
+
+        async Verificarcuenta(){
+          //  aqui muere 
+          console.log(this.cuenta)
+          console.log(this.password)
+
+          var superU = (this.checkbox == true)? 1:0
+          console.log(superU)
+          console.log(this.email)
+            const dataUp = {
+              cuenta: this.cuenta,
+              pwd: this.password,
+              superusuario: superU,
+              email: this.email
+            }
+            await Cuentas.crearCuenta(dataUp)
+        },
+
 
     async loginForm(){
       console.log("ESTAS EN LOGIN")
