@@ -170,6 +170,13 @@ INSERT INTO Institucion_tiene_links values
 (5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
 (6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
 
+INSERT INTO charlas values 
+(1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
+(2,'charla1', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),
+(3,'charla1', 'link zoom 123123qwe','2023-05-6 19:50:00','2023-05-6 20:00:00',256,256,2),
+(4,'charla1', 'link zoom 123123qwe','2023-05-7 16:00:00','2023-05-7 18:00:00',256,256,3),
+(5,'charla1', 'link zoom 123123qwe','2023-05-7 18:00:00','2023-05-7 20:00:00',256,256,3);
+
 --Querys PRO
 --join maestro
 SELECT i.instituciones_id, i.nombre, i.email, i.institucion,  i.telefono, i.resena, i.telefonowp , i.ubicacion,
