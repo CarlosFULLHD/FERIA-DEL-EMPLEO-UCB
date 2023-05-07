@@ -8,6 +8,7 @@ import EmpresasView from "../views/EmpresasView.vue";
 import ChatsView from "../views/ChatsView.vue";
 import CrudView from "../views/CrudView.vue";
 import ContactoView from "../views/ContactoView.vue";
+import TestView from '@/views/TestView.vue'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes = [
     path: "/contacto",
     name: "Contacto",
     component: ContactoView,
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: TestView
   },
 ]
 

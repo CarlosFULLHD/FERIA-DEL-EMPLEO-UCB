@@ -56,14 +56,15 @@ import { pool } from "../db.js";
 export const createInstlinks = async (req, res) => {
   try {
     //aqui se obtienen esos datos
-    const {url, instituciones_instituciones_id} = req.body;
+    const {llave, url, instituciones_instituciones_id} = req.body;
     const [rows] = await pool.query(
       //FALTA AÑADIR subsector_subsector_id FK, logo (blob)
-      "INSERT INTO Institucion_tiene_links(linkin, url, instituciones_instituciones_id) VALUES (NULL,?, ?)",
-      [url, instituciones_instituciones_id]
+      "INSERT INTO institucion_tiene_links(linkin,llave, url, instituciones_instituciones_id) VALUES (NULL,?,?,?)",
+      [llave,url, instituciones_instituciones_id]
     );
     res.status(201).json({
         linkin: rows.insertId,
+        llave,
         url, 
         instituciones_instituciones_id
     });

@@ -148,7 +148,7 @@
         
 
         <!-- ADD MEDIA DIALOG -->
-        <v-dialog v-model="dialogMedia" max-width="550px">
+        <v-dialog v-model="dialogMedia" max-width="850px">
           <v-card>
             <v-toolbar flat color="#001f3f" dark>
               <v-toolbar-title>Multimedia y links</v-toolbar-title>
@@ -176,6 +176,7 @@
               <!-- IMAGE TAB -->
               <v-tab-item>
                 <v-card flat>
+                 
                   <v-card-text>
                     <v-btn
                         color="blue darken-1"
@@ -191,6 +192,12 @@
                       >
                         Guardar imagenes
                       </v-btn>
+
+
+                      <v-card-title class="text-h5 grey lighten-2">
+                        Añadir Imagenes
+                      </v-card-title>
+                      <v-divider ></v-divider>
                     <vue-dropzone 
                       id="imgDropzone" 
                       ref="imgDropzone" 
@@ -205,6 +212,7 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
+
 
               <!-- VIDEO TAB -->
               <v-tab-item>
@@ -221,14 +229,52 @@
                       <v-btn
                         color="blue darken-1"
                         text
-                        @click="save"
+                        @click="saveVideo"
                       >
                         Guardar videos
                       </v-btn>
 
+                      <v-divider ></v-divider>
+                    <v-card>
+                      <v-card-title class="text-h5 grey lighten-2">
+                        Añadir Videos (Youtube)
+                      </v-card-title>
+                        <v-card-text>
+                        <v-text-field
+                            v-model="newString"
+                            label="Copiar URL"
+                            outlined
+                            dense
+                            @keydown.enter="addString"
+                        ></v-text-field>
+                        <v-btn @click="addString" color="primary">Añadir</v-btn>
+                        <v-divider></v-divider>
+                        <v-list>
+                            <v-list-item v-for="(video, index) in videosArray" :key="index">
+                                <v-list-item-content>
+                                    <div>
+                                        <LazyYoutube
+                                            ref="youtubeLazyVideo"
+                                            :src="video"
+                                            max-width="720px"
+                                            aspect-ratio="16:9"
+                                            thumbnail-quality="standard"
+                                            />
+                                    </div>
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                            <v-btn icon @click="deleteString(index)">
+                                            <v-icon color="error">mdi-delete</v-icon>
+                                            </v-btn>
+                                        </v-list-item-action>
+                                    </v-list-item>
+                                </v-list>
+                                </v-card-text>
+                            </v-card>
                   </v-card-text>
                 </v-card>
               </v-tab-item>
+
 
               <!-- LINKS TAB -->
               <v-tab-item>
@@ -245,10 +291,84 @@
                       <v-btn
                         color="blue darken-1"
                         text
-                        @click="save"
+                        @click="saveLinks"
                       >
                         Guardar links
                       </v-btn>
+                      <v-divider ></v-divider>
+
+
+
+                      <v-card>
+                      <v-card-title class="text-h5 grey lighten-2">
+                        Añadir Links
+                      </v-card-title>
+
+                      <v-card>
+                          <v-card-text>
+                          <v-row>
+                          <v-col cols="6">
+                            <v-combobox
+                            outlined
+                              dense
+                              label="Tipo de link"
+                              :items="Object.keys(keyLink)"
+                              v-model="selectedItem"
+                            >
+
+                            <template #selection="{ item }">
+                              <v-list-item-avatar>
+                                <v-icon :class="keyLink[item]">{{ keyLink[item] }}</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>{{ item }}</v-list-item-title>
+                              </v-list-item-content>
+                            </template>
+                            <template #item="{ item }">
+                              <v-list-item-avatar>
+                                <v-icon :class="keyLink[item]">{{ keyLink[item] }}</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>{{ item }}</v-list-item-title>
+                              </v-list-item-content>
+                            </template>
+                           </v-combobox>
+                          </v-col>
+                          <v-col cols="6">
+                          <v-text-field
+                              v-model="newLink"
+                              label="Copiar URL"
+                              outlined
+                              dense
+                              @keydown.enter="addStringLink"
+                          ></v-text-field>
+                        </v-col>
+                        </v-row>
+                          <v-btn @click="addStringLink" color="primary">Añadir</v-btn>
+                          <v-divider></v-divider>
+                          <v-list>
+                              <v-list-item v-for="(value, key) in linkMap" :key="key">
+                                  <v-list-item-content>
+                                      <v-text-field
+                                      v-model="linkMap[key]"
+                                      outlined
+                                      dense
+                                      :disabled=true
+                                      :label="key"
+                                      >
+                                      </v-text-field>
+                          
+                                  </v-list-item-content>
+                                  <v-list-item-action>
+                                      <v-btn icon @click="deleteStringLink(key)">
+                                      <v-icon color="error">mdi-delete</v-icon>
+                                      </v-btn>
+                                  </v-list-item-action>
+                              </v-list-item>
+                          </v-list>
+                          </v-card-text>
+                      </v-card>
+                    </v-card>
 
                   </v-card-text>
                 </v-card>
@@ -322,6 +442,20 @@ import firebase from "firebase";
       tab: null,
       images: [],
       institucion_id : -1,
+      newString: '', // INPUT URL VIDEO STRING
+      newLink: '', // INPUT LINK 
+      keyLink: {
+        Facebook:"mdi mdi-facebook" ,
+        Instagram:"mdi mdi-instagram" ,
+        Whatsapp:"mdi mdi-whatsapp" ,
+        Linkedin:"mdi mdi-linkedin", 
+      },
+      selectedItem: null,
+      linkMap: {},
+      videosArray: [],
+      playerVars: {
+            autoplay: 0
+      },
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 250,
@@ -483,6 +617,8 @@ import firebase from "firebase";
 
       closeMedia (){
         this.dialogMedia = false
+        this.linkArray.length = 0
+        this.videosArray.length = 0
         this.$refs.imgDropzone.removeAllFiles();
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
@@ -566,7 +702,86 @@ import firebase from "firebase";
           
         })
         this.closeMedia()
+        this.$store.dispatch('successAlertAsync',`Imagenes guardados exitosamente`)
       },
+      // SAVE VIDEOS URL METHOD
+      saveVideo () {
+        var idApi = this.institucion_id
+        this.institucion_id -1
+
+        this.videosArray.forEach((element)=> {
+          console.log(element)
+          const dataUp = {
+              url:element,
+              instituciones_instituciones_id: idApi
+            }
+          Instituciones.crearVid(dataUp)
+        })
+        this.closeMedia()
+        this.$store.dispatch('successAlertAsync',`Videos guardados exitosamente`)
+      },
+
+      // VIDEO HANDLER 
+      handleClick(event, ref) {
+      this.$refs[ref][event]();
+      },
+      handleSearch(e, platform) {
+        if (platform === "youtube") this.youtubeLink = e.target.value;
+        else this.vimeoLink = e.target.value;
+      },
+      // ADD NEW URL TO VIDEO PICKER
+      addString() {
+        if (this.newString) {
+          let videoID = this.extractVideoId(this.newString)
+          //this.videosArray.push(this.newString);
+          this.videosArray.push(videoID);
+          this.newString = '';
+        }
+      },
+      deleteString(index) {
+        
+        this.videosArray.splice(index, 1);
+      },
+      extractVideoId(url) {
+          const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|youtu\.be\/|user\/.+\/u\/\d+\/|e\/|embed\/|v=))([a-zA-Z0-9_-]{11})/i;
+          const match = url.match(regExp);
+
+          if (match && match[1]) {
+              return match[1];
+          }
+          // If no match is found, return null or handle the error case as needed
+          return null;
+      },
+
+      addStringLink() {
+        if (this.newLink){
+          this.linkMap[this.selectedItem] = this.newLink
+          this.newLink = ''
+        }
+      },
+      deleteStringLink(key){
+        this.$delete(this.linkMap, key)
+      },
+      // SAVE LINKS URL METHOD
+      saveLinks () {
+        var idApi = this.institucion_id
+        this.institucion_id -1
+
+        Object.entries(this.linkMap).forEach(([key, value])=> {
+          const dataUp = {
+            llave: key,
+            url: value,
+            instituciones_instituciones_id: idApi
+          }
+          console.log(dataUp)
+         Instituciones.crearLink(dataUp)
+        })
+      
+        this.$store.dispatch('successAlertAsync',`Links guardados exitosamente`)
+        this.closeMedia()
+      },
+
+
     }
   }
 </script>

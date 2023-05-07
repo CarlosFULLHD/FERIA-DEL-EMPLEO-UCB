@@ -1,7 +1,15 @@
+USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
-USE feria;
+SELECT * FROM INSTITUCIONES;
 
+SELECT * 
+	FROM INSTITUCIONES A
+		INNER JOIN Institucion_tiene_links B
+        ON A.instituciones_id = B.instituciones_instituciones_id;
+
+
+SELECT*FROM instituciones i INNER JOIN Institucion_tiene_links l ON i.instituciones_id=l.instituciones_instituciones_id  INNER JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id=i.instituciones_id INNER JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id=i.instituciones_id INNER JOIN charlas c ON c.instituciones_instituciones_id=i.instituciones_id ORDER BY i.instituciones_id;
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre varchar(200)  NOT NULL,
@@ -18,43 +26,10 @@ INSERT INTO instituciones values
   (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
   (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
   (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
-
-CREATE TABLE INSTITUCIONES_TIENE_IMAGENES (IMAGEN_ID BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-											URL VARCHAR(255),
-                                            INSTITUCIONES_ID BIGINT NOT NULL,
-                                            CONSTRAINT FK_INSTITUCIONES_IMAGENES
-                                            FOREIGN KEY(INSTITUCIONES_ID)
-                                            REFERENCES INSTITUCIONES(INSTITUCIONES_ID)
-                                            );
-DESC INSTITUCIONES_TIENE_IMAGENES;
-SELECT * FROM INSTITUCIONES_TIENE_IMAGENES;
-
-TRUNCATE TABLE INSTITUCIONES_TIENE_IMAGENES;
+  
+SELECT * FROM INSTITUCIONES;
 
 
---Nueva bdd ediciones 3.0
---Detalles: NO USAMOS FERIA NI FOREIGN KEYS, seguimos con las mismas instituciones
---
--- Table: Feria POR AHORA LA TABLA FERIA NO SERA USADA
-CREATE TABLE Feria (
-    feria_id bigint  NOT NULL AUTO_INCREMENT,
-    nombre varchar(200)  NOT NULL,
-    fechainicio timestamp  NOT NULL,
-    fechafinal timestamp  NOT NULL,
-    CONSTRAINT Feria_pk PRIMARY KEY (feria_id)
-);
-
-CREATE TABLE instituciones (
-    instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(200)  NOT NULL,
-    email varchar(200)  NOT NULL,
-    institucion varchar(200)  NOT NULL,
-    telefono varchar(50)  NOT NULL,
-    resena varchar(280)  NOT NULL,
-    telefonowp varchar(50)  NOT NULL,
-    ubicacion varchar(280)  NOT NULL
-);       
--- Table: cuenta
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
     cuenta varchar(200)  NOT NULL,
@@ -63,6 +38,8 @@ CREATE TABLE cuenta (
     email varchar(200)  NOT NULL,
     CONSTRAINT cuenta_pk PRIMARY KEY (cuenta_id)
 );
+
+SELECT * FROM CUENTA;
 -- Table: charlas
 CREATE TABLE charlas (
     charlas_id bigint  NOT NULL AUTO_INCREMENT,
@@ -89,6 +66,7 @@ CREATE TABLE Charla_tiene_estudiantes (
 -- Table: Charla_tiene_links
 CREATE TABLE Charla_tiene_links (
     linkcha_id bigint  NOT NULL AUTO_INCREMENT,
+    llave varchar(280) not null,
     url varchar(280)  NOT NULL,
     charlas_charlas_id bigint  NOT NULL,
     CONSTRAINT Charla_tiene_links_pk PRIMARY KEY (linkcha_id)
@@ -96,10 +74,16 @@ CREATE TABLE Charla_tiene_links (
 -- Table: Institucion_tiene_links
 CREATE TABLE Institucion_tiene_links (
     linkin bigint  NOT NULL AUTO_INCREMENT,
+    llave varchar(280) not null,
     url varchar(280)  NOT NULL,
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT Institucion_tiene_links_pk PRIMARY KEY (linkin)
 );
+
+DESC institucion_tiene_links;
+SELECT * FROM institucion_tiene_links;
+
+
 -- Table: instituciones_tiene_imagenes
 CREATE TABLE instituciones_tiene_imagenes (
     imagenin_id bigint  NOT NULL AUTO_INCREMENT,
@@ -107,6 +91,10 @@ CREATE TABLE instituciones_tiene_imagenes (
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT instituciones_tiene_imagenes_pk PRIMARY KEY (imagenin_id)
 );
+
+select * from instituciones_tiene_imagenes;
+
+DROP TABLE INSTITUCIONES_TIENE_IMAGENES;
 -- Table: instituciones_tiene_videos
 CREATE TABLE instituciones_tiene_videos (
     videoin_id bigint  NOT NULL AUTO_INCREMENT,
@@ -114,6 +102,8 @@ CREATE TABLE instituciones_tiene_videos (
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT instituciones_tiene_videos_pk PRIMARY KEY (videoin_id)
 );
+
+SELECT * FROM INSTITUCIONES_TIENE_VIDEOS;
 
 -- foreign keys
 -- Reference: Charla_tiene_estudiantes_charlas (table: Charla_tiene_estudiantes)
@@ -143,52 +133,3 @@ ALTER TABLE instituciones_tiene_imagenes ADD CONSTRAINT instituciones_tiene_imag
 -- Reference: instituciones_tiene_videos_instituciones (table: instituciones_tiene_videos)
 ALTER TABLE instituciones_tiene_videos ADD CONSTRAINT instituciones_tiene_videos_instituciones FOREIGN KEY instituciones_tiene_videos_instituciones (instituciones_instituciones_id)
     REFERENCES instituciones (instituciones_id);    
-
-
-
---PRUEBITAS:
-INSERT INTO instituciones_tiene_imagenes values 
-(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
-(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
-(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
-
-INSERT INTO instituciones_tiene_videos values 
-(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
-(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
-(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
-INSERT INTO Institucion_tiene_links values 
-(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
-(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
-(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
-(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
-
-INSERT INTO charlas values 
-(1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
-(2,'charla1', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),
-(3,'charla1', 'link zoom 123123qwe','2023-05-6 19:50:00','2023-05-6 20:00:00',256,256,2),
-(4,'charla1', 'link zoom 123123qwe','2023-05-7 16:00:00','2023-05-7 18:00:00',256,256,3),
-(5,'charla1', 'link zoom 123123qwe','2023-05-7 18:00:00','2023-05-7 20:00:00',256,256,3);
-
---Querys PRO
---join maestro
-SELECT i.instituciones_id, i.nombre, i.email, i.institucion,  i.telefono, i.resena, i.telefonowp , i.ubicacion,
-l.linkin,l.url, m.imagenin_id, m.url, v.videoin_id, v.url,
-c.charlas_id , c.nombrecharla ,c.link,c.fechaInicio ,c.fechaFina ,c.Cupos_charla,c.Cupos_disponibles,c.instituciones_instituciones_id
-FROM instituciones i
-INNER JOIN Institucion_tiene_links l
-ON i.instituciones_id=l.instituciones_instituciones_id 
-INNER JOIN instituciones_tiene_imagenes m
-ON m.instituciones_instituciones_id=i.instituciones_id
-INNER JOIN instituciones_tiene_videos v
-ON v.instituciones_instituciones_id=i.instituciones_id
-INNER JOIN charlas c
-ON c.instituciones_instituciones_id=i.instituciones_id
-ORDER BY i.instituciones_id;

@@ -18,6 +18,14 @@ export default {
     // SERVICIOS PARA MANEJO DE IMAGENES INSTITUCIONES
     crearImg: (data) => {
         return Api().post('api/institucionesimages',data)
+    },
+    // SERVICIOS PARA MANEJO DE VIDEOS INSTITUCIONES
+    crearVid: (data) => {
+        return Api().post('api/institucionesvideos',data)
+    },
+    // SERVICIOS PARA MANEJO DE LINKS INSTITUCIONES
+    crearLink: (data) => {
+        return Api().post('api/institucioneslinks',data)
     }
 }
 
