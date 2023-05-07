@@ -5,10 +5,10 @@ import { pool } from "../db.js";
 
 export const getInstJOIN = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT*FROM instituciones i INNER JOIN Institucion_tiene_links l ON i.instituciones_id=l.instituciones_instituciones_id  INNER JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id=i.instituciones_id INNER JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id=i.instituciones_id INNER JOIN charlas c ON c.instituciones_instituciones_id=i.instituciones_id ORDER BY i.instituciones_id");
+      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, GROUP_CONCAT(DISTINCT l.url) AS links_redes, GROUP_CONCAT(DISTINCT m.url) AS links_img, GROUP_CONCAT(DISTINCT v.url) AS links_videos FROM instituciones a JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID GROUP BY a.INSTITUCIONES_ID");
       res.json(rows);
     } catch (error) {
-      return res.status(500).json({ message: "Algo fue mal" });
+      return res.status(500).json({ error, message: "Algo fue mal" });
     }
   };
 // export const getInstituciones = async (req, res) => {

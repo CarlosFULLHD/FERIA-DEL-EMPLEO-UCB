@@ -147,3 +147,47 @@ ALTER TABLE instituciones_tiene_imagenes ADD CONSTRAINT instituciones_tiene_imag
 -- Reference: instituciones_tiene_videos_instituciones (table: instituciones_tiene_videos)
 ALTER TABLE instituciones_tiene_videos ADD CONSTRAINT instituciones_tiene_videos_instituciones FOREIGN KEY instituciones_tiene_videos_instituciones (instituciones_instituciones_id)
     REFERENCES instituciones (instituciones_id);    
+
+-- DATOS PARA LLENAR TABLAS
+
+INSERT INTO instituciones_tiene_imagenes values 
+(1,'url img 1',1),
+(2,'url img 2',2),
+(3,'url img 3',2),
+(4,'url img 4',2),
+(5,'url img 5',3),
+(6,'url img 6',3);
+
+INSERT INTO instituciones_tiene_videos values 
+(1,'video link 1',1),
+(2,'video link 2',2),
+(3,'video link 3',2),
+(4,'video link 4',2),
+(5,'video link 5',3),
+(6,'video link 6',3);
+INSERT INTO Institucion_tiene_links values 
+(1,'url link 1',1),
+(2,'url link 2',2),
+(3,'url link 3',2),
+(4,'url link 4',2),
+(5,'url link 5',3),
+(6,'url link 6',3);
+INSERT INTO charlas values 
+(1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
+(2,'charla2', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),
+(3,'charla3', 'link zoom 123123qwe','2023-05-6 19:50:00','2023-05-6 20:00:00',256,256,2),
+(4,'charla4', 'link zoom 123123qwe','2023-05-7 16:00:00','2023-05-7 18:00:00',256,256,3),
+(5,'charla5', 'link zoom 123123qwe','2023-05-7 18:00:00','2023-05-7 20:00:00',256,256,3);
+
+-- QUERY MAESTRO TARJETAS
+
+SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, 
+    GROUP_CONCAT(DISTINCT l.url) AS links_redes, 
+    GROUP_CONCAT(DISTINCT m.url) AS links_img, 
+    GROUP_CONCAT(DISTINCT v.url) AS links_videos
+FROM instituciones a
+JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id
+JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID
+JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID
+GROUP BY a.INSTITUCIONES_ID;
+
