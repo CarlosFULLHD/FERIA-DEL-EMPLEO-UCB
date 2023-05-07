@@ -1,6 +1,18 @@
 <template>
   <div class="home">
-    <ApiTest/>
+    
+    <h1>CUENTA: {{ userAccount }}</h1>
+    <h1>PWD: {{ userPwd  }}</h1>
+    <h1>SUPERUSUARIO: {{ userFlag }}</h1>
+    <h1>EMAIL: {{ usserEmail }}</h1>
+
+    <button @click="successAlert"> EXITO</button>
+    <button @click="errorAlert"> ERROR</button>
+    <button @click="warningAlert"> ADVERTENCIA</button>
+    <button @click="adviceAlert"> INFO</button>
+
+
+
     <section class="hero">
       <v-container class="bg-surface-variant mb-6">
         <v-row align="start" no-gutters style="height: 150px;">
@@ -32,13 +44,10 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import ApiTest from "@/components/TarjetasEmpresas.vue";
-import { cuenta, superusuario, correo } from '@/main'
+
 export default {
   name: "HomeView",
   components: {
-    ApiTest,
   },
   data() {
     return {
@@ -69,11 +78,36 @@ export default {
   },
   methods: {
     initialize(){
-      console.log("ESTAS EN HOME")
-      console.log(cuenta)
-      console.log(superusuario)
-      console.log(correo)
+    },
+    
+    successAlert(){
+      this.$store.dispatch('successAlertAsync','Todo esta bien')
+    },
+    warningAlert(){
+      this.$store.dispatch('warningAlertAsync','Existe una advertencia')
+    },
+    errorAlert(){
+      this.$store.dispatch('errorAlertAsync','Todo esta mal :()')
+    },
+    adviceAlert(){
+      this.$store.dispatch('adviceAlertAsync','Sabias que ')
     }
+  },
+  computed: {
+    userAccount(){
+      return this.$store.getters.getCuenta
+    },
+    userPwd(){
+      return this.$store.getters.getpasswordU
+    },
+    usserEmail(){
+      return this.$store.getters.getEmailU
+    },
+    userFlag(){
+      return this.$store.getters.getsuperU
+    },
+    
+
   }
 
 };

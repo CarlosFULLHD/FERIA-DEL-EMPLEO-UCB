@@ -10,9 +10,9 @@
         <li><router-link class="link" :to="{name:'Empresas'}">Empresas</router-link></li>
         <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
         <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
-        <li><router-link class="link" :to="{name:'CuentaCrear'}">Login</router-link></li> 
+        <li><router-link class="link" :to="{name:'Login'}">Login</router-link></li> 
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
-        <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
+        <li ><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
         
       </ul>
       <div class="icon">
@@ -44,6 +44,7 @@ export default {
   name:"navigationView",
   data(){
     return{
+      superUser: this.$store.state.superU,
       scrollNav:null,
       mobile:null,
       mobileNav:null,

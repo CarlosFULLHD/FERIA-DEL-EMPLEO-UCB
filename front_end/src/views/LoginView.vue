@@ -68,7 +68,6 @@
 
 <script>
 
-import { cuenta, superusuario, correo } from '@/main'
 import Cuentas from '@/services/Cuenta'
 export default {
   name:"LoginView",
@@ -104,7 +103,6 @@ export default {
     },
   
 
-   
   methods: {
     validate () {
       this.$refs.form.validate()
@@ -115,40 +113,30 @@ export default {
     resetValidation () {
       this.$refs.form.resetValidation()
     },
-
-        async Verificarcuenta(){
-          //  aqui muere 
-          console.log(this.cuenta)
-          console.log(this.password)
-
-          var superU = (this.checkbox == true)? 1:0
-          console.log(superU)
-          console.log(this.email)
-            const dataUp = {
-              cuenta: this.cuenta,
-              pwd: this.password,
-              superusuario: superU,
-              email: this.email
-            }
-            await Cuentas.crearCuenta(dataUp)
-        },
-
-
     async loginForm(){
-      console.log("ESTAS EN LOGIN")
-      console.log(cuenta)
-      console.log(superusuario)
-      console.log(correo)
-    }
+      try { 
+        let usuario = await Cuentas.loginCuenta(this.cuenta,this.password)
+        let xd = usuario.data
+        if (xd.length !== 0){
+          console.log("CUENTITA")
+          
+          // this.$store.state.cuentaU = xd.cuenta
+          // this.$store.state.passwordU = xd.pwd
+          // this.$store.state.superU = xd.email
+          // this.$store.state.emailU = xd.superusuario
 
-
-
+          this.$store.dispatch('changeUserAccount',xd.cuenta)
+          this.$store.dispatch('changeUserPwd',xd.pwd)
+          this.$store.dispatch('changeUserEmail',xd.email)
+          this.$store.dispatch('changeSuperUser',xd.superusuario)
+          this.$store.dispatch('successAlertAsync',`Bienvenido ${xd.cuenta}`)
+        }
+      } catch (error) {
+        this.$store.dispatch('errorAlertAsync',`Cuenta inexistente, intente de nuevo`)
+      }     
+    },
   },
 }
-
-
-
-
 </script>
 
   

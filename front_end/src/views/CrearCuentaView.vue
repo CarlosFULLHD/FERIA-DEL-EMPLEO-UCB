@@ -156,12 +156,11 @@
         resetValidation () {
           this.$refs.form.resetValidation()
         },
+
+        // CREATE ACCOUNT METHOD
         async submitForm(){
-
-          console.log(this.cuenta)
-          console.log(this.password)
-
-          var superU = (this.checkbox == true)? 1:0
+          try{
+            var superU = (this.checkbox == true)? 1:0
           console.log(superU)
           console.log(this.email)
             const dataUp = {
@@ -171,6 +170,10 @@
               email: this.email
             }
             await Cuentas.crearCuenta(dataUp)
+            this.$store.dispatch('successAlertAsync',`Cuenta creada exitosamente`)
+          } catch (error) {
+            this.$store.dispatch('errorAlertAsync',`Problemas al crear cuenta, intente de nuevo`)
+          }
         }
       },
     }

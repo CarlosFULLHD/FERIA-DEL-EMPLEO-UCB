@@ -229,6 +229,8 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
+
+              <!-- LINKS TAB -->
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>
@@ -444,11 +446,18 @@ import firebase from "firebase";
         this.dialogDelete = true
       },
 
+
+      // BORRAR INSTITUCIÓN METHOD
       async deleteItemConfirm () {
         const deletedItem = this.axiosJson[this.editedIndex]
         const instId = deletedItem.institucionid
-        await Instituciones.borrarIns(instId)
-        this.axiosJson.splice(this.editedIndex, 1)
+        try {
+          await Instituciones.borrarIns(instId)
+          this.axiosJson.splice(this.editedIndex, 1)
+          this.$store.dispatch('successAlertAsync',`Se elimino la institución ${deletedItem.institucion} `)
+        } catch(error){
+          this.$store.dispatch('errorAlertAsync',`Surgio un problema al eliminar ${deletedItem.institucion}`)
+        }
         this.closeDelete()
       },
 
@@ -456,24 +465,19 @@ import firebase from "firebase";
       close () {
         this.dialog = false
         this.$nextTick(async () => {
-
-          const instId = this.editedItem.institucionid
-          
-          if (typeof instId !== "undefined"){
-            const dataUp = {
-              nombre: this.editedItem.institucion,
-              email: this.editedItem.email,
-              institucion: this.editedItem.rubro,
-              telefono: this.editedItem.telefono,
-              resena: this.editedItem.resenia,
-              telefonowp: this.editedItem.telefonowp,
-              ubicacion: this.editedItem.ubicacion
-            }
+            const instId = this.editedItem.institucionid
+            if (typeof instId !== "undefined"){
+              const dataUp = {
+                nombre: this.editedItem.institucion,
+                email: this.editedItem.email,
+                institucion: this.editedItem.rubro,
+                telefono: this.editedItem.telefono,
+                resena: this.editedItem.resenia,
+                telefonowp: this.editedItem.telefonowp,
+                ubicacion: this.editedItem.ubicacion
+              }
             await Instituciones.updateIns(instId, dataUp)
-          } 
-          this.editedItem = Object.assign({}, this.defaultItem)
-          
-          this.editedIndex = -1
+          }          
         })
       },
 
@@ -497,8 +501,8 @@ import firebase from "firebase";
       // NUEVA INSTITUCIÓN
       async save () {
         if (this.editedIndex > -1) {
-          
           Object.assign(this.axiosJson[this.editedIndex], this.editedItem)
+          this.close()
         } else {
 
           if (this.editedItem.email !== '' && this.editedItem.institucion !== '' && this.editedItem.resenia !== ''
@@ -518,12 +522,16 @@ import firebase from "firebase";
 
                 await Instituciones.crearIns(dataUp)
                 this.axiosJson.push(this.editedItem)
+                this.$store.dispatch('successAlertAsync',`Institución ${dataUp['nombre']} creada exitosamente`)
+                this.close()
               } else{
-                alert("Todos los campos deben estar completos")
+                this.$store.dispatch('warningAlertAsync',`Todos los campos deben estar completos`)
               }
-          
+              setTimeout(() => {
+              window.location.reload();
+              }, 2500)
         }
-        this.close()
+        
       },
 
 
@@ -550,7 +558,14 @@ import firebase from "firebase";
           const downloadUrl = await imageRef.getDownloadURL()
           console.log(` ID: ${idApi} --> URL : ${downloadUrl}`)
           
+          const dataUp = {
+                url: `${downloadUrl}`,
+                instituciones_instituciones_id: idApi
+              }
+          Instituciones.crearImg(dataUp)
+          
         })
+        this.closeMedia()
       },
     }
   }
