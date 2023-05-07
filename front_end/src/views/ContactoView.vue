@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div class="Contacto">
+    <div class="Contacto" >
       <div class="Informacion">
         <div class="Titulo">
           <h1>Contacto USEI</h1>
@@ -83,6 +83,9 @@ export default {
 </script>
 
 <style>
+.Contacto{
+  
+}
 .overlay {
   position: fixed;
   top: 0;
