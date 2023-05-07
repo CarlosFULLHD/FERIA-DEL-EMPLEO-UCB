@@ -1,21 +1,22 @@
 <template>
+
 <div id="app">
   <v-app id="inspire">
     <v-row class="fill-height">
       <v-col>
-        <v-sheet height="64">
-          <v-toolbar flat color="white">
-            <v-btn outlined class="mr-4" color="grey darken-2" @click="dialog = true">
+        <v-sheet height="65">
+          <v-toolbar >
+            <v-btn outlined class="mr-4" color="grey darken-5" @click="dialog = true" elevation="2" >
               Nuevo evento
             </v-btn>
-            <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+            <v-btn outlined class="mr-4" color="grey darken-5" @click="setToday" elevation="2">
               Hoy
             </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small>mdi-chevron-left</v-icon>
+            <v-btn fab text small color="grey darken-5" @click="prev" >
+              <v-icon size="40">mdi-chevron-left</v-icon>
             </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small>mdi-chevron-right</v-icon>
+            <v-btn fab text small color="grey darken-5" @click="next">
+              <v-icon size="40">mdi-chevron-right</v-icon>
             </v-btn>
             <v-toolbar-title v-if="$refs.calendar">{{ $refs.calendar.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -23,7 +24,8 @@
               <template v-slot:activator="{ on }">
                 <v-btn
                   outlined
-                  color="grey darken-2"
+                  color="grey darken-5"
+                  elevation="2"
                   v-on="on"
                 >
                   <span>{{ typeToLabel[type] }}</span>
@@ -71,6 +73,7 @@
 
         <v-sheet height="600">
           <v-calendar
+            
             ref="calendar"
             v-model="focus"
             color="primary"
@@ -89,7 +92,7 @@
             offset-x
           >
             <v-card
-              color="grey lighten-4"
+              color="grey lighten-5"
               min-width="350px"
               flat
             >

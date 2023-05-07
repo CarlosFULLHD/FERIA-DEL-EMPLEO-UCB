@@ -128,12 +128,8 @@
                 Crear
               </v-btn>
             </v-card-actions>
-
-            
           </v-card>
         </v-dialog>
-
-        <!-- DELETE ITEM DIALOG -->
         <v-dialog v-model="dialogDelete" max-width="550px">
           <v-card>
             <v-card-title class="text-h5">¿Seguro que quiere borrar esta institución?</v-card-title>
@@ -145,120 +141,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        
-
-        <!-- ADD MEDIA DIALOG -->
-        <v-dialog v-model="dialogMedia" max-width="550px">
-          <v-card>
-            <v-toolbar flat color="#001f3f" dark>
-              <v-toolbar-title>Multimedia y links</v-toolbar-title>
-            </v-toolbar>
-            <v-tabs vertical>
-              <v-tab>
-                <v-icon left>
-                  mdi-image-outline
-                </v-icon>
-                Imagenes
-              </v-tab>
-              <v-tab>
-                <v-icon left>
-                  mdi-youtube
-                </v-icon>
-                Videos
-              </v-tab>
-              <v-tab>
-                <v-icon left>
-                  mdi-link-plus
-                </v-icon>
-                Links
-              </v-tab>
-
-              <!-- IMAGE TAB -->
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="closeMedia"
-                      >
-                        Cancelar
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="saveImage"
-                      >
-                        Guardar imagenes
-                      </v-btn>
-                    <vue-dropzone 
-                      id="imgDropzone" 
-                      ref="imgDropzone" 
-                      :options="dropzoneOptions" 
-                      @vdropzone-complete="afterComplete">
-                    </vue-dropzone>
-                    <div v-if="images.length >0">
-                      <div v-for="image in images" :key="image.src">
-                        <img :src="image.src">
-                      </div>
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-
-              <!-- VIDEO TAB -->
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                   
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="closeMedia"
-                      >
-                        Cancelar
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="save"
-                      >
-                        Guardar videos
-                      </v-btn>
-
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-
-              <!-- LINKS TAB -->
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                   
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="closeMedia"
-                      >
-                        Cancelar
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="save"
-                      >
-                        Guardar links
-                      </v-btn>
-
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs>
-          </v-card>
-        </v-dialog>
-
-
-        
       </v-toolbar>
     </template>
 
@@ -275,7 +157,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="mediaItem(item)"
+        @click="editItem(item)"
       >
       mdi mdi-file-image-plus
       </v-icon>
@@ -286,9 +168,11 @@
       >
         mdi-delete
       </v-icon>
-    </template>
 
-    
+
+
+
+    </template>
     <template v-slot:no-data>
       <v-btn
         color="primary"
@@ -297,8 +181,6 @@
         Reiniciar
       </v-btn>
     </template>
-
-
   </v-data-table>
 </v-app>
 </div>
@@ -307,41 +189,11 @@
 
 <script>
 import Instituciones from '@/services/Instituciones'
-import vue2Dropzone from "vue2-dropzone"
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
-let uuid = require("uuid")
-import firebase from "firebase";
+
   export default {
-    components: {
-      vueDropzone: vue2Dropzone
-    },
     data: () => ({
       dialog: false,
       dialogDelete: false,
-      dialogMedia: false,
-      tab: null,
-      images: [],
-      institucion_id : -1,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 250,
-        thumbnailHeight: 250,
-        addRemoveLinks: true,
-        maxFiles:5,
-        acceptedFiles: ".jpg, .jpeg, .png",
-        dictDefaultMessage: 'Arrastra archivos aquí o haz clic para subir.',
-        dictFallbackMessage: 'Tu navegador no soporta arrastrar y soltar para subir archivos.',
-        dictFallbackText: 'Por favor, utiliza el formulario de reserva de abajo para subir tus archivos.',
-        dictFileTooBig: 'El archivo es demasiado grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.',
-        dictInvalidFileType: 'No puedes subir archivos de este tipo.',
-        dictResponseError: 'El servidor respondió con {{statusCode}} código.',
-        dictCancelUpload: 'Cancelar subida',
-        dictCancelUploadConfirmation: '¿Estás seguro que quieres cancelar esta subida?',
-        dictRemoveFile: 'Eliminar archivo',
-        dictMaxFilesExceeded: 'No puedes subir más archivos.',
-        dictUploadCanceled: 'Subida cancelada',
-      
-      },
       headers: [
         {
           text: 'Institución',
@@ -395,9 +247,6 @@ import firebase from "firebase";
       dialog (val) {
         val || this.close()
       },
-      dialogMedia(val) {
-        val || this.closeMedia()
-      },
       dialogDelete (val) {
         val || this.closeDelete()
       },
@@ -433,59 +282,42 @@ import firebase from "firebase";
         this.dialog = true
       },
 
-      mediaItem(item){
-        this.editedIndex = this.axiosJson.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.institucion_id = this.editedItem.institucionid
-        this.dialogMedia = true
-      },
-
       deleteItem (item) {
         this.editedIndex = this.axiosJson.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
-
-      // BORRAR INSTITUCIÓN METHOD
       async deleteItemConfirm () {
         const deletedItem = this.axiosJson[this.editedIndex]
         const instId = deletedItem.institucionid
-        try {
-          await Instituciones.borrarIns(instId)
-          this.axiosJson.splice(this.editedIndex, 1)
-          this.$store.dispatch('successAlertAsync',`Se elimino la institución ${deletedItem.institucion} `)
-        } catch(error){
-          this.$store.dispatch('errorAlertAsync',`Surgio un problema al eliminar ${deletedItem.institucion}`)
-        }
+        await Instituciones.borrarIns(instId)
+        this.axiosJson.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
-      // CERRAR ACTUALIZAR INSTITUCIÓN
+      // ACTUALIZAR INSTITUCIÓN
       close () {
         this.dialog = false
         this.$nextTick(async () => {
-            const instId = this.editedItem.institucionid
-            if (typeof instId !== "undefined"){
-              const dataUp = {
-                nombre: this.editedItem.institucion,
-                email: this.editedItem.email,
-                institucion: this.editedItem.rubro,
-                telefono: this.editedItem.telefono,
-                resena: this.editedItem.resenia,
-                telefonowp: this.editedItem.telefonowp,
-                ubicacion: this.editedItem.ubicacion
-              }
-            await Instituciones.updateIns(instId, dataUp)
-          }          
-        })
-      },
 
-      closeMedia (){
-        this.dialogMedia = false
-        this.$refs.imgDropzone.removeAllFiles();
-        this.$nextTick(() => {
+          const instId = this.editedItem.institucionid
+          
+          if (typeof instId !== "undefined"){
+            console.log(this.editedItem)
+            const dataUp = {
+              nombre: this.editedItem.institucion,
+              email: this.editedItem.email,
+              institucion: this.editedItem.rubro,
+              telefono: this.editedItem.telefono,
+              resena: this.editedItem.resenia,
+              telefonowp: this.editedItem.telefonowp,
+              ubicacion: this.editedItem.ubicacion
+            }
+            await Instituciones.updateIns(instId, dataUp)
+          } 
           this.editedItem = Object.assign({}, this.defaultItem)
+          
           this.editedIndex = -1
         })
       },
@@ -501,8 +333,8 @@ import firebase from "firebase";
       // NUEVA INSTITUCIÓN
       async save () {
         if (this.editedIndex > -1) {
+          
           Object.assign(this.axiosJson[this.editedIndex], this.editedItem)
-          this.close()
         } else {
 
           if (this.editedItem.email !== '' && this.editedItem.institucion !== '' && this.editedItem.resenia !== ''
@@ -522,51 +354,13 @@ import firebase from "firebase";
 
                 await Instituciones.crearIns(dataUp)
                 this.axiosJson.push(this.editedItem)
-                this.$store.dispatch('successAlertAsync',`Institución ${dataUp['nombre']} creada exitosamente`)
-                this.close()
               } else{
-                this.$store.dispatch('warningAlertAsync',`Todos los campos deben estar completos`)
+                alert("Todos los campos deben estar completos")
               }
-              setTimeout(() => {
-              window.location.reload();
-              }, 2500)
-        }
-        
-      },
-
-
-      // SAVE IMAGE INTO FIREBASE AND MYSQL 
-      saveImage () {
-        this.$refs.imgDropzone.processQueue();
-
-        const files = this.$refs.imgDropzone.getAcceptedFiles();
-
-        var idApi = this.institucion_id
-        this.institucion_id -1
-        var metaData = {
-          contentType: "image/png"
-        }
-
-
-        files.forEach(async (element)=> {
-          const imageName = uuid.v1();
-          const storageRef = firebase.storage().ref();
-          const imageRef = storageRef.child(`images/${imageName}.png`)
-
-          await imageRef.put(element, metaData);
-
-          const downloadUrl = await imageRef.getDownloadURL()
-          console.log(` ID: ${idApi} --> URL : ${downloadUrl}`)
           
-          const dataUp = {
-                url: `${downloadUrl}`,
-                instituciones_instituciones_id: idApi
-              }
-          Instituciones.crearImg(dataUp)
-          
-        })
-        this.closeMedia()
+        }
+        this.close()
       },
-    }
+    },
   }
 </script>

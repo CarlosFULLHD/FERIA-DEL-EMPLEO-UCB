@@ -6,20 +6,255 @@
         <img src="@/assets/logo.png">
       </div>
       <ul v-show="!mobile" class="navigation">
-        <li><router-link class="link" :to="{name:'Home'}">Home</router-link></li>
+        <li><router-link class="link" :to="{name:'Home'}"><v-icon>home</v-icon>Home</router-link></li>
         <li><router-link class="link" :to="{name:'Empresas'}">Empresas</router-link></li>
         <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
         <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
         <li><router-link class="link" :to="{name:'Login'}">Login</router-link></li> 
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
-        <li ><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
-        
+        <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
+        <li>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <div class="Icono" style="display:flex; margin-right:20px;">
+                  <v-badge
+                    :content="messages"
+                    :value="messages"
+                    size="400"
+                    overlap
+                  >
+                  <v-avatar
+                        color="#ffc506"
+                        size="50"
+                      >
+                      <v-icon
+                        size="30"
+                        >mdi-bell
+                      </v-icon>
+                    </v-avatar> 
+                  </v-badge>
+                </div>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item v-for="notification in notifications" :key="notification.id">
+                <v-list-item-title>{{ notification.title }}</v-list-item-title>
+                <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
+              </v-list-item>
+              <v-btn
+                class="mx-1"
+                color="primary"
+                @click="messages++"
+              >
+                Send Message
+              </v-btn>
+              <v-btn
+                class="mx-1"
+                color="error"
+                @click="messages = 0"
+              >
+                Clear Notifications
+              </v-btn>
+            </v-list>
+          </v-menu>
+        </li>
+        <li>
+          <v-row justify="center">
+            <v-menu
+                bottom
+                min-width="200px"
+                margin="10px"
+                rounded
+                offset-y
+              >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                    icon
+                    x-large
+                    v-on="on"
+                  >
+                  <v-avatar
+                      color="brown"
+                      size="50"
+                    >
+                  <span class="white--text text-h5">{{ user.initials }}</span>
+                  </v-avatar>
+                </v-btn>
+              </template>
+                <v-card>
+                  <v-list-item-content class="justify-center">
+                    <div class="mx-auto text-center">
+                      <v-avatar
+                          color="brown"
+                        >
+                        <span class="white--text text-h5">{{ user.initials }}</span>
+                      </v-avatar>
+                        <h3>{{ user.fullName }}</h3>
+                        <p class="text-caption mt-1">
+                            {{ user.email }}
+                        </p>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn
+                            depressed
+                            rounded
+                            text
+                          >
+                          Charlas inscritas
+                        </v-btn>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn
+                            depressed
+                            rounded
+                            text
+                          >
+                          Ver inscritos en charlas
+                        </v-btn>
+                        <v-divider class="my-3"></v-divider>
+                        <v-switch
+                            v-model="$vuetify.theme.dark"
+                            label="Alternar modo oscuro "
+                            style="display:flex; margin-left:20px;"
+                          >
+                        <v-btn
+                            depressed
+                            rounded
+                            text
+                          >
+
+                        </v-btn>
+                        </v-switch>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn
+                          depressed
+                          rounded
+                          text
+                        >
+                        Salir
+                      </v-btn>
+                    </div>
+                  </v-list-item-content>
+              </v-card>
+            </v-menu>
+          </v-row>
+        </li>
       </ul>
       <div class="icon">
         <i @click="toggleMobileNav" v-show="mobile" class="far fa-bars" :class="{'icon-active' : mobileNav}"></i>
       </div>
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
+          <li>
+            <v-row justify="center">
+              <v-menu
+                  bottom
+                  min-width="200px"
+                  margin="10px"
+                  rounded
+                  offset-y
+                >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                      icon
+                      x-large
+                      v-on="on"
+                    >
+                    <v-avatar
+                        color="brown"
+                        size="50"
+                      >
+                    <span class="white--text text-h5">{{ user.initials }}</span>
+                    </v-avatar>
+                  </v-btn>
+                </template>
+                  <v-card>
+                    <v-list-item-content class="justify-center">
+                      <div class="mx-auto text-center">
+                        <v-avatar
+                            color="brown"
+                          >
+                          <span class="white--text text-h5">{{ user.initials }}</span>
+                        </v-avatar>
+                          <h3>{{ user.fullName }}</h3>
+                          <p class="text-caption mt-1">
+                              {{ user.email }}
+                          </p>
+                        <v-divider class="my-3"></v-divider>
+                          <v-btn
+                              depressed
+                              rounded
+                              text
+                            >
+                            Charlas Inscritas
+                          </v-btn>
+                        <v-divider class="my-3"></v-divider>
+                        <v-switch
+                            v-model="$vuetify.theme.dark"
+                            label="Alternar modo oscuro "
+                            style="display:flex; margin-left:20px;"
+                          >
+                        <v-btn
+                            depressed
+                            rounded
+                            text
+                          >
+
+                        </v-btn>
+                        </v-switch>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn
+                          depressed
+                          rounded
+                          text
+                        >
+                        Salir
+                        </v-btn>
+                      </div>
+                    </v-list-item-content>
+                </v-card>
+              </v-menu>
+            </v-row>
+          </li>
+          <li>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-badge
+                    :content="messages"
+                    :value="messages"
+                    overlap
+                  >
+                    <v-icon
+                      class="Campanita"
+                      size="40"
+                      >
+                      mdi-bell
+                    </v-icon>
+                  </v-badge>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-for="notification in notifications" :key="notification.id">
+                  <v-list-item-title>{{ notification.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
+                </v-list-item>
+                <v-btn
+                  class="mx-1"
+                  color="primary"
+                  @click="messages++"
+                >
+                  Send Message
+                </v-btn>
+                <v-btn
+                  class="mx-1"
+                  color="error"
+                  @click="messages = 0"
+                >
+                  Clear Notifications
+                </v-btn>
+              </v-list>
+            </v-menu>
+          </li>
           <li>
             <dic class="icons">
               <font-awesome-icon :icon="['fad', 'calendar-days']" size="lg" style="--fa-primary-color: #71a1f4; --fa-secondary-color: #2e3748;" />
@@ -37,18 +272,29 @@
     </nav>
   </header>
 </template>
-
 <script>
-//import { runInThisContext } from 'vm';
 export default {
   name:"navigationView",
   data(){
     return{
-      superUser: this.$store.state.superU,
       scrollNav:null,
       mobile:null,
       mobileNav:null,
       windowWidth:null,
+      drawer: false,
+      messages: 0,
+      user: {
+        initials: 'JD',
+        fullName: 'Nombre Completo',
+        email: 'correo@gmail.com',
+      },
+      notifications: [
+        {
+          id: 1,
+          title: "Nuevo Inscrito en :",
+          subtitle: "Conferencia BNB"
+        },
+      ]
     }
   },
   created(){
@@ -84,6 +330,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ //*{ border: 1px solid red;}
 @import url(
   'https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap'
   );
@@ -116,8 +363,7 @@ header{
   }
   li{
     text-transform: uppercase;
-    padding: 16px;
-    margin-left: 16px;
+    margin-left: 20px;
   }
   .link{
     font-size: 14px;
@@ -219,14 +465,17 @@ header{
     padding-top: 80px;
     li{
       margin-left: 0;
+      margin-top: 20px;
       .linkD{
-        font-size: 14px;
+        font-size: 20px;
+        font-weight: 400;
         transition: 0.5s ease all;
         padding-bottom: 4px;
         border-bottom: 1px solid transparent;
         color: #000;
         font-style: 'Raleway',normal;
         text-decoration:none;
+        
         &:hover{
           color:#0d63a5;
         }
@@ -270,5 +519,9 @@ header{
       }
     }
   }
+}
+.Icono:hover{
+  color: #ffffff;
+
 }
 </style>

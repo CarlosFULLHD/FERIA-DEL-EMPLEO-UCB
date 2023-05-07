@@ -1,18 +1,7 @@
 <template>
+<v-app>
   <div class="home">
-    
-    <h1>CUENTA: {{ userAccount }}</h1>
-    <h1>PWD: {{ userPwd  }}</h1>
-    <h1>SUPERUSUARIO: {{ userFlag }}</h1>
-    <h1>EMAIL: {{ usserEmail }}</h1>
-
-    <button @click="successAlert"> EXITO</button>
-    <button @click="errorAlert"> ERROR</button>
-    <button @click="warningAlert"> ADVERTENCIA</button>
-    <button @click="adviceAlert"> INFO</button>
-
-
-
+    <ApiTest/>
     <section class="hero">
       <v-container class="bg-surface-variant mb-6">
         <v-row align="start" no-gutters style="height: 150px;">
@@ -41,13 +30,17 @@
       </v-container>
     </section>
   </div>
+</v-app>
 </template>
 
 <script>
+// @ is an alias to /src
+import ApiTest from "@/components/TarjetasEmpresas.vue";
 
 export default {
   name: "HomeView",
   components: {
+    ApiTest,
   },
   data() {
     return {
@@ -72,44 +65,6 @@ export default {
       ],
     };
   },
-  created() {
-      this.initialize();
-      
-  },
-  methods: {
-    initialize(){
-    },
-    
-    successAlert(){
-      this.$store.dispatch('successAlertAsync','Todo esta bien')
-    },
-    warningAlert(){
-      this.$store.dispatch('warningAlertAsync','Existe una advertencia')
-    },
-    errorAlert(){
-      this.$store.dispatch('errorAlertAsync','Todo esta mal :()')
-    },
-    adviceAlert(){
-      this.$store.dispatch('adviceAlertAsync','Sabias que ')
-    }
-  },
-  computed: {
-    userAccount(){
-      return this.$store.getters.getCuenta
-    },
-    userPwd(){
-      return this.$store.getters.getpasswordU
-    },
-    usserEmail(){
-      return this.$store.getters.getEmailU
-    },
-    userFlag(){
-      return this.$store.getters.getsuperU
-    },
-    
-
-  }
-
 };
 </script>
 

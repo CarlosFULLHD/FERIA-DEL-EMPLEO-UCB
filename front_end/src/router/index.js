@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
-import CuentaCrearView from '@/views/CrearCuentaView.vue'
 import CalendarioView from "../views/CalendarioView.vue";
 import EmpresasView from "../views/EmpresasView.vue";
 import ChatsView from "../views/ChatsView.vue";
@@ -18,14 +17,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: "/cuenta/login",
+    path: "/login",
     name: "Login",
     component: LoginView,
-  },
-  {
-    path: "/cuenta/crear",
-    name: "CuentaCrear",
-    component: CuentaCrearView,
   },
   {
     path: "/calendario",
