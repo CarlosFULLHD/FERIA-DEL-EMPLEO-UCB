@@ -1,4 +1,5 @@
 <template>
+   <v-app id="inspire">
     <div class="wrapper">
       <nav class="navChat">
         <ul>
@@ -26,6 +27,7 @@
         </div>
       </div>
     </div>
+  </v-app>
   </template>
   
   <script>
