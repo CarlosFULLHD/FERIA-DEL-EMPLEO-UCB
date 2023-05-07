@@ -5,11 +5,25 @@ SELECT * FROM INSTITUCIONES;
 
 SELECT * 
 	FROM INSTITUCIONES A
-		INNER JOIN Institucion_tiene_links B
-        ON A.instituciones_id = B.instituciones_instituciones_id;
+		LEFT JOIN Institucion_tiene_links B ON A.instituciones_id = B.instituciones_instituciones_id
+        LEFT JOIN instituciones_tiene_imagenes C ON A.instituciones_id = C.instituciones_instituciones_id
+        LEFT JOIN instituciones_tiene_videos D ON A.instituciones_id = D.instituciones_instituciones_id;
+        
+SELECT MainTable.main_key, GROUP_CONCAT(SecondaryTable.attribute) AS attribute_list
+FROM MainTable
+JOIN SecondaryTable ON MainTable.secondary_key = SecondaryTable.secondary_key
+GROUP BY MainTable.main_key;
+
+SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
+	FROM INSTITUCIONES A
+    JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
+	GROUP BY A.INSTITUCIONES_ID;
 
 
-SELECT*FROM instituciones i INNER JOIN Institucion_tiene_links l ON i.instituciones_id=l.instituciones_instituciones_id  INNER JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id=i.instituciones_id INNER JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id=i.instituciones_id INNER JOIN charlas c ON c.instituciones_instituciones_id=i.instituciones_id ORDER BY i.instituciones_id;
+SELECT * FROM Institucion_tiene_links;
+SELECT * FROM instituciones_tiene_imagenes;
+SELECT * FROM instituciones_tiene_videos;
+
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre varchar(200)  NOT NULL,

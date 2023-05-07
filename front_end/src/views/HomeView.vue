@@ -1,4 +1,5 @@
 <template>
+  <v-app id="inspire">
   <div class="home">
     
     <h1>CUENTA: {{ userAccount }}</h1>
@@ -41,6 +42,7 @@
       </v-container>
     </section>
   </div>
+</v-app>
 </template>
 
 <script>
