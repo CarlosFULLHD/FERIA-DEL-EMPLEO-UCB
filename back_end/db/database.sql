@@ -143,3 +143,52 @@ ALTER TABLE instituciones_tiene_imagenes ADD CONSTRAINT instituciones_tiene_imag
 -- Reference: instituciones_tiene_videos_instituciones (table: instituciones_tiene_videos)
 ALTER TABLE instituciones_tiene_videos ADD CONSTRAINT instituciones_tiene_videos_instituciones FOREIGN KEY instituciones_tiene_videos_instituciones (instituciones_instituciones_id)
     REFERENCES instituciones (instituciones_id);    
+
+
+
+--PRUEBITAS:
+INSERT INTO instituciones_tiene_imagenes values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+
+INSERT INTO instituciones_tiene_videos values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+INSERT INTO Institucion_tiene_links values 
+(1,'url qoweihqwioeqwieqweuioqweuiouqoiwe',1),
+(2,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(3,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(4,'url qoweihqwioeqwieqweuioqweuiouqoiwe',2),
+(5,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3),
+(6,'url qoweihqwioeqwieqweuioqweuiouqoiwe',3);
+
+INSERT INTO charlas values 
+(1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
+(2,'charla1', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),
+(3,'charla1', 'link zoom 123123qwe','2023-05-6 19:50:00','2023-05-6 20:00:00',256,256,2),
+(4,'charla1', 'link zoom 123123qwe','2023-05-7 16:00:00','2023-05-7 18:00:00',256,256,3),
+(5,'charla1', 'link zoom 123123qwe','2023-05-7 18:00:00','2023-05-7 20:00:00',256,256,3);
+
+--Querys PRO
+--join maestro
+SELECT i.instituciones_id, i.nombre, i.email, i.institucion,  i.telefono, i.resena, i.telefonowp , i.ubicacion,
+l.linkin,l.url, m.imagenin_id, m.url, v.videoin_id, v.url,
+c.charlas_id , c.nombrecharla ,c.link,c.fechaInicio ,c.fechaFina ,c.Cupos_charla,c.Cupos_disponibles,c.instituciones_instituciones_id
+FROM instituciones i
+INNER JOIN Institucion_tiene_links l
+ON i.instituciones_id=l.instituciones_instituciones_id 
+INNER JOIN instituciones_tiene_imagenes m
+ON m.instituciones_instituciones_id=i.instituciones_id
+INNER JOIN instituciones_tiene_videos v
+ON v.instituciones_instituciones_id=i.instituciones_id
+INNER JOIN charlas c
+ON c.instituciones_instituciones_id=i.instituciones_id
+ORDER BY i.instituciones_id;
