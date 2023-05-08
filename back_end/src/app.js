@@ -13,6 +13,9 @@ import institucionesJOINRoutes from "./routes/inst_join.routes.js";
 import institucionescalendarioRoutes from "./routes/calendario.routes.js"
 import charlasRoutes from "./routes/charlas.routes.js"
 import charlaslinksRoutes from "./routes/char_links.routes.js"
+//este se diferencia porque obtiene charlas por id de institucion
+import charlasINSTITUCIONRoutes from "./routes/añadirest_charla.routes.js"
+
 //Carpeta 1
 
 const app = express();
@@ -43,6 +46,13 @@ app.use("/api", institucionescalendarioRoutes);
 app.use("/api", charlasRoutes);
 //Para link de las charlas
 app.use("/api", charlaslinksRoutes);
+
+
+//para obtener las charlas por id de institucion
+// PARA INSCRIPCION DE CHARLAS
+app.use("/api", charlasINSTITUCIONRoutes);
+
+
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
