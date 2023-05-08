@@ -5,12 +5,31 @@ import { pool } from "../db.js";
 
 export const getInstJOIN = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, GROUP_CONCAT(DISTINCT l.url) AS links_redes,  GROUP_CONCAT(DISTINCT m.url) AS links_img,  GROUP_CONCAT(DISTINCT v.url) AS links_videos  FROM instituciones a  LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID  GROUP BY a.INSTITUCIONES_ID");
+      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, GROUP_CONCAT(DISTINCT l.llave ORDER BY l.llave ASC) AS links_llaves, GROUP_CONCAT(DISTINCT l.url) AS links_redes, GROUP_CONCAT(DISTINCT m.url) AS links_img, GROUP_CONCAT(DISTINCT v.url) AS links_videos FROM instituciones a LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID GROUP BY a.INSTITUCIONES_ID ORDER BY links_llaves ASC");
       res.json(rows);
     } catch (error) {
       return res.status(500).json({ error, message: "Algo fue mal" });
     }
   };
+
+  export const getImagenesInstv1 = async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC");
+      res.json(rows);
+    } catch (error) {
+      return res.status(500).json({ error, message: "Algo fue mal" });
+    }
+  };
+
+  export const getImagenesInstv2 = async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, i.nombre, GROUP_CONCAT(m.imagenin_id) AS imagenin_id, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id GROUP BY i.INSTITUCIONES_ID");
+      res.json(rows);
+    } catch (error) {
+      return res.status(500).json({ error, message: "Algo fue mal" });
+    }
+  };
+
 // export const getInstituciones = async (req, res) => {
 //   try {
 //     const [rows] = await pool.query("SELECT * FROM instituciones");
