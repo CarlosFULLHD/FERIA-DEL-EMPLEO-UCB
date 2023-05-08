@@ -1,3 +1,5 @@
+-- Comandos varios xd
+
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
@@ -30,11 +32,7 @@ SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
     JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
 	GROUP BY A.INSTITUCIONES_ID;
 
-
-SELECT * FROM Institucion_tiene_links;
-SELECT * FROM instituciones_tiene_imagenes;
-SELECT * FROM instituciones_tiene_videos;
-
+-- CORRER NUEVA DATABASE DESDE AQUI 
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre varchar(200)  NOT NULL,
@@ -45,15 +43,11 @@ CREATE TABLE instituciones (
     telefonowp varchar(50)  NOT NULL,
     ubicacion varchar(280)  NOT NULL
 );
-DESCRIBE instituciones;
 
 INSERT INTO instituciones values 
   (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
   (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
   (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
-  
-SELECT * FROM INSTITUCIONES;
-
 
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
@@ -64,7 +58,6 @@ CREATE TABLE cuenta (
     CONSTRAINT cuenta_pk PRIMARY KEY (cuenta_id)
 );
 
-SELECT * FROM CUENTA;
 -- Table: charlas
 CREATE TABLE charlas (
     charlas_id bigint  NOT NULL AUTO_INCREMENT,
