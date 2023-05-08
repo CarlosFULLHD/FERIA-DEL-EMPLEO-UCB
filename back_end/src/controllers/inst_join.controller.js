@@ -5,41 +5,53 @@ import { pool } from "../db.js";
 
 export const getInstJOIN = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, GROUP_CONCAT(DISTINCT l.url) AS links_redes, GROUP_CONCAT(DISTINCT m.url) AS links_img, GROUP_CONCAT(DISTINCT v.url) AS links_videos FROM instituciones a JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID GROUP BY a.INSTITUCIONES_ID");
+      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, GROUP_CONCAT(DISTINCT l.llave ORDER BY l.llave ASC) AS links_llaves, GROUP_CONCAT(DISTINCT l.url) AS links_redes, GROUP_CONCAT(DISTINCT m.url) AS links_img, GROUP_CONCAT(DISTINCT v.url) AS links_videos FROM instituciones a LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID GROUP BY a.INSTITUCIONES_ID ORDER BY links_llaves ASC");
       res.json(rows);
     } catch (error) {
       return res.status(500).json({ error, message: "Algo fue mal" });
     }
   };
-// export const getInstituciones = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query("SELECT * FROM instituciones");
-//     res.json(rows);
-//   } catch (error) {
-//     return res.status(500).json({ message: "Algo fue mal" });
-//   }
-// };
-// //obtener institucion por id
-// export const getInstitucion = async (req, res) => {
-//   try {
-//     //creamos una const para guardar el parametro 
-//     const { id } = req.params;
-//     const [rows] = await pool.query(
-//       "SELECT * FROM instituciones WHERE instituciones_id = ?",
-//       [id]
-//     );
 
-//     if (rows.length <= 0) {
-//       return res.status(404).json({ message: "No existe el registro" });
-//     }
+  export const getImagenesInstv1 = async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC");
+      res.json(rows);
+    } catch (error) {
+      return res.status(500).json({ error, message: "Algo fue mal" });
+    }
+  };
 
-//     res.json(rows[0]);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({error, message: "Algo fue mal al obtener la institucion" });
-//   }
-// };
+  export const getImagenesInstv2 = async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, i.nombre, GROUP_CONCAT(m.imagenin_id) AS imagenin_id, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id GROUP BY i.INSTITUCIONES_ID");
+      res.json(rows);
+    } catch (error) {
+      return res.status(500).json({ error, message: "Algo fue mal" });
+    }
+  };
+
+//obtener imagenes por id
+export const getInstitucionImagesbyId = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { INSTITUCIONES_ID } = req.params;
+    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
+      [INSTITUCIONES_ID]
+    );
+
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existe el registro" });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error, message: "Algo fue mal al obtener la institucion" });
+  }
+};
+
+
 // //se necesita id para le delete
 // export const deleteInstitucion = async (req, res) => {
 //   try {

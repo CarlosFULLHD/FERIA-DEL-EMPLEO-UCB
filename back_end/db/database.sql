@@ -1,15 +1,38 @@
+-- Comandos varios xd
+
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
 SELECT * FROM INSTITUCIONES;
+SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
+GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 
+GROUP_CONCAT(DISTINCT l.url) AS links_redes,  
+GROUP_CONCAT(DISTINCT m.url) AS links_img,  
+GROUP_CONCAT(DISTINCT v.url) AS links_videos  
+FROM instituciones a  
+LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  
+LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  
+LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID
+GROUP BY a.INSTITUCIONES_ID;
+    
+    
 
-SELECT * 
+
+SELECT * FROM INSTITUCIONES A LEFT JOIN Institucion_tiene_links B ON A.instituciones_id = B.instituciones_instituciones_id
+LEFT JOIN instituciones_tiene_imagenes C ON A.instituciones_id = C.instituciones_instituciones_id
+        LEFT JOIN instituciones_tiene_videos D ON A.instituciones_id = D.instituciones_instituciones_id;
+        
+SELECT MainTable.main_key, GROUP_CONCAT(SecondaryTable.attribute) AS attribute_list
+FROM MainTable
+JOIN SecondaryTable ON MainTable.secondary_key = SecondaryTable.secondary_key
+GROUP BY MainTable.main_key;
+
+SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
 	FROM INSTITUCIONES A
-		INNER JOIN Institucion_tiene_links B
-        ON A.instituciones_id = B.instituciones_instituciones_id;
+    JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
+	GROUP BY A.INSTITUCIONES_ID;
 
-
-SELECT*FROM instituciones i INNER JOIN Institucion_tiene_links l ON i.instituciones_id=l.instituciones_instituciones_id  INNER JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id=i.instituciones_id INNER JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id=i.instituciones_id INNER JOIN charlas c ON c.instituciones_instituciones_id=i.instituciones_id ORDER BY i.instituciones_id;
+-- CORRER NUEVA DATABASE DESDE AQUI 
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre varchar(200)  NOT NULL,
@@ -20,15 +43,11 @@ CREATE TABLE instituciones (
     telefonowp varchar(50)  NOT NULL,
     ubicacion varchar(280)  NOT NULL
 );
-DESCRIBE instituciones;
 
 INSERT INTO instituciones values 
   (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
   (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
   (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
-  
-SELECT * FROM INSTITUCIONES;
-
 
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
@@ -39,7 +58,6 @@ CREATE TABLE cuenta (
     CONSTRAINT cuenta_pk PRIMARY KEY (cuenta_id)
 );
 
-SELECT * FROM CUENTA;
 -- Table: charlas
 CREATE TABLE charlas (
     charlas_id bigint  NOT NULL AUTO_INCREMENT,
@@ -152,12 +170,23 @@ INSERT INTO instituciones_tiene_videos values
 (5,'video link 5',3),
 (6,'video link 6',3);
 INSERT INTO Institucion_tiene_links values 
-(1,'url link 1',1),
-(2,'url link 2',2),
-(3,'url link 3',2),
-(4,'url link 4',2),
-(5,'url link 5',3),
-(6,'url link 6',3);
+(1,'Facebook','link facebook',1),
+(2,'Instagram','link Instagram',1),
+(3,'Linkedin','link Linkedin',1),
+(4,'Whasup','link Whasup',1),
+(5,'Tiktok','link Tiktok',1),
+(6,'Formulario','link Formulario',1),
+(7,'2Facebook','2link facebook',2),
+(8,'2Instagram','2link Instagram',2),
+(9,'2Linkedin','2link Linkedin',2),
+(10,'2Whasup','2link Whasup',2),
+(11,'2Tiktok','2link Tiktok',2),
+(12,'2Formulario','2link Formulario',2),
+(13,'3Linkedin','3link Linkedin',3),
+(14,'3Whasup','3link Whasup',3),
+(15,'3Tiktok','3link Tiktok',3),
+(16,'3Formulario','3link Formulario',3);
+
 INSERT INTO charlas values 
 (1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
 (2,'charla2', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),

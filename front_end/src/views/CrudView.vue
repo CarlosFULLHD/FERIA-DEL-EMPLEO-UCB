@@ -682,8 +682,6 @@ import firebase from "firebase";
         var metaData = {
           contentType: "image/png"
         }
-
-
         files.forEach(async (element)=> {
           const imageName = uuid.v1();
           const storageRef = firebase.storage().ref();
@@ -699,10 +697,10 @@ import firebase from "firebase";
                 instituciones_instituciones_id: idApi
               }
           Instituciones.crearImg(dataUp)
-          
         })
-        this.closeMedia()
+        this.$refs.imgDropzone.removeAllFiles();
         this.$store.dispatch('successAlertAsync',`Imagenes guardados exitosamente`)
+        this.closeMedia()
       },
       // SAVE VIDEOS URL METHOD
       saveVideo () {
