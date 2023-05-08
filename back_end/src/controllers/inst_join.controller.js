@@ -35,7 +35,7 @@ export const getInstitucionImagesbyId = async (req, res) => {
   try {
     //creamos una const para guardar el parametro 
     const { INSTITUCIONES_ID } = req.params;
-    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, i.nombre,GROUP_CONCAT(m.imagenin_id) AS imagenin_id, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
+    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
       [INSTITUCIONES_ID]
     );
 
