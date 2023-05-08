@@ -2,11 +2,22 @@ USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
 SELECT * FROM INSTITUCIONES;
+SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
+GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 
+GROUP_CONCAT(DISTINCT l.url) AS links_redes,  
+GROUP_CONCAT(DISTINCT m.url) AS links_img,  
+GROUP_CONCAT(DISTINCT v.url) AS links_videos  
+FROM instituciones a  
+LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  
+LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  
+LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID
+GROUP BY a.INSTITUCIONES_ID;
+    
+    
 
-SELECT * 
-	FROM INSTITUCIONES A
-		LEFT JOIN Institucion_tiene_links B ON A.instituciones_id = B.instituciones_instituciones_id
-        LEFT JOIN instituciones_tiene_imagenes C ON A.instituciones_id = C.instituciones_instituciones_id
+
+SELECT * FROM INSTITUCIONES A LEFT JOIN Institucion_tiene_links B ON A.instituciones_id = B.instituciones_instituciones_id
+LEFT JOIN instituciones_tiene_imagenes C ON A.instituciones_id = C.instituciones_instituciones_id
         LEFT JOIN instituciones_tiene_videos D ON A.instituciones_id = D.instituciones_instituciones_id;
         
 SELECT MainTable.main_key, GROUP_CONCAT(SecondaryTable.attribute) AS attribute_list

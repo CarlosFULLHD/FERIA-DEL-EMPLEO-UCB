@@ -5,7 +5,7 @@ import { pool } from "../db.js";
 
 export const getInstJOIN = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, GROUP_CONCAT(DISTINCT l.url) AS links_redes, GROUP_CONCAT(DISTINCT m.url) AS links_img, GROUP_CONCAT(DISTINCT v.url) AS links_videos FROM instituciones a JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID GROUP BY a.INSTITUCIONES_ID");
+      const [rows] = await pool.query("SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, GROUP_CONCAT(DISTINCT l.url) AS links_redes,  GROUP_CONCAT(DISTINCT m.url) AS links_img,  GROUP_CONCAT(DISTINCT v.url) AS links_videos  FROM instituciones a  LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID  GROUP BY a.INSTITUCIONES_ID");
       res.json(rows);
     } catch (error) {
       return res.status(500).json({ error, message: "Algo fue mal" });
