@@ -30,35 +30,28 @@ export const getInstJOIN = async (req, res) => {
     }
   };
 
-// export const getInstituciones = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query("SELECT * FROM instituciones");
-//     res.json(rows);
-//   } catch (error) {
-//     return res.status(500).json({ message: "Algo fue mal" });
-//   }
-// };
-// //obtener institucion por id
-// export const getInstitucion = async (req, res) => {
-//   try {
-//     //creamos una const para guardar el parametro 
-//     const { id } = req.params;
-//     const [rows] = await pool.query(
-//       "SELECT * FROM instituciones WHERE instituciones_id = ?",
-//       [id]
-//     );
+//obtener imagenes por id
+export const getInstitucionImagesbyId = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { INSTITUCIONES_ID } = req.params;
+    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, i.nombre,GROUP_CONCAT(m.imagenin_id) AS imagenin_id, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
+      [INSTITUCIONES_ID]
+    );
 
-//     if (rows.length <= 0) {
-//       return res.status(404).json({ message: "No existe el registro" });
-//     }
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existe el registro" });
+    }
 
-//     res.json(rows[0]);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({error, message: "Algo fue mal al obtener la institucion" });
-//   }
-// };
+    res.json(rows[0]);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error, message: "Algo fue mal al obtener la institucion" });
+  }
+};
+
+
 // //se necesita id para le delete
 // export const deleteInstitucion = async (req, res) => {
 //   try {

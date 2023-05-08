@@ -2,7 +2,8 @@ import { Router } from "express";
 import {
     getInstJOIN,
     getImagenesInstv1,
-    getImagenesInstv2
+    getImagenesInstv2,
+    getInstitucionImagesbyId
 } from "../controllers/inst_join.controller.js";
 //controlador de rutas para el manejo modularizado
 //Digamos carpeta 2
@@ -20,11 +21,9 @@ router.get("/institucionesimagesv1", getImagenesInstv1);
 // GET imagenes por id de institucion ordenados por id de imagen(en orden xd)
 router.get("/institucionesimagesv2", getImagenesInstv2);
 
-// //obtener una institucion por nombre
-// router.get("/instituciones/query/:word", getInstitucionbyword);
 
-// // GET una institucion por ID
-// router.get("/instituciones/:id", getInstitucion);
+// GET imagenes de la institucion por ID
+router.get("/institucionesimagesv1/:INSTITUCIONES_ID", getInstitucionImagesbyId);
 
 // // DELETE una institucion con ID
 // router.delete("/instituciones/:id", deleteInstitucion);
