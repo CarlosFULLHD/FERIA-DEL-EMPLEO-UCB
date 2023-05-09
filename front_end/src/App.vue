@@ -35,7 +35,13 @@ export default {
     PageFooter,
     AlertsPopup,
   },
+  created() {
+    this.initialize()
+  },
   methods: {
+    initialize(){
+    
+    },
     goToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },

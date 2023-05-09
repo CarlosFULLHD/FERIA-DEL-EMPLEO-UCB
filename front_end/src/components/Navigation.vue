@@ -325,7 +325,6 @@
           <li><router-link class="linkD" :to="{name:'Login'}">Login</router-link></li> 
           <li><router-link class="linkD" :to="{name:'Contacto'}">Contactos</router-link></li>
           <li><router-link class="linkD" :to="{name:'Crud'}">Crud</router-link></li>
-
         </ul>
       </transition>
     </nav>
@@ -654,7 +653,7 @@ header{
       margin-left: 0;
       margin-top: 20px;
       .linkD{
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 400;
         transition: 0.5s ease all;
         padding-bottom: 4px;

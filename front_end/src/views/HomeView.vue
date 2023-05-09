@@ -12,8 +12,6 @@
     <button @click="warningAlert"> ADVERTENCIA</button>
     <button @click="adviceAlert"> INFO</button>
 
-
-
     <section class="hero">
       <v-container class="bg-surface-variant mb-6">
         <v-row align="start" no-gutters style="height: 150px;">
@@ -116,6 +114,66 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+.v-card__title {
+  background-color: #2196F3;
+  color: white;
+}
+
+.v-card__title h3 {
+  font-size: 20px;
+}
+
+.v-card__text {
+  color: #616161;
+}
+
+.v-divider {
+  margin: 16px 0;
+}
+
+.v-card__actions {
+  justify-content: flex-end;
+}
+
+.v-btn {
+  font-weight: bold;
+}
+
+.my-card {
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.v-card__title {
+  background-color: #1976D2;
+  color: white;
+}
+
+.v-card__title h3 {
+  font-size: 20px;
+}
+
+.v-card__text {
+  color: #616161;
+}
+
+.v-divider {
+  margin: 16px 0;
+}
+
+.v-card__actions {
+  justify-content: flex-end;
+}
+
+.v-btn {
+  font-weight: bold;
+}
+
 .hero {
   background-image: url("../assets/cato-foto.jpg");
   background-attachment: fixed;

@@ -1,58 +1,7 @@
 import { pool } from "../db.js";
-//Carpeta 3
-//Aqui es donde se ejecuta la funcionalidad, querys y funciones
-//con el export mandamos estas funciones asincronas a la carpeta 2
 
-// export const getInstlinks = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query("SELECT * FROM instituciones");
-//     res.json(rows);
-//   } catch (error) {
-//     return res.status(500).json({ message: "Algo fue mal" });
-//   }
-// };
-// //obtener institucion por id
-// export const getInstitucion = async (req, res) => {
-//   try {
-//     //creamos una const para guardar el parametro 
-//     const { id } = req.params;
-//     const [rows] = await pool.query(
-//       "SELECT * FROM instituciones WHERE instituciones_id = ?",
-//       [id]
-//     );
 
-//     if (rows.length <= 0) {
-//       return res.status(404).json({ message: "No existe el registro" });
-//     }
-
-//     res.json(rows[0]);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({error, message: "Algo fue mal al obtener la institucion" });
-//   }
-// };
-// //se necesita id para le delete
-// export const deleteInstitucion = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const [rows] = await pool.query("DELETE FROM instituciones WHERE instituciones_id = ?", [
-//       id,
-//     ]);
-
-//     if (rows.affectedRows <= 0) {
-//       return res.status(404).json({ message: "institucion no encontrada" });
-//     }
-
-//     res.sendStatus(204);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ message: "Algo fue mal al momento de eliminar" });
-//   }
-// };
-
-//crear institucion
+//crear IMAGEN
 export const createInstimages = async (req, res) => {
   try {
     const {url, instituciones_instituciones_id} = req.body;
@@ -67,6 +16,29 @@ export const createInstimages = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({error, message: "Algo fue mal en la creacion de la imagen" });
+  }
+};
+
+
+// OBTENER IMAGENES POR ID
+export const getImagenesById = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { instituciones_instituciones_id} = req.params;
+    const [rows] = await pool.query(
+      "SELECT url FROM instituciones_tiene_imagenes WHERE instituciones_instituciones_id = ?",
+      [instituciones_instituciones_id]
+    );
+
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existen imagenes" });
+    }
+
+    res.json(rows);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({error, message: "Algo fue mal al buscar imagenes" });
   }
 };
 

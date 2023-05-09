@@ -1,13 +1,16 @@
 
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
-<<<<<<< HEAD
+
 
 SELECT * FROM INSTITUCIONES;
 
-SELECT * FROM instituciones_tiene_imagenes WHERE instituciones_instituciones_id = 3;
+SELECT * FROM INSTITUCIONES_TIENE_VIDEOS;
 
-SELECT i.INSTITUCIONES_ID,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE m.instituciones_instituciones_id =   ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC;
+
+SELECT llave, url FROM Institucion_tiene_links WHERE instituciones_instituciones_id = 1;
+
+SELECT i.instituciones_id,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC
 
 
 SELECT a.instituciones_id, b.llave, b.url FROM Institucion_tiene_links b RIGHT JOIN instituciones a on a.INSTITUCIONES_ID = b.instituciones_instituciones_id ORDER BY a.INSTITUCIONES_ID asc;
@@ -43,8 +46,7 @@ SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
     JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
 	GROUP BY A.INSTITUCIONES_ID;
 
-=======
->>>>>>> 132b66e782e8b97406b9bd8be2bbc55ee42a8fb2
+
 -- CORRER NUEVA DATABASE DESDE AQUI 
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -58,9 +60,9 @@ CREATE TABLE instituciones (
 );
 
 INSERT INTO instituciones values 
-  (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
-  (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
-  (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
+  (4, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
+  (5, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
+  (6, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
 
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
@@ -144,31 +146,31 @@ SELECT * FROM INSTITUCIONES_TIENE_VIDEOS;
 -- foreign keys
 -- Reference: Charla_tiene_estudiantes_charlas (table: Charla_tiene_estudiantes)
 ALTER TABLE Charla_tiene_estudiantes ADD CONSTRAINT Charla_tiene_estudiantes_charlas FOREIGN KEY Charla_tiene_estudiantes_charlas (charlas_charlas_id)
-    REFERENCES charlas (charlas_id);
+    REFERENCES charlas (charlas_id) ON DELETE CASCADE;
 
 -- Reference: Charla_tiene_estudiantes_cuenta (table: Charla_tiene_estudiantes)
 ALTER TABLE Charla_tiene_estudiantes ADD CONSTRAINT Charla_tiene_estudiantes_cuenta FOREIGN KEY Charla_tiene_estudiantes_cuenta (cuenta_cuenta_id)
-    REFERENCES cuenta (cuenta_id);
+    REFERENCES cuenta (cuenta_id) ON DELETE CASCADE;
 
 -- Reference: Charla_tiene_links_charlas (table: Charla_tiene_links)
 ALTER TABLE Charla_tiene_links ADD CONSTRAINT Charla_tiene_links_charlas FOREIGN KEY Charla_tiene_links_charlas (charlas_charlas_id)
-    REFERENCES charlas (charlas_id);
+    REFERENCES charlas (charlas_id) ON DELETE CASCADE;
 
 -- Reference: Feria_tiene_charlas_instituciones (table: charlas)
 ALTER TABLE charlas ADD CONSTRAINT Feria_tiene_charlas_instituciones FOREIGN KEY Feria_tiene_charlas_instituciones (instituciones_instituciones_id)
-    REFERENCES instituciones (instituciones_id);
+    REFERENCES instituciones (instituciones_id) ON DELETE CASCADE;
 
 -- Reference: Institucion_tiene_links_instituciones (table: Institucion_tiene_links)
 ALTER TABLE Institucion_tiene_links ADD CONSTRAINT Institucion_tiene_links_instituciones FOREIGN KEY Institucion_tiene_links_instituciones (instituciones_instituciones_id)
-    REFERENCES instituciones (instituciones_id);
+    REFERENCES instituciones (instituciones_id) ON DELETE CASCADE;
 
 -- Reference: instituciones_tiene_imagenes_instituciones (table: instituciones_tiene_imagenes)
 ALTER TABLE instituciones_tiene_imagenes ADD CONSTRAINT instituciones_tiene_imagenes_instituciones FOREIGN KEY instituciones_tiene_imagenes_instituciones (instituciones_instituciones_id)
-    REFERENCES instituciones (instituciones_id);
+    REFERENCES instituciones (instituciones_id) ON DELETE CASCADE;
 
 -- Reference: instituciones_tiene_videos_instituciones (table: instituciones_tiene_videos)
 ALTER TABLE instituciones_tiene_videos ADD CONSTRAINT instituciones_tiene_videos_instituciones FOREIGN KEY instituciones_tiene_videos_instituciones (instituciones_instituciones_id)
-    REFERENCES instituciones (instituciones_id);    
+    REFERENCES instituciones (instituciones_id) ON DELETE CASCADE;    
 
 -- DATOS PARA LLENAR TABLAS
 

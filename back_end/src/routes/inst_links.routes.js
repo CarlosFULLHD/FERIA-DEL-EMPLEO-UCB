@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  //getInstlinks,
+  getLinksById,
   createInstlinks
 } from "../controllers/inst_links.cotroller.js";
 
@@ -14,7 +14,7 @@ const router = Router();
 
 // INSERTAR una institucion 
 router.post("/institucioneslinks", createInstlinks);
-// //actualizar una institucion
-// router.patch("/instituciones/:id", updateInstitucion);
+
+router.get("/institucioneslinks/:instituciones_instituciones_id", getLinksById);
 
 export default router;

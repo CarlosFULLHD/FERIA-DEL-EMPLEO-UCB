@@ -178,7 +178,7 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [],
+    events: [], // ARRAY OF ALL THE TALKS
     dialog: false,
     dialogDate: false
   }),
@@ -233,13 +233,41 @@ export default {
     // METHOD TO RETRIEVE EVENTS FROM DATA BASE
 
     async getEvents () {
-      console.log("HOLA")
-      let snapshot = await Calendario.getAllCharlas()
-      console.log(snapshot.data)
+      console.log("INICIO")
+      let xd = await Calendario.getAllCharlas()
+      let snapshot = xd.data
+      
+      //console.log(snapshot.data)
+      Object.keys(snapshot).forEach(key => {
+           //console.log(key);
+
+          console.log(snapshot[key].fechaFina)
+
+          this.events.push({
+            name: snapshot[key].nombrecharla,
+            start: new Date(snapshot[key].fechaInicio),
+            end: new Date(snapshot[key].fechaFina),
+            color: snapshot[key].Color,
+            timed: true,
+          })
+
+          //  let addData = snapshot
+          //  addData.id = snapshot[key].charlas_id
+          //  addData.color = snapshot[key].Color
+          //  addData.name = snapshot[key].nombrecharla
+          //  addData.details = "HOLA HOLA MARIO SISISISIS"
+          //  addData.start = snapshot[key].fechaInicio
+          //  addData.end = snapshot[key].fechaFina
+          //  console.log(addData)
+           
+           //this.events.push(addData) 
+          
+      });
+
+
+
       //const events = []
-      snapshot.forEach(doc => {
-        console.log(doc)
-      })
+      
       // let snapshot = await db.collection('calEvent').get()
       // const events = []
       // snapshot.forEach(doc => {
@@ -281,7 +309,7 @@ export default {
       let id = this.getKeyByValue(this.name)
       try {
         const dataUp = {
-        nombrecharla: this.name,
+        nombrecharla: this.titleTalk,
         link: this.link,
         fechaInicio: this.start,
         fechaFina: this.end,

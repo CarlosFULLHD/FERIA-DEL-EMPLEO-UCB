@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
   //getInstlinks,
-  createVideos
+  createVideos,
+  getVideosById
 } from "../controllers/inst_videos.controller.js";
 
 const router = Router();
@@ -16,5 +17,6 @@ const router = Router();
 router.post("/institucionesvideos", createVideos);
 // //actualizar una institucion
 // router.patch("/instituciones/:id", updateInstitucion);
+router.get("/institucionesvideos/:instituciones_instituciones_id",getVideosById )
 
 export default router;

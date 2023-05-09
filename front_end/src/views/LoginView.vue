@@ -113,19 +113,22 @@
           let usuario = await Cuentas.loginCuenta(this.cuenta,this.password)
           let xd = usuario.data
           if (xd.length !== 0){
-            console.log("CUENTITA")
             
-            // this.$store.state.cuentaU = xd.cuenta
-            // this.$store.state.passwordU = xd.pwd
-            // this.$store.state.superU = xd.email
-            // this.$store.state.emailU = xd.superusuario
-            this.$store.dispatch('changeUserAccount',xd.cuenta)
-            this.$store.dispatch('changeUserPwd',xd.pwd)
-            this.$store.dispatch('changeUserEmail',xd.email)
-            this.$store.dispatch('changeSuperUser',xd.superusuario)
+            this.$session.set('cuenta',xd.cuenta)
+            this.$session.set('pwd',xd.pwd)
+            this.$session.set('email',xd.email)
+            this.$session.set('flag',xd.superusuario)
+            alert("HOLA")
+            
+            // this.$store.dispatch('changeUserAccount',xd.cuenta)
+            // this.$store.dispatch('changeUserPwd',xd.pwd)
+            // this.$store.dispatch('changeUserEmail',xd.email)
+            // this.$store.dispatch('changeSuperUser',xd.superusuario)
+            
             this.$store.dispatch('successAlertAsync',`Bienvenido ${xd.cuenta}`)
           }
         } catch (error) {
+          this.$session.destroy()
           this.$store.dispatch('errorAlertAsync',`Cuenta inexistente, intente de nuevo`)
         }     
       },

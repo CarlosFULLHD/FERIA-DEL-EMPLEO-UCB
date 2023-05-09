@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
+      
         <v-row justify="center">
           <v-col v-for="(value , key) in tarjetasObject" :key="key"
             cols="auto"
             sm="6"
             md="4"
-            lg="4"
+            lg="2"
           >
             <v-hover v-slot="{ hover }">
               <div class="card">
@@ -19,7 +19,7 @@
                   class="my-3"
                 >
                 <!-- IMAGENES EMPRESA -->
-                  <v-carousel hide-delimiters>
+                  <v-carousel hide-delimiters  height="275" width="275">
                     <span  v-for="(xd , key) in imagenesObject" :key="key">
                     <v-carousel-item
                       v-if ="xd['instituciones_id'] === value['instituciones_id']"
@@ -27,7 +27,7 @@
                       cover
                     >
                   </v-carousel-item>
-                </span>
+                  </span>
                   </v-carousel>
 
                   <!-- TITULO -->
@@ -53,10 +53,109 @@
                       Opcion
                     </v-btn>
                     <v-btn color="#ffc506">
-                      <button id="miBoton" class="miBoton">Información</button>
+                      <button id="miBoton" @click="infoDialog(value['instituciones_id'])" class="miBoton">Información</button>
                     </v-btn>
                   </v-card-actions>
                   <v-divider></v-divider>
+
+
+                  <!-- INFO DIALOG -->
+                  <v-dialog
+                  v-model="dialog"
+                  fullscreen
+                  hide-overlay
+                  transition="dialog-bottom-transition"
+                >
+               
+                  <v-card
+                  elevation="24"
+                  max-width="444"
+                  class="mx-auto">
+                  <v-toolbar flat color="#001f3f" dark>
+                      <v-btn
+                        icon
+                        dark
+                        @click="dialog = false"
+                      >
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                      <v-toolbar-title>Cerrar</v-toolbar-title>
+                      <v-spacer></v-spacer>
+
+
+                      <v-toolbar-items>
+                        <v-btn
+                          dark
+                          text
+                          @click="dialog = false"
+                        >
+                          Charlas
+                        </v-btn>
+                      </v-toolbar-items>
+                    </v-toolbar>
+                    
+                    <template>
+                      <center>
+                      <h1>{{ infoNombre }}</h1>
+                      <h3><b>Categoría: </b><i>{{  infoRubro }}</i></h3>              
+                      <v-row>
+                        <v-col cols="12" md="6">
+                          <v-carousel :cycle="true"  :interval="2500" :show-arrows="false" :show-indicators="false">
+                            <span  v-for="(xd , key) in infoImgObject" :key="key">
+                            <v-carousel-item
+                            :src="xd['url']"
+                            cover>
+                            </v-carousel-item>
+                          </span>
+                          </v-carousel>
+                          
+                        </v-col>
+                        
+
+                        <v-row>
+                          <v-col cols="12">
+                            <!--BUSINESS INFO -->
+                            <h1>Conócenos</h1>
+                            <v-divider></v-divider>
+                            <p>{{  infoResena }}</p>
+                            <v-divider></v-divider>
+                            <h1>Contactos</h1>
+
+                            <v-card-actions ref="testHola('sisisisi')">
+                            <span  v-for="(xd , key) in infoLinksObject" :key="key">
+                              <v-btn :href="xd.url">
+                                <v-icon color="primary"
+                                > {{ logos[xd['llave']] }}
+                                </v-icon>
+                              </v-btn>
+                            
+                            </span>
+                          </v-card-actions>
+
+
+
+                          </v-col>
+                        </v-row>
+                      </v-row>
+                   
+                    <v-divider></v-divider>
+                    <h1>Nuestros videos</h1>
+                    <v-row class="video-row" no-gutters>
+                      <v-col v-for="(xd , key) in videoImgObject" :key="key" cols="12" sm="6" md="4" lg="3" xl="2">
+                        <LazyYoutube
+                                            ref="youtubeLazyVideo"
+                                            :src="xd['url']"
+                                            max-width="720px"
+                                            aspect-ratio="16:9"
+                                            thumbnail-quality="standard"
+                                            />
+                      </v-col>
+                    </v-row>
+                  </center>
+                  </template>
+
+                    </v-card>
+                    </v-dialog>
 
                   
                   <v-card-actions ref="testHola('sisisisi')">
@@ -74,7 +173,7 @@
             </v-hover>
           </v-col>
         </v-row>
-      </v-container>
+   
     </v-main>
   </v-app>
 </template>
@@ -82,11 +181,32 @@
 
   <script>
   import Tarjetas from '@/services/Tarjetas'
+  import Instituciones from '@/services/Instituciones'
     export default {
       data: () => ({
+
+        carouselItems: [
+        { src: 'image1.jpg', alt: 'Image 1' },
+        { src: 'image2.jpg', alt: 'Image 2' },
+        { src: 'image3.jpg', alt: 'Image 3' },
+      ],
+
+        dialog: false,
+        infoLinksObject: {},
+        infoImgObject: {},
+        videoImgObject: {},
+        infoNombre: '',
+        infoEmail:'',
+        infoTelefono:'',
+        infoResena:'',
+        infoUbicacion: '',
+        infoRubro: '',
+        
+
         tarjetasObject: {},
         imagenesObject: {},
         linksObject: {},
+        videoObject: {},
         logos: {
               Facebook:"mdi mdi-facebook" ,
               Instagram:"mdi mdi-instagram" ,
@@ -125,8 +245,33 @@
         },
 
 
+
       },
       methods: {
+        async infoDialog(id){
+          let xd = await Instituciones.getInstById(id)
+          
+          this.infoId = xd.data.instituciones_id
+          this.infoNombre = xd.data.nombre
+          this.infoEmail = xd.data.email
+          this.infoTelefono = xd.data.telefono
+          this.infoResena = xd.data.resena
+          this.infoUbicacion = xd.data.ubicacion
+          this.infoRubro = xd.data.institucion
+          this.dialog = true
+          try {
+            xd = await Tarjetas.getImgByIdTwo(this.infoId)
+            this.infoImgObject = xd.data
+            xd = await Tarjetas.getVidById(this.infoId)
+            this.videoImgObject = xd.data
+            xd = await Tarjetas.getLinksById(this.infoId)
+            console.log(xd.data)
+            this.infoLinksObject = xd.data
+          } catch (error) {
+            this.infoImgObject = {}
+          }
+          //console.log(xd.data)
+        },
         async initialize() {
           Tarjetas.crearTarjeta().then((result) => {
             this.tarjetasObject = result.data
@@ -190,6 +335,11 @@
 
 .v-window-item {
   height: 100%;
+}
+
+.video-row {
+  overflow-x: auto;
+  white-space: nowrap;
 }
 </style>
 

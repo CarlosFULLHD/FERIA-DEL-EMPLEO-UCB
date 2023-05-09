@@ -6,6 +6,9 @@ export default {
     listarIns : (parameters) => {
         return Api().get('api/instituciones',parameters)
     },
+    getInstById : (id) => {
+        return Api().get(`api/instituciones/${id}`)
+    },
     borrarIns: (id) => {
         return Api().delete(`api/instituciones/${id}`)
     },
