@@ -185,7 +185,7 @@ INSERT INTO instituciones_tiene_videos values
 (4,'video link 4',2),
 (5,'video link 5',3),
 (6,'video link 6',3);
-INSERT INTO Institucion_tiene_links values 
+INSERT INTO Institucion_tiene_links(llave,url,instituciones_instituciones_id) values 
 (1,'url link 1',1),
 (2,'url link 2',2),
 (3,'url link 3',2),

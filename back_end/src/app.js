@@ -54,6 +54,7 @@ app.use("/api", charlaslinksRoutes);
 app.use("/api", charlasINSTITUCIONRoutes);
 
 // API PARA NATALIA
+// Ya funciona 
 app.use("/api", chatRoutes);
 
 app.use((req, res, next) => {
