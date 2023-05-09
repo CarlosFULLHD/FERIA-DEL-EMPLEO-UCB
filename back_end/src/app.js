@@ -16,6 +16,7 @@ import charlaslinksRoutes from "./routes/char_links.routes.js"
 //este se diferencia porque obtiene charlas por id de institucion
 import charlasINSTITUCIONRoutes from "./routes/añadirest_charla.routes.js"
 
+import chatRoutes from "./routes/chat.routes.js"
 //Carpeta 1
 
 const app = express();
@@ -52,7 +53,8 @@ app.use("/api", charlaslinksRoutes);
 // PARA INSCRIPCION DE CHARLAS
 app.use("/api", charlasINSTITUCIONRoutes);
 
-
+// API PARA NATALIA
+app.use("/api", chatRoutes);
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
