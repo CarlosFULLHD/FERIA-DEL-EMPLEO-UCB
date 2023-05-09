@@ -54,6 +54,7 @@
         <v-dialog v-model="dialog" max-width="550">
         <v-card>
           <v-container>
+            <h1 class="cool-title">Nuevo evento</h1>
             <v-form @submit.prevent="addEvent">
               
               <v-combobox 

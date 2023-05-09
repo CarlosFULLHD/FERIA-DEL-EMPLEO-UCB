@@ -38,7 +38,7 @@ const routes = [
     component: EmpresasView,
   },
   {
-    path: "/chats_empresas",
+    path: "/chats",
     name: "Chat",
     component: ChatsView,
   },

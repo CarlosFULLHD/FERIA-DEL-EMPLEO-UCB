@@ -1,4 +1,4 @@
-<template>
+<!--<template>
    <v-app id="inspire">
     <div class="wrapper">
       <nav class="navChat">
@@ -28,9 +28,10 @@
       </div>
     </div>
   </v-app>
-  </template>
-  
+  </template>-->
+  <!--
   <script>
+  import Chat from '@/services/Chat'
   export default {
     data() {
       return {
@@ -90,7 +91,95 @@
       
     }
   };
+  </script>-->
+  <template>
+    <v-app id="inspire">
+      <div class="wrapper">
+        <nav class="navChat">
+          <h1>Lista de chats de empresas</h1>
+          <p>Total de chats: {{ chatsLength }}</p>
+          <ul>
+            <li v-for="(chat, index) in chatsObject" :key="index">
+              <a href="#" @click="selectChat(index)">
+                {{ chat.nombre }}
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="main">
+          <div class="chat-container">
+            <div class="head">
+              <h2>Aqui el nombre del chat seleccionado: {{ selectedChat.nombre }}</h2>
+            </div>
+            <div class="messages">
+              <div v-for="(message, index) in selectedChat.messages" :key="index">
+                <div :class="['message', message.type]">{{ message.text }}</div>
+              </div>
+            </div>
+            <div class="input">
+              <input type="text" v-model="newMessage" @keyup.enter="sendMessage" v-on:input="validateNumber" placeholder="Escribe tu mensaje...">
+              <button class="send" @click="sendMessage">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-app>
+  </template>
+  
+  <script>
+  import Chat from '@/services/Chat'
+  
+  export default {
+    name: 'ChatsView',
+    data: () => ({
+      chatsObject: {},
+      selectedChat: {
+        nombre: '',
+        messages: []
+      },
+      newMessage: ''
+    }),
+    mounted() {
+      this.loadChats()
+    },
+    created() {
+      this.initialize();
+    },
+    computed: {
+      // CHATS LENGTH
+      chatsLength() {
+        return Object.keys(this.chatsObject).length
+      },
+    },
+    methods: {
+      async initialize() {
+        Chat.listarIns().then((result) => {
+          this.chatsObject = result.data
+        }).catch((error) => {
+          console.log(error)
+        });
+      },
+      selectChat(index) {
+        this.selectedChat = this.chatsObject[index]
+      },
+      sendMessage() {
+        if (this.newMessage.trim() !== '') {
+          this.selectedChat.messages.push({
+            text: this.newMessage.trim(),
+            type: 'outgoing'
+          })
+          this.newMessage = ''
+        }
+      }
+    }
+  }
   </script>
+  
+  
+  
+
+  
+  
   
   <style>
   .head{
