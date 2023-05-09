@@ -1,7 +1,6 @@
 
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
-<<<<<<< HEAD
 
 SELECT * FROM INSTITUCIONES;
 
@@ -43,8 +42,6 @@ SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
     JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
 	GROUP BY A.INSTITUCIONES_ID;
 
-=======
->>>>>>> 132b66e782e8b97406b9bd8be2bbc55ee42a8fb2
 -- CORRER NUEVA DATABASE DESDE AQUI 
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -54,13 +51,14 @@ CREATE TABLE instituciones (
     telefono varchar(50)  NOT NULL,
     resena varchar(280)  NOT NULL,
     telefonowp varchar(50)  NOT NULL,
-    ubicacion varchar(280)  NOT NULL
+    ubicacion varchar(280)  NOT NULL,
+    descripcion varchar(280)  NOT NULL
 );
 
 INSERT INTO instituciones values 
-  (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233'),
-  (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222'),
-  (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333');
+  (1, 'Banco BISA', 'bancobisa@gmail.com','bancaria','22256584','Banco bisa siempre tuyo','+591 7554654','Av Libertador #1233','Somos una buena empresa'),
+  (2, 'Banco Mercantil SantaCruz', 'bancobisa@gmail.com','bancaria','22256546','Besto banco','+591 7235640','Av Simon bolivar #2222','Somos una buena empresa'),
+  (3, 'TOYOTA', 'toyosa@gmail.com','autos','2123132','RUN RUN FRANCHESCO','+591 73024872','Av Wallace #3333','Somos la mejor empresa');
 
 CREATE TABLE cuenta (
     cuenta_id bigint  NOT NULL AUTO_INCREMENT,
