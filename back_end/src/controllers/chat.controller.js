@@ -12,7 +12,6 @@ export const getDatosCompletos = async (req, res) => {
     if (rows.length <= 0) {
       return res.status(404).json({ message: "No existe el registro" });
     }
-
     res.json(rows[0]);
   } catch (error) {
     return res
@@ -25,7 +24,7 @@ export const getNombreDeEmpresa = async (req, res) => {
     //creamos una const para guardar el parametro 
     const { id } = req.params;
     const [rows] = await pool.query(
-      "SELECT * FROM instituciones WHERE instituciones_id = ?",
+      "SELECT nombre, resena FROM instituciones WHERE instituciones_id = ?",
       [id]
     );
 
