@@ -1,7 +1,7 @@
--- Comandos varios xd
 
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
+<<<<<<< HEAD
 
 SELECT * FROM INSTITUCIONES;
 
@@ -43,6 +43,8 @@ SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
     JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
 	GROUP BY A.INSTITUCIONES_ID;
 
+=======
+>>>>>>> 132b66e782e8b97406b9bd8be2bbc55ee42a8fb2
 -- CORRER NUEVA DATABASE DESDE AQUI 
 CREATE TABLE instituciones (
     instituciones_id bigint  NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -201,13 +203,64 @@ INSERT INTO charlas values
 
 -- QUERY MAESTRO TARJETAS
 
-SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion, 
-    GROUP_CONCAT(DISTINCT l.url) AS links_redes, 
-    GROUP_CONCAT(DISTINCT m.url) AS links_img, 
-    GROUP_CONCAT(DISTINCT v.url) AS links_videos
-FROM instituciones a
-JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id
-JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID
-JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID
-GROUP BY a.INSTITUCIONES_ID;
+SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
+GROUP_CONCAT(DISTINCT l.llave ORDER BY l.llave ASC) AS links_llaves, 
+GROUP_CONCAT(DISTINCT l.url) AS links_redes,  
+GROUP_CONCAT(DISTINCT m.url) AS links_img,  
+GROUP_CONCAT(DISTINCT v.url) AS links_videos  
+FROM instituciones a  
+LEFT JOIN Institucion_tiene_links l 
+ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  
+LEFT JOIN instituciones_tiene_imagenes m 
+ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  
+LEFT JOIN instituciones_tiene_videos v 
+ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID  
+GROUP BY a.INSTITUCIONES_ID
+ORDER BY links_llaves ASC;
 
+-- query para obtener imagenes por id de institucion v1
+
+SELECT i.INSTITUCIONES_ID,m.url
+FROM instituciones_tiene_imagenes m
+RIGHT JOIN instituciones i
+ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id
+ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC;
+
+-- query pro listadov2
+SELECT i.INSTITUCIONES_ID,
+GROUP_CONCAT(m.url) AS urls_imagenes
+FROM instituciones i
+LEFT JOIN instituciones_tiene_imagenes m 
+ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id
+WHERE i.INSTITUCIONES_ID = 2
+GROUP BY i.INSTITUCIONES_ID;
+
+-- Otros queries
+
+SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
+GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 
+GROUP_CONCAT(DISTINCT l.url) AS links_redes,  
+GROUP_CONCAT(DISTINCT m.url) AS links_img,  
+GROUP_CONCAT(DISTINCT v.url) AS links_videos  
+FROM instituciones a  
+LEFT JOIN Institucion_tiene_links l ON a.INSTITUCIONES_ID = l.instituciones_instituciones_id  
+LEFT JOIN instituciones_tiene_imagenes m ON m.instituciones_instituciones_id = a.INSTITUCIONES_ID  
+LEFT JOIN instituciones_tiene_videos v ON v.instituciones_instituciones_id = a.INSTITUCIONES_ID
+GROUP BY a.INSTITUCIONES_ID;
+    
+    
+
+
+SELECT * FROM INSTITUCIONES A LEFT JOIN Institucion_tiene_links B ON A.instituciones_id = B.instituciones_instituciones_id
+LEFT JOIN instituciones_tiene_imagenes C ON A.instituciones_id = C.instituciones_instituciones_id
+        LEFT JOIN instituciones_tiene_videos D ON A.instituciones_id = D.instituciones_instituciones_id;
+        
+SELECT MainTable.main_key, GROUP_CONCAT(SecondaryTable.attribute) AS attribute_list
+FROM MainTable
+JOIN SecondaryTable ON MainTable.secondary_key = SecondaryTable.secondary_key
+GROUP BY MainTable.main_key;
+
+SELECT INSTITUCIONES_ID, GROUP_CONCAT(b.url) AS attribute_list
+	FROM INSTITUCIONES A
+    JOIN instituciones_tiene_imagenes B ON A.INSTITUCIONES_ID = B.instituciones_instituciones_id
+	GROUP BY A.INSTITUCIONES_ID;
