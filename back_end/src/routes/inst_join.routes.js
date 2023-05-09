@@ -3,7 +3,8 @@ import {
     getInstJOIN,
     getImagenesInstv1,
     getImagenesInstv2,
-    getInstitucionImagesbyId
+    getInstitucionImagesbyId,
+    getInstitucionLinks
 } from "../controllers/inst_join.controller.js";
 //controlador de rutas para el manejo modularizado
 //Digamos carpeta 2
@@ -24,6 +25,9 @@ router.get("/institucionesimagesv2", getImagenesInstv2);
 
 // GET imagenes de la institucion por ID
 router.get("/institucionesimagesv1/:INSTITUCIONES_ID", getInstitucionImagesbyId);
+
+// GET LINKS DE LA INSTITUCIÓN
+router.get("/institucioneslinks",getInstitucionLinks);
 
 // // DELETE una institucion con ID
 // router.delete("/instituciones/:id", deleteInstitucion);

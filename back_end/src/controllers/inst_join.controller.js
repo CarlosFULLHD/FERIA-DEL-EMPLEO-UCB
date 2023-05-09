@@ -14,7 +14,7 @@ export const getInstJOIN = async (req, res) => {
 
   export const getImagenesInstv1 = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC");
+      const [rows] = await pool.query("SELECT i.instituciones_id,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC");
       res.json(rows);
     } catch (error) {
       return res.status(500).json({ error, message: "Algo fue mal" });
@@ -35,7 +35,8 @@ export const getInstitucionImagesbyId = async (req, res) => {
   try {
     //creamos una const para guardar el parametro 
     const { INSTITUCIONES_ID } = req.params;
-    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, GROUP_CONCAT(m.url) AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
+ 
+    const [rows] = await pool.query("SELECT i.INSTITUCIONES_ID, GROUP_CONCAT(m.url SEPARATOR '||') AS urls_imagenes FROM instituciones i LEFT JOIN instituciones_tiene_imagenes m ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE i.INSTITUCIONES_ID = ? GROUP BY i.INSTITUCIONES_ID",
       [INSTITUCIONES_ID]
     );
 
@@ -50,6 +51,18 @@ export const getInstitucionImagesbyId = async (req, res) => {
       .json({ error, message: "Algo fue mal al obtener la institucion" });
   }
 };
+
+
+// OBTENER LLAVE LINKS (INSITUCIONES LINKS)
+export const getInstitucionLinks = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT a.instituciones_id, b.llave, b.url FROM Institucion_tiene_links b RIGHT JOIN instituciones a on a.INSTITUCIONES_ID = b.instituciones_instituciones_id ORDER BY a.INSTITUCIONES_ID asc");
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ error, message: "Algo fue mal" });
+  }
+};
+
 
 
 // //se necesita id para le delete

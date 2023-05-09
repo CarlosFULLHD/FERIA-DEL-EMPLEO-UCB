@@ -4,7 +4,7 @@ import {
     //getCharlaIDlink,
     deleteCharlalink,
     createCharlalink,
-    updateCharlalink
+    updateCharlalink,
 
 } from "../controllers/char_links.controller.js";
 const router = Router();

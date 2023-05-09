@@ -4,12 +4,12 @@ import {
     getCharlaID,
     deleteCharla,
     createCharla,
-    updateCharla
+    updateCharla,
 
 } from "../controllers/charlas.controller.js";
 const router = Router();
 // GET todas las instituciones
-router.get("/charlas", getCharlas);
+router.get("/charlasAll", getCharlas);
 
 // GET una charla por ID
 router.get("/charlas/:id", getCharlaID);

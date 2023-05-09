@@ -778,8 +778,6 @@ import firebase from "firebase";
         this.$store.dispatch('successAlertAsync',`Links guardados exitosamente`)
         this.closeMedia()
       },
-
-
     }
   }
 </script>

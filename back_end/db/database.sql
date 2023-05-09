@@ -4,6 +4,17 @@ USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
 SELECT * FROM INSTITUCIONES;
+
+SELECT * FROM instituciones_tiene_imagenes WHERE instituciones_instituciones_id = 3;
+
+SELECT i.INSTITUCIONES_ID,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id WHERE m.instituciones_instituciones_id =   ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC;
+
+
+SELECT a.instituciones_id, b.llave, b.url FROM Institucion_tiene_links b RIGHT JOIN instituciones a on a.INSTITUCIONES_ID = b.instituciones_instituciones_id ORDER BY a.INSTITUCIONES_ID asc;
+
+select * from institucion_tiene_links;
+
+
 SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
 GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 
 GROUP_CONCAT(DISTINCT l.url) AS links_redes,  
@@ -66,10 +77,15 @@ CREATE TABLE charlas (
     fechaInicio timestamp  NOT NULL,
     fechaFina timestamp  NOT NULL,
     Cupos_charla int  NOT NULL,
-    Cupos_disponibles int  NOT NULL,
+    Color varchar(250) not null,
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT charlas_pk PRIMARY KEY (charlas_id)
 );
+
+SELECT * FROM CHARLAS;
+TRUNCATE TABLE CHARLAS;
+desc charlas;
+select now();
 
 -- tables
 -- Table: Charla_tiene_estudiantes
@@ -170,23 +186,12 @@ INSERT INTO instituciones_tiene_videos values
 (5,'video link 5',3),
 (6,'video link 6',3);
 INSERT INTO Institucion_tiene_links values 
-(1,'Facebook','link facebook',1),
-(2,'Instagram','link Instagram',1),
-(3,'Linkedin','link Linkedin',1),
-(4,'Whasup','link Whasup',1),
-(5,'Tiktok','link Tiktok',1),
-(6,'Formulario','link Formulario',1),
-(7,'2Facebook','2link facebook',2),
-(8,'2Instagram','2link Instagram',2),
-(9,'2Linkedin','2link Linkedin',2),
-(10,'2Whasup','2link Whasup',2),
-(11,'2Tiktok','2link Tiktok',2),
-(12,'2Formulario','2link Formulario',2),
-(13,'3Linkedin','3link Linkedin',3),
-(14,'3Whasup','3link Whasup',3),
-(15,'3Tiktok','3link Tiktok',3),
-(16,'3Formulario','3link Formulario',3);
-
+(1,'url link 1',1),
+(2,'url link 2',2),
+(3,'url link 3',2),
+(4,'url link 4',2),
+(5,'url link 5',3),
+(6,'url link 6',3);
 INSERT INTO charlas values 
 (1,'charla1', 'link zoom 123123qwe','2023-05-6 17:00:00','2023-05-6 18:00:00',256,256,1),
 (2,'charla2', 'link zoom 123123qwe','2023-05-6 18:00:00','2023-05-6 19:00:00',256,256,2),

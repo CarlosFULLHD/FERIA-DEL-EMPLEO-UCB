@@ -521,11 +521,12 @@ export default {
   'https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap'
   );
 header{
+  position: fixed;
   background-color: #001f3f;
   opacity: 0.9;
   z-index:99;
   width: 100%;
-  position: relative;
+  top: 0; 
   transition: 0.5s ease all;
   color: #fff;
   nav{
@@ -708,5 +709,6 @@ header{
 }
 .Icono:hover{
   color: #ffffff;
+
 }
 </style>

@@ -51,17 +51,26 @@
 
         <!-- ADD EVENT DIALOG -->
 
-        <v-dialog v-model="dialog" max-width="500">
+        <v-dialog v-model="dialog" max-width="550">
         <v-card>
           <v-container>
             <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="name" type="text" label="Título (Requerido)"></v-text-field>
-              <v-text-field v-model="details" type="text" label="Detalles"></v-text-field>
-              <v-text-field v-model="start" type="date" label="Inicio (Requerido)"></v-text-field>
-              <v-text-field v-model="end" type="date" label="Fin (Requerido)"></v-text-field>
+              
+              <v-combobox 
+                v-model="name"
+                label="Institución"
+                :items="nombreArray"
+                :item-value="IdArray"
+                variant="outlined"
+              ></v-combobox>
+              <v-text-field v-model="titleTalk" type="text" label="Título charla"></v-text-field>
+              <v-text-field v-model="start" type="datetime-local" label="Fecha Inicio (Requerido)"></v-text-field>
+              <v-text-field v-model="end" type="datetime-local" label="Fin (Requerido)"></v-text-field>
+              <v-text-field v-model="cupo" type="number" label="Cupo máximo (Requerido)"></v-text-field>
+              <v-text-field v-model="link" type="text" label="Link (Requerido)"></v-text-field>
               <v-text-field v-model="color" type="color" label="Color (click para abrir menú colores)"></v-text-field>
               <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
-                create event
+                Crear charla
               </v-btn>
             </v-form>
           </v-container>
@@ -140,9 +149,14 @@
 </template>
 
 <script>
+
+import Calendario from '@/services/Calendario'
 import { db } from '@/main'
 export default {
   data: () => ({
+    comboboxArray: [],
+
+
     today: new Date().toISOString().substr(0, 10),
     focus: new Date().toISOString().substr(0, 10),
     type: 'month',
@@ -152,11 +166,14 @@ export default {
       day: 'Día',
       '4day': '4 días',
     },
-    name: null,
+    name: null,// BUSINESS NAME (COMBOBOX)
     details: null,
-    start: null,
-    end: null,
-    color: '#1976D2', // default event color
+    titleTalk: null, // TALK TITLE
+    start: null, // INITIAL DATE
+    end: null,  // END DATE
+    cupo: null, // MAX CAP
+    link: null, // LINK OF THE TALK
+    color: '#1976D2', // EVENTO COLOR
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
@@ -168,7 +185,20 @@ export default {
   mounted () {
     this.getEvents()
   },
+  created() {
+    this.loadComboBox()
+  },
   computed: {
+    // CARGADO COMBOBOX NOMBRES E ID
+    nombreArray(){
+      return this.comboboxArray.map((item)=> item.nombre)
+    },
+    IdArray() {
+      return this.comboboxArray.map((item) => item.instituciones_id);
+    },
+
+
+
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -200,16 +230,29 @@ export default {
     }
   },
   methods: {
+    // METHOD TO RETRIEVE EVENTS FROM DATA BASE
+
     async getEvents () {
-      let snapshot = await db.collection('calEvent').get()
-      const events = []
+      console.log("HOLA")
+      let snapshot = await Calendario.getAllCharlas()
+      console.log(snapshot.data)
+      //const events = []
       snapshot.forEach(doc => {
-        let appData = doc.data()
-        appData.id = doc.id
-        events.push(appData)
+        console.log(doc)
       })
-      this.events = events
+      // let snapshot = await db.collection('calEvent').get()
+      // const events = []
+      // snapshot.forEach(doc => {
+      //   let appData = doc.data()
+      //   appData.id = doc.id
+      //   events.push(appData)
+      // })
+      // this.events = events
     },
+
+
+
+
     setDialogDate( { date }) {
       this.dialogDate = true
       this.focus = date
@@ -230,25 +273,34 @@ export default {
     next () {
       this.$refs.calendar.next()
     },
+
+    // GUARDAR CHARLA
     async addEvent () {
-      if (this.name && this.start && this.end) {
-        await db.collection("calEvent").add({
-          name: this.name,
-          details: this.details,
-          start: this.start,
-          end: this.end,
-          color: this.color
-        })
-        this.getEvents()
-        this.name = '',
-        this.details = '',
-        this.start = '',
-        this.end = '',
-        this.color = '#1976D2'
-      } else {
-        alert('Debes ingresar el título, inicio y fin')
+     alert("SISISISISI")
+     if (this.titleTalk && this.start && this.end && this.link && this.cupo ){
+      let id = this.getKeyByValue(this.name)
+      try {
+        const dataUp = {
+        nombrecharla: this.name,
+        link: this.link,
+        fechaInicio: this.start,
+        fechaFina: this.end,
+        Cupos_charla: this.cupo,
+        Color: this.color,
+        instituciones_instituciones_id: id
+      }
+      console.log(dataUp)
+      Calendario.addCharla(dataUp)
+      this.$store.dispatch('successAlertAsync',`El evento ${this.name} fue creado exitosamente`)
+      } catch(error) {
+        this.$store.dispatch('errorAlertAsync',`Fallo de conexión con base de datos`)
+      }
+      }
+      else {
+        this.$store.dispatch('errorAlertAsync',`Llene todos los campos requeridos`)
       }
     },
+    // EDITAR CHARLA
     editEvent (ev) {
       this.currentlyEditing = ev.id
     },
@@ -259,11 +311,13 @@ export default {
       this.selectedOpen = false,
       this.currentlyEditing = null
     },
+    // BORRAR CHARLA
     async deleteEvent (ev) {
       await db.collection("calEvent").doc(ev).delete()
       this.selectedOpen = false,
       this.getEvents()
     },
+    // MOSTRAR EVENTO
     showEvent ({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event
@@ -286,7 +340,30 @@ export default {
       return d > 3 && d < 21
       ? 'th'
       : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
+    },
+    // LOAD COMBOBOX FOR EXISTING BUSINESS
+    async loadComboBox(){
+      let xd = await Calendario.getInstituciones()
+      this.comboboxArray = xd.data
+    },
+
+    getKeyByValue (value) {
+      const item = this.comboboxArray.find(obj => obj.nombre === value);
+      return item ? item.instituciones_id : null;
     }
-  }
+
+    
+   
+
+  },
+
+
+    
+   
+
+
+
+
+
 }
 </script>

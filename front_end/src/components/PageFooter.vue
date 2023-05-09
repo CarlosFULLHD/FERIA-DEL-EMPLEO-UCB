@@ -1,52 +1,41 @@
 <template>
-  <v-footer
-    color="#ffc506"
-  >
-    <v-card
-      flat
-      tile
-      class="indigo lighten-1 white--text text-center"
-      color="#001f3f"
-    >
-    <center>
-      <v-card-text>
-        <v-btn
-          v-for="icon in icons"
-          :key="icon"
-          class="mx-4 white--text"
-          icon
-          style="color:#ffc506"
-        >
-          <v-icon size="24px">
-            {{ icon }}
-          </v-icon>
-        </v-btn>
-      </v-card-text>
-   
-
-      <v-card-text class="white--text pt-0" style="color: white">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <v-card-text class="white--text" style="color: white">
-        {{ new Date().getFullYear() }} — <strong>Unidad de Servicios Estudiantiles (USEI)</strong>
-      </v-card-text>
-    </center>
-    </v-card>
+  <v-footer color="#FDD835">
+    <v-spacer></v-spacer>
+    <div class="footer-text">
+      <div class="footer-social">
+        <a href="https://www.facebook.com/" target="_blank">
+          <v-icon size="50" class="mr-10">mdi-facebook</v-icon>
+        </a>
+        <a href="https://www.twitter.com/" target="_blank">
+          <v-icon size="50" class="mr-10">mdi-twitter</v-icon>
+        </a>
+        <a href="https://www.instagram.com/" target="_blank">
+          <v-icon size="50">mdi-whatsapp</v-icon>
+        </a>
+      </div>
+      <div class="footer-description">Unidad de Servicios Estudiantiles (USEI)</div>
+      <div class="footer-date" style="font-size:20px;">© {{ new Date().getFullYear() }}</div>
+    </div>
+    <v-spacer></v-spacer>
   </v-footer>
 </template>
 
-<script>
-  export default {
-    data: () => ({
-      icons: [
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-linkedin',
-        'mdi-instagram',
-      ],
-    }),
-  }
-</script>
+<style>
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.footer-description {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.footer-social {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.footer-date {
+  font-size: 14px;
+}
+</style>

@@ -53,11 +53,11 @@ export const deleteCharla = async (req, res) => {
 export const createCharla = async (req, res) => {
   try {
     //aqui se obtienen esos datos
-    const {nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Cupos_disponibles, instituciones_instituciones_id} = req.body;
+    const {nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Color, instituciones_instituciones_id} = req.body;
     const [rows] = await pool.query(
       //FALTA AÑADIR subsector_subsector_id FK, logo (blob)
-      "INSERT INTO charlas(charlas_id, nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Cupos_disponibles, instituciones_instituciones_id) VALUES (NULL,?, ?, ?, ?, ?, ?, ?)",
-      [nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Cupos_disponibles, instituciones_instituciones_id]
+      "INSERT INTO charlas(charlas_id, nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Color, instituciones_instituciones_id) VALUES (NULL,?, ?, ?, ?, ?, ?, ?)",
+      [nombrecharla, link, fechaInicio, fechaFina, Cupos_charla, Color, instituciones_instituciones_id]
     );
     res.status(201).json({
         charlas_id: rows.insertId,
@@ -65,8 +65,8 @@ export const createCharla = async (req, res) => {
         link, 
         fechaInicio, 
         fechaFina, 
-        Cupos_charla, 
-        Cupos_disponibles, 
+        Cupos_charla,
+        Color, 
         instituciones_instituciones_id
     });
   } catch (error) {
