@@ -20,7 +20,6 @@ export const getDatosCompletos = async (req, res) => {
       .json({error, message: "Algo fue mal al obtener los dsatos de la empresa, cupos, url reu" });
   }
 };
-//Datos de la empresa
 export const getNombreDeEmpresa = async (req, res) => {
   try {
     //creamos una const para guardar el parametro 
@@ -38,7 +37,7 @@ export const getNombreDeEmpresa = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({error, message: "Algo fue mal al obtener el nombre de la institucion. Revisar ID" });
+      .json({error, message: "Algo fue mal al obtener la institucion" });
   }
 };
 //Cupos de la reu
