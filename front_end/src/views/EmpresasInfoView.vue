@@ -1,65 +1,48 @@
 <template>
     <v-app>
         <v-main>
-        <template>
-            <center>
-            <h1>{{ infoNombre }}</h1>
-            <h3><b>Categoría: </b><i>{{  infoRubro }}</i></h3>
-            <v-row>
-            <v-col cols="12" md="6">
-                <v-carousel :cycle="true"  :interval="2500" :show-arrows="false" :show-indicators="false">
-                <span  v-for="(xd , key) in infoImgObject" :key="key">
-                <v-carousel-item
-                :src="xd['url']"
-                cover>
-                </v-carousel-item>
-                </span>
-                </v-carousel>
-
-            </v-col>
-
-
-            <v-row>
-                <v-col cols="12">
-                <!--BUSINESS INFO -->
-                <h1>Conócenos</h1>
-                <v-divider></v-divider>
-                <p>{{  infoResena }}</p>
-                <v-divider></v-divider>
-                <h1>Contactos</h1>
-
-                <v-card-actions ref="testHola('sisisisi')">
-                <span  v-for="(xd , key) in infoLinksObject" :key="key">
-                    <v-btn :href="xd.url">
-                    <v-icon color="primary"
-                    > {{ logos[xd['llave']] }}
-                    </v-icon>
-                    </v-btn>
-
-                </span>
-                </v-card-actions>
-
-
-
-                </v-col>
+            <template>
+  <v-app>
+    <v-main>
+      <v-container fluid>
+        <v-row justify="center">
+          <v-col cols="12">
+            <h1 class="display-2 text-center">{{ infoNombre }}</h1>
+            <h3 class="text-center">{{ infoRubro }}</h3>
+            <v-divider class="my-5"></v-divider>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-carousel :cycle="true" :interval="2500" show-arrows show-indicators>
+              <v-carousel-item v-for="(img, index) in infoImgObject" :key="index" :src="img.url" cover></v-carousel-item>
+            </v-carousel>
+          </v-col>
+          <v-col cols="12" md="6">
+            <h2 class="headline text-center">Conócenos</h2>
+            <v-divider class="my-3"></v-divider>
+            <p>{{ infoResena }}</p>
+            <v-divider class="my-3"></v-divider>
+            <h2 class="headline text-center">Contactos</h2>
+            <v-card-actions class="d-flex justify-center flex-wrap">
+              <v-btn v-for="(link, index) in infoLinksObject" :key="index" :href="link.url" class="mx-2" fab>
+                <v-icon>{{ logos[link.llave] }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-col>
+          <v-col cols="12">
+            <v-divider class="my-5"></v-divider>
+            <h2 class="headline text-center">Nuestros videos</h2>
+            <v-row class="video-row" no-gutters>
+              <v-col v-for="(video, index) in videoImgObject" :key="index" cols="12" sm="6" md="4" lg="3" xl="2">
+                <LazyYoutube ref="youtubeLazyVideo" :src="video.url" max-width="720px" aspect-ratio="16:9" thumbnail-quality="standard" />
+              </v-col>
             </v-row>
-            </v-row>
-
-        <v-divider></v-divider>
-        <h1>Nuestros videos</h1>
-        <v-row class="video-row" no-gutters>
-            <v-col v-for="(xd , key) in videoImgObject" :key="key" cols="12" sm="6" md="4" lg="3" xl="2">
-            <LazyYoutube
-                                ref="youtubeLazyVideo"
-                                :src="xd['url']"
-                                max-width="720px"
-                                aspect-ratio="16:9"
-                                thumbnail-quality="standard"
-                                />
-            </v-col>
+          </v-col>
         </v-row>
-        </center>
-        </template>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
+
 
     </v-main>
     </v-app>
