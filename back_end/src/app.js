@@ -19,8 +19,6 @@ import charlasINSTITUCIONRoutes from "./routes/añadirest_charla.routes.js"
 import chatRoutes from "./routes/chat.routes.js"
 //Carpeta 1
 
-
-
 const app = express();
 
 // Middlewares

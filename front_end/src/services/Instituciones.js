@@ -6,7 +6,6 @@ export default {
     listarIns : (parameters) => {
         return Api().get('api/instituciones',parameters)
     },
-    // OBTENER INSTITUCION POR ID
     getInstById : (id) => {
         return Api().get(`api/instituciones/${id}`)
     },

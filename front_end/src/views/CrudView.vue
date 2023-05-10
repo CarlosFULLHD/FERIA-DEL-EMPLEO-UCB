@@ -4,6 +4,7 @@
   <v-data-table
     :headers="headers"
     :items="axiosJson"
+    sort-by="calories"
     :class="['elevation-1', 'overflow-x-auto']"
   >
     <template v-slot:top>
@@ -512,9 +513,11 @@ import firebase from "firebase";
         telefonowp: '',
       },
     }),
+
     created() {
       this.initialize();
-    },
+      
+  },
 
     computed: {
       formTitle () {
@@ -660,11 +663,8 @@ import firebase from "firebase";
               } else{
                 this.$store.dispatch('warningAlertAsync',`Todos los campos deben estar completos`)
               }
-              await this.initialize()
               setTimeout(() => {
-                alert("HOLA")
-                
-           
+              window.location.reload();
               }, 2500)
         }
         
