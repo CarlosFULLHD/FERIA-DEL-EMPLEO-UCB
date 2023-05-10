@@ -6,7 +6,8 @@
     <h1>PWD: {{ userPwd  }}</h1>
     <h1>SUPERUSUARIO: {{ userFlag }}</h1>
     <h1>EMAIL: {{ usserEmail }}</h1>
-
+    <h1>ID: {{ userId }}</h1>
+    <h1>LOGGED IN: {{ userLoggedInFlag }}</h1>
     <button @click="successAlert"> EXITO</button>
     <button @click="errorAlert"> ERROR</button>
     <button @click="warningAlert"> ADVERTENCIA</button>
@@ -106,6 +107,12 @@ export default {
     userFlag(){
       return this.$store.getters.getsuperU
     },
+    userId(){
+      return this.$store.getters.getCuentaId
+    },
+    userLoggedInFlag(){
+      return this.$store.getters.getloggedinFlag
+    }
     
 
   }

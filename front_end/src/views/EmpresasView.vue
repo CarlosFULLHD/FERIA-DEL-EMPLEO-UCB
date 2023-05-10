@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      
+      <v-container>
         <v-row justify="center">
           <v-col v-for="(value , key) in tarjetasObject" :key="key"
             cols="auto"
             sm="6"
             md="4"
-            lg="2"
+            lg="20"
           >
             <v-hover v-slot="{ hover }">
               <div class="card">
@@ -31,7 +31,7 @@
                   </v-carousel>
 
                   <!-- TITULO -->
-                  <v-card-title class="primary--text headline mb-0 " >
+                  <v-card-title class="primary--text headline mb-0 custom-card-title">
                     {{ value['nombre'] }}
                   </v-card-title>
                   <v-divider></v-divider>
@@ -48,117 +48,25 @@
                   <v-divider></v-divider>
 
 
-                  <v-card-actions>
-                    <v-btn color="#ffc506">
-                      Opcion
+                  <v-card-actions style="background-color: #001f3f;">
+                    <v-btn color="#ffc506"
+                    rounded
+            
+                    @click="charlasDialogo(value['instituciones_id'], value['nombre'])"
+                    >
+                     <strong>Charlas</strong>
                     </v-btn>
-                    <v-btn color="#ffc506">
-                      <button id="miBoton" @click="infoDialog(value['instituciones_id'])" class="miBoton">Información</button>
+                    <v-btn color="#ffc506"
+                  
+                    rounded
+                    @click="infoDialog(value['instituciones_id'])" 
+                    >
+                    <strong>Información</strong>
                     </v-btn>
                   </v-card-actions>
                   <v-divider></v-divider>
 
-
-                  <!-- INFO DIALOG -->
-                  <v-dialog
-                  v-model="dialog"
-                  fullscreen
-                  hide-overlay
-                  transition="dialog-bottom-transition"
-                >
-               
-                  <v-card
-                  elevation="24"
-                  max-width="444"
-                  class="mx-auto">
-                  <v-toolbar flat color="#001f3f" dark>
-                      <v-btn
-                        icon
-                        dark
-                        @click="dialog = false"
-                      >
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                      <v-toolbar-title>Cerrar</v-toolbar-title>
-                      <v-spacer></v-spacer>
-
-
-                      <v-toolbar-items>
-                        <v-btn
-                          dark
-                          text
-                          @click="dialog = false"
-                        >
-                          Charlas
-                        </v-btn>
-                      </v-toolbar-items>
-                    </v-toolbar>
-                    
-                    <template>
-                      <center>
-                      <h1>{{ infoNombre }}</h1>
-                      <h3><b>Categoría: </b><i>{{  infoRubro }}</i></h3>              
-                      <v-row>
-                        <v-col cols="12" md="6">
-                          <v-carousel :cycle="true"  :interval="2500" :show-arrows="false" :show-indicators="false">
-                            <span  v-for="(xd , key) in infoImgObject" :key="key">
-                            <v-carousel-item
-                            :src="xd['url']"
-                            cover>
-                            </v-carousel-item>
-                          </span>
-                          </v-carousel>
-                          
-                        </v-col>
-                        
-
-                        <v-row>
-                          <v-col cols="12">
-                            <!--BUSINESS INFO -->
-                            <h1>Conócenos</h1>
-                            <v-divider></v-divider>
-                            <p>{{  infoResena }}</p>
-                            <v-divider></v-divider>
-                            <h1>Contactos</h1>
-
-                            <v-card-actions ref="testHola('sisisisi')">
-                            <span  v-for="(xd , key) in infoLinksObject" :key="key">
-                              <v-btn :href="xd.url">
-                                <v-icon color="primary"
-                                > {{ logos[xd['llave']] }}
-                                </v-icon>
-                              </v-btn>
-                            
-                            </span>
-                          </v-card-actions>
-
-
-
-                          </v-col>
-                        </v-row>
-                      </v-row>
-                   
-                    <v-divider></v-divider>
-                    <h1>Nuestros videos</h1>
-                    <v-row class="video-row" no-gutters>
-                      <v-col v-for="(xd , key) in videoImgObject" :key="key" cols="12" sm="6" md="4" lg="3" xl="2">
-                        <LazyYoutube
-                                            ref="youtubeLazyVideo"
-                                            :src="xd['url']"
-                                            max-width="720px"
-                                            aspect-ratio="16:9"
-                                            thumbnail-quality="standard"
-                                            />
-                      </v-col>
-                    </v-row>
-                  </center>
-                  </template>
-
-                    </v-card>
-                    </v-dialog>
-
-                  
-                  <v-card-actions ref="testHola('sisisisi')">
+                  <v-card-actions>
                     <span  v-for="(xd , key) in linksObject" :key="key">
                       <v-btn :href="xd.url" v-if ="xd['instituciones_id'] === value['instituciones_id']">
                         <v-icon color="primary"
@@ -173,7 +81,101 @@
             </v-hover>
           </v-col>
         </v-row>
-   
+      </v-container>
+     
+
+
+      <v-dialog
+        v-model="dialog"
+        transition="dialog-top-transition"
+        max-width="1500"
+      >
+        
+        <template v-slot:default="dialog">
+          <v-card>
+            <v-toolbar
+              color="primary"
+              dark
+            > {{ nombreCharlaDialog }}</v-toolbar>
+            <v-card-text>
+            </v-card-text>
+
+
+            
+            <v-card-title v-if="charlasObject !== null">Charlas disponibles</v-card-title>
+              <v-card-text>
+                <v-container>
+                  <span v-if="charlasObject !== null">
+              <v-data-table
+                :headers="headers"
+                :items="charlasObject"
+                :items-per-page="5"
+                :class="['elevation-1', 'overflow-x-auto']"
+              >
+                <template v-slot:[`item.header`]="{ item }">
+                  {{ item.header }}
+                </template>
+                <template v-slot:[`item.tituloCharla`]="{ item }">
+                  {{ item.nombrecharla }}
+                </template>
+                <template v-slot:[`item.fechaInicioCharla`]="{ item }">
+                  {{ item.fechaInicio }}
+                </template>
+                <template v-slot:[`item.fechaFinalCharla`]="{ item }">
+                  {{ item.fechaFina }}
+                </template>
+                <template v-slot:[`item.cuposCharla`]="{ item }">
+                  {{ item.Cupos_charla }}
+                </template>
+                <template v-slot:[`item.linkCharla`]="{ item }">
+                  {{ item.link }}
+                </template>
+               
+
+                <template v-slot:[`item.actions`]="{ item }">
+                <v-btn
+                  block
+                  elevation="2"
+                  rounded
+                  color="#ffc506"
+                  @click="addCharlaCuenta(item)"
+                >Inscribirse</v-btn>
+              </template>
+
+
+
+              </v-data-table>
+            </span>
+            <span v-else>
+              <h2>No existen charlas de {{ nombreCharlaDialog }} aún, estate atento</h2>
+            </span>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" block @click="dialog.value = false">Cerrar</v-btn>
+          </v-card-actions>
+        
+
+          </v-card>
+        </template>
+      </v-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </v-main>
   </v-app>
 </template>
@@ -181,28 +183,32 @@
 
   <script>
   import Tarjetas from '@/services/Tarjetas'
-  import Instituciones from '@/services/Instituciones'
+  import Charlas from '@/services/Charlas'
     export default {
       data: () => ({
+        headers: [
+        {text: 'Título',align: 'start', value: 'tituloCharla'},
+        { text: 'Fecha inicio', value: 'fechaInicioCharla' },
+        { text: 'Fecha fin', value: 'fechaFinalCharla' },
+        { text: 'Cupos disponibles', value: 'cuposCharla' },
+        { text: 'Link', value: 'linkCharla' },
+        { text: 'Inscribirse', value: 'actions', sortable: false },
+        ],
 
-        carouselItems: [
-        { src: 'image1.jpg', alt: 'Image 1' },
-        { src: 'image2.jpg', alt: 'Image 2' },
-        { src: 'image3.jpg', alt: 'Image 3' },
-      ],
 
+        idDialog : null,
+        nameDialog: null,
         dialog: false,
-        infoLinksObject: {},
-        infoImgObject: {},
-        videoImgObject: {},
-        infoNombre: '',
-        infoEmail:'',
-        infoTelefono:'',
-        infoResena:'',
-        infoUbicacion: '',
-        infoRubro: '',
-        
+        charlasObject: null,
 
+        tituloCharla: null,
+        fechaInicioCharla: null,
+        fechaFinalCharla: null,
+        cuposCharla: null,
+        linkCharla: null,
+        idCharla: null,
+
+  
         tarjetasObject: {},
         imagenesObject: {},
         linksObject: {},
@@ -213,20 +219,6 @@
               Whatsapp:"mdi mdi-whatsapp" ,
               Linkedin:"mdi mdi-linkedin", 
           },
-        items: [
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-          },
-        ],
         alignments: [
           'start',
           'center',
@@ -237,6 +229,7 @@
         this.initialize();
         this.imgs();
         this.links();
+        this.cleanInitObjects();
       },
       computed: {
         // TARJETAS LENGTH
@@ -244,33 +237,68 @@
           return Object.keys(this.tarjetasObject).length
         },
 
-
-
+        idCharlaDialog() {
+          return this.idDialog
+        },
+        nombreCharlaDialog(){
+          return this.nameDialog
+        },
+        charlasList(){
+          return this.charlasObject
+        },
       },
       methods: {
-        async infoDialog(id){
-          let xd = await Instituciones.getInstById(id)
-          
-          this.infoId = xd.data.instituciones_id
-          this.infoNombre = xd.data.nombre
-          this.infoEmail = xd.data.email
-          this.infoTelefono = xd.data.telefono
-          this.infoResena = xd.data.resena
-          this.infoUbicacion = xd.data.ubicacion
-          this.infoRubro = xd.data.institucion
+        async charlasDialogo(id, name) {
           this.dialog = true
+          this.idDialog = id
+          this.nameDialog = name
+
           try {
-            xd = await Tarjetas.getImgByIdTwo(this.infoId)
-            this.infoImgObject = xd.data
-            xd = await Tarjetas.getVidById(this.infoId)
-            this.videoImgObject = xd.data
-            xd = await Tarjetas.getLinksById(this.infoId)
-            console.log(xd.data)
-            this.infoLinksObject = xd.data
-          } catch (error) {
-            this.infoImgObject = {}
+            let xd = await Charlas.getAllCharlasById(this.idDialog)
+            this.charlasObject = xd.data
+            console.log(this.charlasObject)
+          } catch(error){
+            this.charlasObject = null
+            console.log(this.charlasObject)
           }
-          //console.log(xd.data)
+        },
+
+        async addCharlaCuenta(item){
+          let dp = Object.assign({}, item)
+          const charId = dp.charlas_id
+          const dataUp = {
+            cuenta_cuenta_id: this.$store.getters.getCuentaId,
+            charlas_charlas_id: charId
+          }
+          try {
+            await Charlas.postCharlaCuenta(dataUp)
+            const mail = this.$store.getters.getEmailU
+           // sendMail(mail) 
+           
+            this.dialog = false
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth' // or 'auto' for instant scrolling
+            });
+            this.$store.dispatch('successAlertAsync',`Inscrito exitosamente, se envio un correo a ${mail}`)
+          } catch (error) {
+            this.dialog = false
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth' // or 'auto' for instant scrolling
+            });
+            this.$store.dispatch('errorAlertAsync',`Problemas al inscribir, intente de nuevo`)
+          }
+        },
+
+        
+
+
+
+        infoDialog(id){
+        
+          this.$router.push({name:'EmpresasInfo', params: {inst_id: id}})
+
         },
         async initialize() {
           Tarjetas.crearTarjeta().then((result) => {
@@ -292,18 +320,31 @@
 
        
         test () {
-          alert("HOLA")
           let xd = this.tarjetasObject
           alert(`${xd['links_llaves']}`)
           Object.keys(xd).forEach(key => {
             console.log(key, xd[key]);
           });
         },
+        cleanInitObjects() {
+        this.tarjetasObject = {}
+        this.imagenesObject = {}
+        this.linksObject = {}
+        this.videoObject = {}
+      },
+        cleanInfo() {
+        this.infoLinksObject = {}
+        this.infoImgObject = {}
+        this.videoImgObject = {}
+        this.dialog = false
+        }
       },
       mounted() {
-        const testHola = this.$refs.testHola
-        this.testicul(testHola)
+        //const testHola = this.$refs.testHola
+        //this.testicul(testHola)
       },
+      
+      
     }
   </script>
 
@@ -332,6 +373,7 @@
   color: white;
   background-color: #ffc506;
 }
+
 
 .v-window-item {
   height: 100%;
