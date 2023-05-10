@@ -112,3 +112,70 @@ export const updateCharla = async (req, res) => {
       .json({error,  message: "Algo fue mal al actualizar la charla" });
   }
 };
+
+
+export const getCharlasPorInstitucionId = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { instituciones_instituciones_id} = req.params;
+    const [rows] = await pool.query(
+      "SELECT * FROM CHARLAS WHERE instituciones_instituciones_id = ?",
+      [instituciones_instituciones_id]
+    );
+
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existen links" });
+    }
+
+    res.json(rows);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({error, message: "Algo fue mal al charlas" });
+  }
+};
+
+export const getCharlasPorCuentaId = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { cuenta_cuenta_id} = req.params;
+    const [rows] = await pool.query(
+      `select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, c.estudcha_id
+      from instituciones a, charlas b, charla_tiene_estudiantes c
+      where a.instituciones_id = b.instituciones_instituciones_id and
+          b.charlas_id = c.charlas_charlas_id and 
+            c.cuenta_cuenta_id = ?`,
+      [cuenta_cuenta_id]
+    );
+
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existen links" });
+    }
+    res.json(rows);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({error, message: "Algo fue mal al charlas" });
+  }
+};
+
+//BORRAR CHARLAS DE ESTUDIANTE POR ID DE CHARLA-CUENTA
+export const deleteCharlaCuentaPorId = async (req, res) => {
+  try {
+    const { estudcha_id } = req.params;
+    const [rows] = await pool.query("DELETE FROM charla_tiene_estudiantes WHERE estudcha_id = ?", [
+      estudcha_id,
+    ]);
+
+    if (rows.affectedRows <= 0) {
+      return res.status(404).json({ message: "charla no encontrada" });
+    }
+
+    res.sendStatus(204);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Algo fue mal al momento de eliminar" });
+  }
+};
+

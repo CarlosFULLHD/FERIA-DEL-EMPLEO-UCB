@@ -54,7 +54,7 @@
         <v-dialog v-model="dialog" max-width="550">
         <v-card>
           <v-container>
-            <h1 class="cool-title">Nuevo evento</h1>
+            <h1 class="cool-title">Nuevo </h1>
             <v-form @submit.prevent="addEvent">
               
               <v-combobox 
@@ -116,7 +116,7 @@
               </v-toolbar>
               <v-card-text>
                 <form v-if="currentlyEditing !== selectedEvent.id">
-                  {{ selectedEvent.details }}
+                  Link: <a v-bind:href=selectedEvent.details target="_blank">{{ selectedEvent.details }}</a>
                 </form>
                 <form v-else>
                   <textarea-autosize
@@ -152,6 +152,8 @@
 <script>
 
 import Calendario from '@/services/Calendario'
+import Instituciones from '@/services/Instituciones'
+
 import { db } from '@/main'
 export default {
   data: () => ({
@@ -234,20 +236,19 @@ export default {
     // METHOD TO RETRIEVE EVENTS FROM DATA BASE
 
     async getEvents () {
-      console.log("INICIO")
       let xd = await Calendario.getAllCharlas()
       let snapshot = xd.data
-      
-      //console.log(snapshot.data)
-      Object.keys(snapshot).forEach(key => {
-           //console.log(key);
-
-          console.log(snapshot[key].fechaFina)
-
+  
+      Object.keys(snapshot).forEach(async key => {
+  
+          let xd = await  Instituciones.getInstById(snapshot[key].instituciones_instituciones_id)
+     
           this.events.push({
-            name: snapshot[key].nombrecharla,
+            id: snapshot[key].charlas_id,
+            name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
             start: new Date(snapshot[key].fechaInicio),
             end: new Date(snapshot[key].fechaFina),
+            details: snapshot[key].link,
             color: snapshot[key].Color,
             timed: true,
           })
@@ -305,7 +306,6 @@ export default {
 
     // GUARDAR CHARLA
     async addEvent () {
-     alert("SISISISISI")
      if (this.titleTalk && this.start && this.end && this.link && this.cupo ){
       let id = this.getKeyByValue(this.name)
       try {
@@ -320,7 +320,7 @@ export default {
       }
       console.log(dataUp)
       Calendario.addCharla(dataUp)
-      this.$store.dispatch('successAlertAsync',`El evento ${this.name} fue creado exitosamente`)
+      this.$store.dispatch('successAlertAsync',`El evento ${this.titleTalk} de la institución ${this.name} fue creado exitosamente`)
       } catch(error) {
         this.$store.dispatch('errorAlertAsync',`Fallo de conexión con base de datos`)
       }
@@ -329,10 +329,12 @@ export default {
         this.$store.dispatch('errorAlertAsync',`Llene todos los campos requeridos`)
       }
     },
+
     // EDITAR CHARLA
     editEvent (ev) {
       this.currentlyEditing = ev.id
     },
+
     async updateEvent (ev) {
       await db.collection('calEvent').doc(this.currentlyEditing).update({
         details: ev.details
@@ -342,9 +344,12 @@ export default {
     },
     // BORRAR CHARLA
     async deleteEvent (ev) {
-      await db.collection("calEvent").doc(ev).delete()
-      this.selectedOpen = false,
-      this.getEvents()
+      console.log(ev)
+      await Calendario.deleteCharlaById(ev)
+      this.$store.dispatch('successAlertAsync',`El evento fue eliminado exitosamente`)
+      // await db.collection("calEvent").doc(ev).delete()
+      // this.selectedOpen = false,
+      // this.getEvents()
     },
     // MOSTRAR EVENTO
     showEvent ({ nativeEvent, event }) {

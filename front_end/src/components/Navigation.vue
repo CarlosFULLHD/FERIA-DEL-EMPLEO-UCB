@@ -78,7 +78,7 @@
                       color="brown"
                       size="50"
                     >
-                  <span class="white--text text-h5">{{ user.initials }}</span>
+                  <span class="white--text text-h5">{{ userAccount }}</span>
                   </v-avatar>
                 </v-btn>
               </template>
@@ -88,48 +88,47 @@
                       <v-avatar
                           color="brown"
                         >
-                        <span class="white--text text-h5">{{ user.initials }}</span>
+                        <span class="white--text text-h5">{{ userAccount }}</span>
                       </v-avatar>
-                        <h3>{{ user.fullName }}</h3>
+                        <h3>{{userName }}</h3>
                         <p class="text-caption mt-1">
-                            {{ user.email }}
+                            {{ usserEmail }}
                         </p>
-                        <v-divider class="my-3"></v-divider>
+                        <v-divider class="my-3" v-if="loggedInFlag"></v-divider>
                         
-                        <v-btn
+                        <v-btn v-if="loggedInFlag"
                             @click="dialog = true"
                             depressed
-                            rounded
+                            block
                             text
                           >
                           Charlas inscritas
-                          
                         </v-btn>
 
-                        <v-divider class="my-3"></v-divider>
-                        <v-btn
+                        <v-divider class="my-3" v-if="loggedInFlag && userFlag"></v-divider>
+                        <v-btn v-if="loggedInFlag && userFlag"
                             @click="dialog2 = true"
                             depressed
-                            rounded
+                            block
                             text
                           >
                           Ver inscritos en charlas
                         </v-btn>
-                        <v-divider class="my-3"></v-divider>
+                        <v-divider class="my-3" v-if="!loggedInFlag"></v-divider>
                         <router-link class="link" :to="{name:'CuentaCrear'}">
-                        <v-btn
+                        <v-btn v-if="!loggedInFlag"
                             depressed
-                            rounded
+                            block
                             text
                           >
                           Crear Cuenta
                         </v-btn>
                         </router-link>
-                        <v-divider class="my-3"></v-divider>
+                        <v-divider class="my-3" v-if="!loggedInFlag" ></v-divider>
                         <router-link class="link" :to="{name:'Login'}">
-                        <v-btn
+                        <v-btn v-if="!loggedInFlag"
                             depressed
-                            rounded
+                            block
                             text
                           >
                           Iniciar Sesion
@@ -138,7 +137,7 @@
                         <v-divider class="my-3"></v-divider>
                         <v-switch
                             v-model="$vuetify.theme.dark"
-                            label="Alternar modo oscuro "
+                            label="Modo oscuro"
                             style="display:flex; margin-left:20px;"
                           >
                         <v-btn
@@ -188,7 +187,7 @@
                       color="brown"
                       size="50"
                     >
-                  <span class="white--text text-h5">{{ user.initials }}</span>
+                  <span class="white--text text-h5">{{ userAccount }}</span>
                   </v-avatar>
                 </v-btn>
               </template>
@@ -198,11 +197,11 @@
                       <v-avatar
                           color="brown"
                         >
-                        <span class="white--text text-h5">{{ user.initials }}</span>
+                        <span class="white--text text-h5">{{ userAccount }}</span>
                       </v-avatar>
-                        <h3>{{ user.fullName }}</h3>
+                        <h3>{{ userName }}</h3>
                         <p class="text-caption mt-1">
-                            {{ user.email }}
+                            {{ usserEmail }}
                         </p>
                         <v-divider class="my-3"></v-divider>
                         
@@ -314,9 +313,9 @@
             </v-menu>
           </li>
           <li>
-            <dic class="icons">
+            <div class="icons">
               <font-awesome-icon :icon="['fad', 'calendar-days']" size="lg" style="--fa-primary-color: #71a1f4; --fa-secondary-color: #2e3748;" />
-            </dic>
+            </div>
             <router-link class="linkD" :to="{name:'Home'}">Home</router-link>
           </li>
           <li><router-link class="linkD" :to="{name:'Empresas'}">Empresas</router-link></li>
@@ -328,6 +327,9 @@
         </ul>
       </transition>
     </nav>
+
+
+
     <!--Charlas Inscritas e Inscritos en Charlas!-->
     <div class="text-center">
     <v-dialog
@@ -345,34 +347,53 @@
       </template>
 
       <v-card>
-        <v-card-title>Inscritos en Charlas</v-card-title>
-        <v-card-text>
+        <v-card-title>Charlas inscritas de {{ userName }}</v-card-title>
+        <v-card-text v-if="userCharlaObject.length > 0" >
           <v-container>
             <v-data-table
-              :headers="headers"
-              :items="items"
+              :headers="headersCharlasUser"
+              :items="userCharlaObject"
               :items-per-page="5"
             >
-              <template v-slot:[`item.header`]="{ item }">
-                {{ item.header }}
+              <template v-slot:[`item.institucionCharlaUser`]="{ item }">
+                {{ item.nombre }}
               </template>
-              <template v-slot:[`item.col1`]="{ item }">
-                {{ item.col1 }}
+              <template v-slot:[`item.tituloCharlaUser`]="{ item }">
+                {{ item.nombrecharla }}
               </template>
-              <template v-slot:[`item.col2`]="{ item }">
-                {{ item.col2 }}
+              <template v-slot:[`item.fechaInicioCharlaUser`]="{ item }">
+                {{ item.fechainicio }}
               </template>
-              <template v-slot:[`item.col3`]="{ item }">
-                {{ item.col3 }}
+              <template v-slot:[`item.fechaFinaCharlaUser`]="{ item }">
+                {{ item.fechafina }}
               </template>
+              <template v-slot:[`item.linkCharlaUser`]="{ item }">
+                <a v-bind:href=item.link target="_blank">{{ item.link }}</a>
+              </template>
+              <template v-slot:[`item.idCharlaUser`]="{ item }">
+                {{ item.estudcha_id }}
+              </template>
+
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-btn icon @click="deleteCharlaUser(item)">
+                    <v-icon color="error">mdi-delete</v-icon>
+                </v-btn>
+              </template>
+
             </v-data-table>
           </v-container>
+        </v-card-text>
+        <v-card-text v-else>
+          <h1>No tiene charlas inscritas todavía</h1>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="dialog = false">Cerrar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+
+
   </div>
   <div class="text-center">
     <v-dialog
@@ -390,7 +411,7 @@
       </template>
       
       <v-card>
-        <v-card-title>Charlas Inscritas</v-card-title>
+        <v-card-title>Hola choco</v-card-title>
         <v-card-text>
           <v-container>
             <v-data-table
@@ -424,6 +445,7 @@
   </header>
 </template>
 <script>
+import Charlas from '@/services/Charlas'
 export default {
   name:"navigationView",
   data(){
@@ -437,9 +459,9 @@ export default {
       dialog2:false,
       messages: 0,
       user: {
-        initials: 'JD',
-        fullName: 'Nombre Completo',
-        email: 'correo@gmail.com',
+      
+        
+        
       },
       notifications: [
         {
@@ -448,12 +470,24 @@ export default {
           subtitle: "Conferencia BNB"
         },
       ],
-      headers: [
-        { text: 'Nombre', value: 'header' },
-        { text: 'Institucion', value: 'col1' },
-        { text: 'Charla', value: 'col2' },
-        { text: 'Fecha', value: 'col3' },
-      ],
+      institucionCharlaUser: null,
+      tituloCharlaUser: null,
+      fechaInicioCharlaUser: null,
+      fechaFinaCharlaUser: null,
+      linkCharlaUser: null,
+      idCharlaUser: null,
+      userCharlaObject: {},
+      headersCharlasUser: [
+        {text: 'Institución',align: 'start', value: 'institucionCharlaUser'},
+        {text: 'Título',align: 'start', value: 'tituloCharlaUser'},
+        { text: 'Fecha inicio', value: 'fechaInicioCharlaUser' },
+        { text: 'Fecha fin', value: 'fechaFinaCharlaUser' },
+        { text: 'Link', value: 'linkCharlaUser' },
+        { text: 'id', value: 'idCharlaUser' },
+        { text: 'Eliminar', value: 'actions', sortable: false },
+        ],
+
+        
     
       items: [
         { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
@@ -485,11 +519,36 @@ export default {
   created(){
     window.addEventListener('resize',this.checkScreen);
     this.checkScreen();
+    this.loadCharlasSubscritas();
   },
   mounted(){
     window.addEventListener('scroll',this.updateScroll);
   },
   methods:{
+    async deleteCharlaUser(item){
+      let dp = Object.assign({}, item)
+      const charId = dp.estudcha_id
+      try {
+        await Charlas.deleteCharlaCuentaById(charId)
+        this.loadCharlasSubscritas()
+        this.dialog = false
+        window.scrollTo({
+              top: 0,
+              behavior: 'smooth' // or 'auto' for instant scrolling
+            });
+        this.$store.dispatch('successAlertAsync',`Se elimino subscripción a la charla ${dp.nombre}`)
+      } catch (error) {
+        this.dialog = false
+        window.scrollTo({
+              top: 0,
+              behavior: 'smooth' // or 'auto' for instant scrolling
+            });
+        this.$store.dispatch('errorAlertAsync',`Problemas al conectar a base de datos`)
+      }    
+    },
+
+
+
     toggleMobileNav(){
       this.mobileNav = !this.mobileNav;
     },
@@ -510,6 +569,33 @@ export default {
       this.mobileNav=false;
       return;
     },
+    async loadCharlasSubscritas(){
+      if (this.loggedInFlag){
+        let xx = await Charlas.getCharlaByIdCuenta(this.userId)
+        this.userCharlaObject = xx.data
+        
+      } 
+    }
+  },
+  computed: {
+    userAccount(){
+      return this.$store.getters.getCuenta.charAt(0) == '' ? 'UCB': this.$store.getters.getCuenta.charAt(0)
+    },
+    userName(){
+      return this.$store.getters.getCuenta == '' ? 'UCB': this.$store.getters.getCuenta
+    },
+    usserEmail(){
+      return this.$store.getters.getEmailU == '' ? '' : this.$store.getters.getEmailU
+    },
+    userFlag(){
+      return this.$store.getters.getsuperU
+    },
+    userId(){
+      return this.$store.getters.getCuentaId
+    },
+    loggedInFlag() {
+      return this.$store.getters.getloggedinFlag
+    }
   }
 };
 </script>
