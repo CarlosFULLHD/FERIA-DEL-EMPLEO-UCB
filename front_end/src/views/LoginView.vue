@@ -30,7 +30,7 @@
             </v-card-text>
             <v-card-actions>
               <v-btn color="primary" @click="loginForm">Iniciar sesión</v-btn>
-              <v-btn color="secondary" @click="resetForm">Limpiar</v-btn>
+              <!-- <v-btn color="secondary" @click="resetForm">Limpiar</v-btn> -->
             </v-card-actions>
             <h4 class="achecuatro">No tienes una cuenta? Haz click  <router-link to="/cuenta/crear">aqui</router-link></h4>
           </v-card>

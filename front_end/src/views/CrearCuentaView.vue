@@ -8,7 +8,7 @@
           v-model="cuenta"
           hint="Nombre de cuenta"
           prepend-icon="mdi mdi-account-circle-outline"
-          :rules="[rules.required, rules.min]"
+          :rules="[rules.required]"
           label="Cuenta"
           autofocus="true"
           clearable
@@ -18,10 +18,10 @@
         <v-text-field
           v-model="password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[rules.required, rules.min]"
+          :rules="[rules.required]"
           :type="show1 ? 'text' : 'password'"
           prepend-icon="mdi mdi-lock-outline"
-          hint="Al menos 8 caracteres "
+          hint="Use una contraseña segura "
           label="Contraseña"
           clearable
           @click:append="show1 = !show1"
@@ -37,7 +37,7 @@
 
         <v-checkbox
           v-model="checkbox"
-          :rules="[v => !!v || '¡Debes aceptar los términos para continuar!']"
+         
           required
           color="green"
         >
@@ -47,7 +47,7 @@
         </v-checkbox>
 
         <div class="mt-6">
-          <v-btn color="primary" :disabled="!formIsValid" type="submit" @click="submitForm">Crear cuenta</v-btn>
+          <v-btn color="primary" type="submit" @click="submitForm">Crear cuenta</v-btn>
           <!-- <v-btn color="error" class="ml-4" @click="reset">Reset Form</v-btn> -->
           <!-- Deshabilidato el button -->
         <h4 class="achecuatro">Ya tienes una cuenta? Haz click  <router-link to="/cuenta/login">aqui</router-link></h4>
