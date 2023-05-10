@@ -42,22 +42,48 @@
 </template>
 
 <script>
-import Cuentas from '@/services/Cuenta';
-
-export default {
-  data() {
-    return {
-      cuenta: '',
-      password: '',
-      showPassword: false,
-      valid: false,
-      rules: {
-        required: value => !!value || 'Requerido.',
-        min: value => (value && value.length >= 8) || 'Mínimo 8 caracteres',
+  import Cuentas from '@/services/Cuenta'
+  export default {
+    name:"LoginView",
+      data () {
+        const defaultForm = Object.freeze({
+          account:'',
+          password: '',
+          confpassword: '',
+          email:'',
+          error: null,
+          show1: false,
+          show2: false,
+          valid: true,
+          terms: false,
+        })
+        
+          return {
+              form: Object.assign({}, defaultForm),
+              rules: {
+                  required: v => !!v || 'Requerido.',
+                  min: v => v.length >= 8 || 'Mínimo 8 caracteres',
+                  confirmPassword: [
+                    (val) => val === this.password || 'Passwords do not match',
+                    (val) => (val || '').length > 0 || 'Confirm password is required',],
+                  email: value => {
+                  const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  return pattern.test(value) || 'e - mail inválido'},
+                  
+            },
+          }
       },
-    };
-  },
+
   methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
+      reset () {
+        this.$refs.form.reset()
+      },
+      resetValidation () {
+        this.$refs.form.resetValidation()
+      },
     async loginForm() {
       try {
         const usuario = await Cuentas.loginCuenta(this.cuenta, this.password);
