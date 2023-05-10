@@ -8,10 +8,18 @@ export default new Vuex.Store({
   state: {
 
         // SESSION HANDLER
-        cuentaU : '',
-        passwordU: '',
-        superU: false,
-        emailU: '',
+        cuentaId: null,
+        cuentaU : 'jpv',
+        passwordU: '1234',
+        superU: true,
+        emailU: 'juan.via@ucb.edu.bo',
+        loggedinFlag: true,
+        // cuentaId:null,
+        // cuentaU : '',
+        // passwordU: '',
+        // superU: false,
+        // emailU: '',
+        // loggedinFlag: false,
 
         // MESSAGES
         successAlert: false,
@@ -26,7 +34,12 @@ export default new Vuex.Store({
   },
   // EVENTS OVER STATES 
   mutations: {
-    
+    setloggedinFlag(state,nCu) {
+      state.loggedinFlag = nCu
+    },
+    setcuentaId(state,nCu){
+      state.cuentaId = nCu
+    },
     setCuentaU(state,nCu){
       state.cuentaU = nCu
     },
@@ -71,7 +84,7 @@ export default new Vuex.Store({
     warningAlertAsync(context, message){
       setTimeout(() => {
         context.commit('setWarningAlert')
-      }, 2000);
+      }, 3500);
       context.commit('setWarningMessage',message)
       context.commit('setWarningAlert')
     },
@@ -79,7 +92,7 @@ export default new Vuex.Store({
     errorAlertAsync(context,message){
       setTimeout(() => {
         context.commit('setErrorAlert')
-      }, 2000);
+      }, 3500);
       context.commit('setErrorMessage',message)
       context.commit('setErrorAlert')
     },
@@ -87,7 +100,7 @@ export default new Vuex.Store({
     adviceAlertAsync(context,message){
       setTimeout(() => {
         context.commit('setAdviceAlert')
-      }, 2000)
+      }, 3500)
       context.commit('setAdviceMessage',message)
       context.commit('setAdviceAlert')
       
@@ -96,9 +109,17 @@ export default new Vuex.Store({
     successAlertAsync(context,message){
       setTimeout(() => {
         context.commit('setSuccessAlert')
-      }, 2000);
+      }, 3500);
       context.commit('setSuccessMessage',message)
       context.commit('setSuccessAlert')
+    },
+
+    changeUserId(context,id){
+      context.commit('setcuentaId',id)
+    },
+
+    changeloggedinFlag(context,id){
+      context.commit('setloggedinFlag',id)
     },
 
     changeUserAccount(context, account){
@@ -117,7 +138,12 @@ export default new Vuex.Store({
   },
   getters: {
     // Define your getters to retrieve computed state values here
-
+    getloggedinFlag: state => {
+      return state.loggedinFlag
+    },
+    getCuentaId: state => {
+      return state.cuentaId
+    },
     getCuenta: state => {
       return state.cuentaU
     },

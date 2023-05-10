@@ -12,6 +12,11 @@ export default {
     // GET ALL CHARLAS
     getAllCharlas: () => {
         return Api().get('api/charlasAll')
+    },
+    // DELETE CHARLA BY ID
+    deleteCharlaById: (id) => {
+        return Api().delete(`api/charlas/${id}`)
     }
+
 
 }
