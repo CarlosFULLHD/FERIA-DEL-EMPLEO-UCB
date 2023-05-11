@@ -13,7 +13,7 @@ export default new Vuex.Store({
         cuentaId: 1,
         cuentaU : 'jpv',
         passwordU: '1234',
-        superU: true,
+        superU: false,
         emailU: 'juan.via@ucb.edu.bo',
         loggedinFlag: true,
 

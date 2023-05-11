@@ -11,10 +11,11 @@
         <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
         <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
-        <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
+        <li><router-link class="link" :to="{name:'Crud'}">Administración</router-link></li>
         <li>
 
           <!-- CAMPANA -->
+          <span v-if="notificationObjectAdmin.length > 0">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
@@ -41,7 +42,7 @@
             </template>
             <v-card>
             <v-list>
-              <span v-if="notificationObjectAdmin.length > 0">
+              
                 <v-list-item v-for="notification in notificationObjectAdmin" :key="notification.estudcha_id">
                 <v-list-item-content>
                   <v-list-item-title>Nuevo inscrito en:</v-list-item-title>
@@ -52,7 +53,7 @@
                     <v-icon color="error">mdi-delete</v-icon></v-btn>
                 </v-list-item-action>
               </v-list-item>
-              </span>
+              
               <center>
               <v-btn
                 class="mx-1"
@@ -61,10 +62,13 @@
               >
                 Limpiar todas
               </v-btn>
+              
             </center>
+        
             </v-list>
           </v-card>
           </v-menu>
+        </span>
 
 
 
@@ -673,6 +677,8 @@ export default {
     charlasObjectUser(){
       return this.$store.getters.getCharlasInscritasObj.length === 0 ? {} : this.$store.getters.getCharlasInscritasObj
     },
+
+    
     userAccount(){
       return this.$store.getters.getCuenta.charAt(0) == '' ? 'UCB': this.$store.getters.getCuenta.charAt(0)
     },
