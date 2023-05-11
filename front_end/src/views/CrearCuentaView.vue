@@ -1,117 +1,90 @@
-
 <template>
+  <v-app>
+    <v-container fluid>
+      <v-row justify="center" align="stretch" class="mt-10">
+        <v-col cols="12" md="8" lg="6">
+          <v-card>
+            <v-card-title class="text-center">Crear cuenta</v-card-title>
+            <v-card-text>
+                <v-form ref="form" @submit.prevent="enviarCuenta">
+                  <v-text-field
+                    v-model="cuenta"
+                    hint="Nombre de cuenta"
+                    prepend-icon="mdi mdi-account-circle-outline"
+                    :rules="[rules.required]"
+                    label="Cuenta"
+                    autofocus="true"
+                    clearable
+                    required
+                  ></v-text-field>
 
-    <v-app>
-        <h1>HOLA</h1>
-      <v-sheet width="300" class="mx-auto">
-        <h1>Creación de cuenta</h1>
-        <v-form ref="form" @submit.prevent="enviarCuenta">
-          <v-text-field
-            v-model="cuenta"
-            hint="Nombre de cuenta"
-            prepend-icon="mdi mdi-account-circle-outline"
-            :rules="[rules.required, rules.min]"
-            label="Cuenta"
-            autofocus="true"
-            clearable
-            required
-          >
-          </v-text-field>
-    
-          <v-text-field
-            v-model="password"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[rules.required, rules.min]"
-            :type="show1 ? 'text' : 'password'"
-            prepend-icon="mdi mdi-lock-outline"
-            hint="Al menos 8 caracteres "
-            label="Contraseña"
-            clearable
-            @click:append="show1 = !show1"
-          ></v-text-field>
-            
-          <v-text-field
-            v-model="email"
-            prepend-icon="mdi mdi-email-outline"
-            :rules="[rules.required, rules.email]"
-            label="E-mail"
-            clearable
-          >
-    
-            
-          </v-text-field>
-    
-    
-          <v-checkbox
-            v-model="checkbox"
-            :rules="[v => !!v || '¡Debes aceptar los términos para continuar!']"
-            required
-            color="green">
-          <template v-slot:label>
-                  <div @click.stop="">
-                    ¿Super usuario?
+                  <v-text-field
+                    v-model="password"
                     
-                  </div>
-          </template>
-    
-    
-          </v-checkbox>
-    
-    
-    
-          <v-btn
-            color="success"
-            class="mr-4"
-            @click="submitForm"
-          >
-            Validate
-          </v-btn>
-      
-          <v-btn
-            color="error"
-            class="mr-4"
-            @click="reset"
-          >
-            Reset Form
-          </v-btn>
-      
-          <v-btn
-            color="warning"
-            @click="resetValidation"
-          >
-            Reset Validation
-          </v-btn>
-    
-    
-    
-          <v-btn
-          :disabled="!formIsValid"
-          text
-          color="primary"
-          type="submit"
-          >
-          Crear cuenta
-          </v-btn>
-        </v-form>
-      </v-sheet>
-    </v-app>
-    
-    </template>
-      
-      <style>
-      @media (min-width: 1024px) {
-        .login {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          
-        }
-        
-      }
-      .error {
-          color:red;
-        }
-      </style>
+                    :rules="[rules.required]"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="showPassword ? 'text' : 'password'"
+                    prepend-icon="mdi mdi-lock-outline"
+                    hint="Al menos 8 caracteres "
+                    label="Contraseña"
+                    clearable
+                    @click:append="showPassword = !showPassword"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="email"
+                    prepend-icon="mdi mdi-email-outline"
+                    :rules="[rules.required, rules.email]"
+                    label="E-mail"
+                    clearable
+                  ></v-text-field>
+
+                  <v-checkbox
+                    v-model="checkbox"
+                    
+                    required
+                    color="green"
+                  >
+                    <template v-slot:label>
+                      <div @click.stop="">¿Super usuario?</div>
+                    </template>
+                  </v-checkbox>
+                </v-form>
+                <div class="mt-6">
+              <v-btn color="primary" @click="submitForm">Crear cuenta</v-btn>
+            </div>
+            <h4>Ya tienes una cuenta? Haz click  <router-link to="/cuenta/login">aqui</router-link></h4>
+            </v-card-text>
+            
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
+</template>
+
+
+<style scoped>
+@media (min-width: 1024px) {
+  .login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.error {
+  color: red;
+}
+
+.v-application--wrap {
+  height: 100%;
+  background-color: #f5f5f5;
+}
+h4 {
+  padding: 10px;
+}
+</style>
     
     <script>
 
@@ -132,6 +105,7 @@
           })
           
             return {
+              showPassword: false,
                 form: Object.assign({}, defaultForm),
                 rules: {
                     required: v => !!v || 'Requerido.',

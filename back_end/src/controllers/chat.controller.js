@@ -16,7 +16,7 @@ export const getDatosCompletos = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({error, message: "Algo fue mal al obtener los dsatos de la empresa, cupos, url reu" });
+      .json({error, message: "Algo fue mal al obtener los datos de la empresa, cupos, url reu. GETDATOSCOMPLETOS ERROR" });
   }
 };
 export const getNombreDeEmpresa = async (req, res) => {
