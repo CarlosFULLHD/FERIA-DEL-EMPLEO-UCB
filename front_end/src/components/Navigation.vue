@@ -11,7 +11,9 @@
         <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
         <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
+        <span v-if="loggedInFlag && userFlag">
         <li><router-link class="link" :to="{name:'Crud'}">Administración</router-link></li>
+        </span>
         <li>
 
           <!-- CAMPANA -->
@@ -165,13 +167,64 @@
                         </v-btn>
                         </v-switch>
                         <v-divider class="my-3"></v-divider>
-                        <v-btn
-                          depressed
-                          rounded
-                          text
-                        >
-                        Salir
-                      </v-btn>
+                      
+                        <span v-if="loggedInFlag">
+                      <v-dialog
+              v-model="dialogLogout"
+              persistent
+              max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                color="#ffc506"
+                    rounded
+                  v-bind="attrs"
+                  v-on="on"
+                >          
+                Cerrar sesión
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="text-h5">
+                  ¿Segúro que desea desconectarse?
+                </v-card-title>
+                <v-card-text>Cerrar sesión para {{ userName }}</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="dialogLogout = false"
+                  >
+                    No
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="doLogout()"
+                  >
+                    Si
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     </div>
                   </v-list-item-content>
               </v-card>
@@ -276,13 +329,62 @@
                         </v-btn>
                         </v-switch>
                         <v-divider class="my-3"></v-divider>
-                        <v-btn
-                          depressed
-                          rounded
-                          text
-                        >
-                        Salir
-                      </v-btn>
+                        <span v-if="loggedInFlag">
+                      <v-dialog
+              v-model="dialogLogout"
+              persistent
+              max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                color="#ffc506"
+                    rounded
+                  v-bind="attrs"
+                  v-on="on"
+                >          
+                Cerrar sesión
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="text-h5">
+                  ¿Segúro que desea desconectarse?
+                </v-card-title>
+                <v-card-text>Cerrar sesión para {{ userName }}</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="dialogLogout = false"
+                  >
+                    No
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="doLogout()"
+                  >
+                    Si
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </span>
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
                     </div>
                   </v-list-item-content>
               </v-card>
@@ -303,10 +405,29 @@
           <li><router-link class="linkD" :to="{name:'Calendario'}">Calendario</router-link></li> 
           <li><router-link class="linkD" :to="{name:'Login'}">Login</router-link></li> 
           <li><router-link class="linkD" :to="{name:'Contacto'}">Contactos</router-link></li>
-          <li><router-link class="linkD" :to="{name:'Crud'}">Crud</router-link></li>
+          <span v-if="loggedInFlag && userFlag">
+          <li><router-link class="linkD" :to="{name:'Crud'}">Administración</router-link></li>
+        </span>
         </ul>
       </transition>
     </nav>
+
+
+
+
+    <!-- LOG OUT -->
+   
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -479,6 +600,7 @@ export default {
       drawer: false,
       dialog:false,
       dialog2:false,
+      dialogLogout:false,
       
       user: {
       },
@@ -562,6 +684,18 @@ export default {
       this.loadCharlasSubscritas() 
       this.getNotifications()
     },
+
+    doLogout(){
+      this.dialogLogout = false
+      this.$store.dispatch('changeUserId', null)
+      this.$store.dispatch('changeloggedinFlag', false)
+      this.$store.dispatch('changeUserAccount', '')
+      this.$store.dispatch('changeUserEmail', '')
+      this.$store.dispatch('changeSuperUser', false)
+      this.$store.dispatch('changeUserPwd', '')
+      this.$store.dispatch('successAlertAsync', 'Se cerro la sesión')
+      this.$router.push({ name: 'Home' })
+   },
 
     clearAllNotifications(){
       let xd = this.notificationObjectAdmin
@@ -678,7 +812,7 @@ export default {
       return this.$store.getters.getCharlasInscritasObj.length === 0 ? {} : this.$store.getters.getCharlasInscritasObj
     },
 
-    
+
     userAccount(){
       return this.$store.getters.getCuenta.charAt(0) == '' ? 'UCB': this.$store.getters.getCuenta.charAt(0)
     },

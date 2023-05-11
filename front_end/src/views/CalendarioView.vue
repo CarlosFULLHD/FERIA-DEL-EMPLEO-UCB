@@ -5,9 +5,11 @@
       <v-col>
         <v-sheet height="64">
           <v-toolbar flat color="white">
+            <span v-if="userFlag">
             <v-btn outlined class="mr-4" color="grey darken-2" @click="dialog = true">
               Nuevo evento
             </v-btn>
+            </span>
             <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
               Hoy
             </v-btn>
@@ -107,9 +109,11 @@
                 :color="selectedEvent.color"
                 dark
               >
+              <span v-if="userFlag">
                 <v-btn @click="deleteEvent(selectedEvent.id)" icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
+              </span>
                 <!-- eslint-disable-next-line -->
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -238,7 +242,11 @@ export default {
       return this.$refs.calendar.getFormatter({
         timeZone: 'UTC', month: 'long',
       })
-    }
+    },
+    userFlag(){
+      return this.$store.getters.getsuperU
+    },
+
   },
   methods: {
     // METHOD TO RETRIEVE EVENTS FROM DATA BASE

@@ -10,12 +10,12 @@ export default new Vuex.Store({
   state: {
 
         // SESSION HANDLER
-        cuentaId: 1,
-        cuentaU : 'jpv',
-        passwordU: '1234',
+        cuentaId: null,
+        cuentaU : '',
+        passwordU: '',
         superU: false,
-        emailU: 'juan.via@ucb.edu.bo',
-        loggedinFlag: true,
+        emailU: '',
+        loggedinFlag: false,
 
         navigation: null,
         calendarioEventsObject: [],
