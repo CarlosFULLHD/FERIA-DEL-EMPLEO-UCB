@@ -8,7 +8,9 @@ import {
     getCharlasPorInstitucionId,
     getCharlasPorCuentaId,
     deleteCharlaCuentaPorId,
-    getCharlasPorIdAdmi
+    getCharlasPorIdAdmi,
+    getNotificacionesAdmi,
+    clearNotificationById
 
 } from "../controllers/charlas.controller.js";
 
@@ -43,3 +45,7 @@ router.get(`/getcharlacuenta/:cuenta_cuenta_id`,getCharlasPorCuentaId)
 router.delete("/deletecharlacuenta/:estudcha_id", deleteCharlaCuentaPorId);
 
 router.get(`/getcharlasadmi/:instituciones_instituciones_id`, getCharlasPorIdAdmi)
+
+router.get(`/getnotificacionesadmin`,getNotificacionesAdmi)
+
+router.patch(`/clearnotificationid/:estudcha_id`, clearNotificationById)

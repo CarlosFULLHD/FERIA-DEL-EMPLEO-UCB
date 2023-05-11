@@ -21,6 +21,7 @@ export default new Vuex.Store({
         calendarioEventsObject: [],
         charlasInscritasObj: {},
         charlasAdminObj: {},
+        notificacionesList: {},
         // cuentaId:null,
         // cuentaU : '',
         // passwordU: '',
@@ -41,9 +42,12 @@ export default new Vuex.Store({
   },
   // EVENTS OVER STATES 
   mutations: {
+    setNotificacionesList(state, data) {
+      state.notificacionesList = data
+    },
 
     setNavigation(state, navigation ) {
-      state.navigation   = navigation 
+      state.navigation  = navigation 
     },
 
     setCalendarioEventsObject(state, data){
@@ -160,12 +164,9 @@ export default new Vuex.Store({
     async changeCharlasAdminObj(context,id){
       try {
         let xd = await Charlas.getCharlaAdmiByIdInstitucion(id)
-        console.log("HOLA")
-        console.log(xd.data)
         context.commit('setCharlasAdminObj',xd.data)
         
       } catch(error) {
-        console.log("ERROR")
         context.commit('setCharlasAdminObj',{})
       }
     },
@@ -179,7 +180,16 @@ export default new Vuex.Store({
       } catch (error){
         context.commit('setCharlasInscritasObj',{})
       }
-      
+    },
+
+    async changeNotificacionesList(context){
+      try {
+        let xd = await Charlas.getNotificacionesAdmi()
+        console.log(xd.data)
+        context.commit('setNotificacionesList', xd.data)
+      } catch (error) {
+        context.commit('setNotificacionesList',{})
+      }
     },
 
     changeUserId(context,id){
@@ -206,6 +216,10 @@ export default new Vuex.Store({
   },
   getters: {
     // Define your getters to retrieve computed state values here
+    getNotificacionesList: state => {
+      return state.notificacionesList
+    },
+    
     getCalendarioEventsObject: state => {
       return state.calendarioEventsObject
     },

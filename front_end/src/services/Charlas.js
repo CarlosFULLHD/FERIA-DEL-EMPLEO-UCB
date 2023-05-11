@@ -22,5 +22,14 @@ export default {
     // GET CHARLAS ADMINISTRADOR POR ID DE INSTITUCIÓN
     getCharlaAdmiByIdInstitucion:(id) => {
         return Api().get(`api/getcharlasadmi/${id}`)
+    },
+
+    // GET NOTIFICACIONES PENDIENTES
+    getNotificacionesAdmi: ()=> {
+        return Api().get(`api/getnotificacionesadmin`)
+    },
+    // CLEAR NOTIFICATION BY ID 
+    clearNotificationById: (id) => {
+        return Api().patch(`api/clearnotificationid/${id}`)
     }
 }

@@ -25,6 +25,14 @@ group by b.charlas_id;
 select * from instituciones;
 
 select * from charlas;
+select * from charla_tiene_estudiantes;
+
+
+SELECT a.charlas_id, a.nombrecharla, b.flag
+from charlas a, charla_tiene_estudiantes b
+where a.charlas_id = b.charlas_charlas_id and b.flag= 1;
+
+
 
 SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
 GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 

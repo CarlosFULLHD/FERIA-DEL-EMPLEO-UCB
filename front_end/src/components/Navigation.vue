@@ -13,13 +13,15 @@
         <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
         <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
         <li>
+
+          <!-- CAMPANA -->
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
                 <div class="Icono" style="display:flex; margin-right:20px;">
                   <v-badge
-                    :content="messages"
-                    :value="messages"
+                    :content="notificationMessages"
+                    :value="notificationMessages"
                     size="400"
                     overlap
                   >
@@ -35,28 +37,38 @@
                   </v-badge>
                 </div>
               </v-btn>
+
             </template>
+            <v-card>
             <v-list>
-              <v-list-item v-for="notification in notifications" :key="notification.id">
-                <v-list-item-title>{{ notification.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
+              <span v-if="notificationObjectAdmin.length > 0">
+                <v-list-item v-for="notification in notificationObjectAdmin" :key="notification.estudcha_id">
+                <v-list-item-content>
+                  <v-list-item-title>Nuevo inscrito en:</v-list-item-title>
+                  <v-list-item-subtitle>{{ notification.nombrecharla }}</v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn icon @click="deleteNotification(notification.estudcha_id)"> 
+                    <v-icon color="error">mdi-delete</v-icon></v-btn>
+                </v-list-item-action>
               </v-list-item>
-              <v-btn
-                class="mx-1"
-                color="primary"
-                @click="messages++"
-              >
-                Send Message
-              </v-btn>
+              </span>
+              <center>
               <v-btn
                 class="mx-1"
                 color="error"
-                @click="messages = 0"
+                @click="clearAllNotifications"
               >
-                Clear Notifications
+                Limpiar todas
               </v-btn>
+            </center>
             </v-list>
+          </v-card>
           </v-menu>
+
+
+
+
         </li>
         <!--Icono de perfil y opciones!-->
         <li>
@@ -170,6 +182,7 @@
         <ul v-show="mobileNav" class="dropdown-nav">
           <li>
           <v-row justify="center">
+            
             <v-menu
                 bottom
                 min-width="200px"
@@ -273,44 +286,7 @@
           </v-row>
         </li>
           <li>
-            <v-menu offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-badge
-                    :content="messages"
-                    :value="messages"
-                    overlap
-                  >
-                    <v-icon
-                      class="Campanita"
-                      size="40"
-                      >
-                      mdi-bell
-                    </v-icon>
-                  </v-badge>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item v-for="notification in notifications" :key="notification.id">
-                  <v-list-item-title>{{ notification.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
-                </v-list-item>
-                <v-btn
-                  class="mx-1"
-                  color="primary"
-                  @click="messages++"
-                >
-                  Send Message
-                </v-btn>
-                <v-btn
-                  class="mx-1"
-                  color="error"
-                  @click="messages = 0"
-                >
-                  Clear Notifications
-                </v-btn>
-              </v-list>
-            </v-menu>
+ 
           </li>
           <li>
             <div class="icons">
@@ -499,7 +475,7 @@ export default {
       drawer: false,
       dialog:false,
       dialog2:false,
-      messages: 0,
+      
       user: {
       },
 
@@ -508,7 +484,18 @@ export default {
       charlasAdmiObject: {},
       comboName: null,
       comboboxArray: [],
+    
       notifications: [
+        {
+          id: 1,
+          title: "Nuevo Inscrito en :",
+          subtitle: "Conferencia BNB"
+        },
+        {
+          id: 1,
+          title: "Nuevo Inscrito en :",
+          subtitle: "Conferencia BNB"
+        },
         {
           id: 1,
           title: "Nuevo Inscrito en :",
@@ -559,19 +546,42 @@ export default {
     this.checkScreen();
     this.loadCharlasSubscritas();
     this.loadComboBox();
+    this.getNotifications();
   },
   mounted(){
     window.addEventListener('scroll',this.updateScroll);
   },
+
   methods:{
     ...mapMutations(['setNavigation']),
     doSomething() {
       this.loadCharlasSubscritas() 
+      this.getNotifications()
+    },
+
+    clearAllNotifications(){
+      let xd = this.notificationObjectAdmin
+      Object.keys(xd).forEach(async key => {
+          await Charlas.clearNotificationById(xd[key].estudcha_id)
+          await this.$store.dispatch('changeNotificacionesList')
+
+      });
+        
+
+
+    },
+    async deleteNotification(id){
+      await Charlas.clearNotificationById(id)
+      await this.$store.dispatch('changeNotificacionesList')
     },
 
 
 
-
+    async getNotifications() {
+      if (this.loggedInFlag && this.userFlag){
+        await this.$store.dispatch('changeNotificacionesList')
+      }
+    },
     // LOAD COMBOBOX FOR EXISTING BUSINESS
     async loadComboBox(){
       let xd = await Calendario.getInstituciones()
@@ -585,15 +595,6 @@ export default {
 
 
     charlasDialogo(){
-      // var instId = this.getKeyByValue(this.comboName)
-      // try {
-      //   let xd = await Charlas.getCharlaAdmiByIdInstitucion(instId)
-      //   this.charlasAdmiObject = xd.data
-      //   console.log(this.charlasAdmiObject)
-      // } catch (error) {
-      //   console.log("VACIO")
-      //   this.charlasAdmiObject = {}
-      // }
       let id = this.getKeyByValue(this.comboName)
       this.loadCharlasAdmin(id)
       
@@ -650,14 +651,21 @@ export default {
     },
     async loadCharlasAdmin(instId){
       if (this.loggedInFlag){
-       
         await this.$store.dispatch('changeCharlasAdminObj',instId)
-        console.log(this.charlasObjectAdmin)
       }
     }
 
   },
   computed: {
+    notificationMessages() {
+      return this.$store.getters.getNotificacionesList.length
+    },
+
+
+    notificationObjectAdmin() {
+      return this.$store.getters.getNotificacionesList.length === 0 ? {} : this.$store.getters.getNotificacionesList
+    },
+
     charlasObjectAdmin(){
       return this.$store.getters.getCharlasAdminObj.length === 0 ? {} : this.$store.getters.getCharlasAdminObj
     },

@@ -205,3 +205,38 @@ export const getCharlasPorIdAdmi = async (req, res) => {
   }
 };
 
+
+export const getNotificacionesAdmi = async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+    SELECT b.estudcha_id, a.nombrecharla, b.flag
+    from charlas a, charla_tiene_estudiantes b
+    where a.charlas_id = b.charlas_charlas_id and b.flag= 1;
+    `);
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Algo fue mal" });
+  }
+};
+
+
+export const clearNotificationById = async (req, res) => {
+  try {
+    const { estudcha_id } = req.params;
+    const [rows] = await pool.query(`UPDATE charla_tiene_estudiantes
+                                      SET flag = 0
+                                      WHERE estudcha_id = ?`, 
+    [estudcha_id,]);
+
+    if (rows.affectedRows <= 0) {
+      return res.status(404).json({ message: "charla no encontrada" });
+    }
+
+    res.sendStatus(204);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Algo fue mal al momento de eliminar" });
+  }
+};
+
