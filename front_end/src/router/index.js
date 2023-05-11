@@ -17,48 +17,57 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView
+    component: HomeView,
+    meta: { title: 'Inicio' }
   },
   {
     path: "/cuenta/login",
     name: "Login",
     component: LoginView,
+    meta: { title: 'Iniciar Sesion' }
   },
   {
     path: "/cuenta/crear",
     name: "CuentaCrear",
     component: CuentaCrearView,
+    meta: { title: 'Crear Cuenta' }
   },
   {
     path: "/calendario",
     name: "Calendario",
     component: CalendarioView,
+    meta: { title: 'Calendario' }
   },
   {
     path: "/empresas",
     name: "Empresas",
     component: EmpresasView,
+    meta: { title: 'Empresas' }
   },
   {
     path: "/chats",
     name: "Chat",
     component: ChatsView,
+    meta: { title: 'Chat' }
   },
   {
     path: "/crud",
     name: "Crud",
     component: CrudView,
+    meta: { title: 'Admin' }
   },
   {
     path: "/contacto",
     name: "Contacto",
     component: ContactoView,
+    meta: { title: 'Contacto' }
   },
   {
     path:"/empresas/:parameter",
     name: 'EmpresasInfo',
-    component:EmpresasInfoView
-  }
+    component:EmpresasInfoView,
+    meta: { title: 'Info' }
+  },
 ]
 
 const router = new VueRouter({

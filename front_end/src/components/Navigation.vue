@@ -6,12 +6,12 @@
         <img src="@/assets/logo.png">
       </div>
       <ul v-show="!mobile" class="navigation">
-        <li><router-link class="link" :to="{name:'Home'}"><v-icon>home</v-icon>Home</router-link></li>
-        <li><router-link class="link" :to="{name:'Empresas'}">Empresas</router-link></li>
-        <li><router-link class="link" :to="{name:'Chat'}">Chat</router-link></li>
-        <li><router-link class="link" :to="{name:'Calendario'}">Calendario</router-link></li>
-        <li><router-link class="link" :to="{name:'Contacto'}">Contactos</router-link></li>
-        <li><router-link class="link" :to="{name:'Crud'}">Crud</router-link></li>
+        <li><router-link class="link" :to="{name:'Home'}"><v-icon class="icono">home</v-icon>Home</router-link></li>
+        <li><router-link class="link" :to="{name:'Empresas'}"><v-icon class="icono">corporate_fare</v-icon>Empresas</router-link></li>
+        <li><router-link class="link" :to="{name:'Chat'}"><v-icon class="icono">forum</v-icon>Chat</router-link></li>
+        <li><router-link class="link" :to="{name:'Calendario'}"><v-icon class="icono">calendar_month</v-icon>Calendario</router-link></li>
+        <li><router-link class="link" :to="{name:'Contacto'}"><v-icon class="icono">account_circle</v-icon>Contactos</router-link></li>
+        <li><router-link class="link" :to="{name:'Crud'}"><v-icon class="icono">edit_note</v-icon>Crud</router-link></li>
         <li>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -46,14 +46,14 @@
                 color="primary"
                 @click="messages++"
               >
-                Send Message
+                Enviar Mensaje
               </v-btn>
               <v-btn
                 class="mx-1"
                 color="error"
                 @click="messages = 0"
               >
-                Clear Notifications
+                Limpiar Notificaciones
               </v-btn>
             </v-list>
           </v-menu>
@@ -144,8 +144,9 @@
                             depressed
                             rounded
                             text
-                          >
-
+                            dark :class="{'white--text': $vuetify.theme.dark}" @click="toggleDarkMode"
+                            >
+                          {{ darkMode ? 'Modo claro' : 'Modo oscuro' }}
                         </v-btn>
                         </v-switch>
                         <v-divider class="my-3"></v-divider>
@@ -154,7 +155,7 @@
                           rounded
                           text
                         >
-                        Salir
+                        Salir <v-icon>logout</v-icon>
                       </v-btn>
                     </div>
                   </v-list-item-content>
@@ -264,7 +265,7 @@
                           rounded
                           text
                         >
-                        Salir
+                        Salir <v-icon>logout</v-icon>
                       </v-btn>
                     </div>
                   </v-list-item-content>
@@ -300,14 +301,14 @@
                   color="primary"
                   @click="messages++"
                 >
-                  Send Message
+                  Enviar Mensaje
                 </v-btn>
                 <v-btn
                   class="mx-1"
                   color="error"
                   @click="messages = 0"
                 >
-                  Clear Notifications
+                  Limpiar Notificaciones
                 </v-btn>
               </v-list>
             </v-menu>
@@ -316,14 +317,13 @@
             <div class="icons">
               <font-awesome-icon :icon="['fad', 'calendar-days']" size="lg" style="--fa-primary-color: #71a1f4; --fa-secondary-color: #2e3748;" />
             </div>
-            <router-link class="linkD" :to="{name:'Home'}">Home</router-link>
+            <router-link class="link" :to="{name:'Home'}"><v-icon class="icono">home</v-icon>Home</router-link>
           </li>
-          <li><router-link class="linkD" :to="{name:'Empresas'}">Empresas</router-link></li>
-          <li><router-link class="linkD" :to="{name:'Chat'}">Chat</router-link></li> 
-          <li><router-link class="linkD" :to="{name:'Calendario'}">Calendario</router-link></li> 
-          <li><router-link class="linkD" :to="{name:'Login'}">Login</router-link></li> 
-          <li><router-link class="linkD" :to="{name:'Contacto'}">Contactos</router-link></li>
-          <li><router-link class="linkD" :to="{name:'Crud'}">Crud</router-link></li>
+        <li><router-link class="link" :to="{name:'Empresas'}"><v-icon class="icono">corporate_fare</v-icon>Empresas</router-link></li>
+        <li><router-link class="link" :to="{name:'Chat'}"><v-icon class="icono">forum</v-icon>Chat</router-link></li>
+        <li><router-link class="link" :to="{name:'Calendario'}"><v-icon class="icono">calendar_month</v-icon>Calendario</router-link></li>
+        <li><router-link class="link" :to="{name:'Contacto'}"><v-icon class="icono">account_circle</v-icon>Contactos</router-link></li>
+        <li><router-link class="link" :to="{name:'Crud'}"><v-icon class="icono">edit_note</v-icon>Crud</router-link></li>
         </ul>
       </transition>
     </nav>
@@ -700,10 +700,10 @@ export default {
   );
 header{
   position: fixed;
-  background-color: #001f3f;
-  opacity: 0.9;
+  background-color: #004070!important;
   z-index:99;
   width: 100%;
+  height: 100px;
   top: 0; 
   transition: 0.5s ease all;
   color: #fff;
@@ -728,7 +728,9 @@ header{
   }
   li{
     text-transform: uppercase;
-    margin-left: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 10px;
   }
   .link{
     font-size: 14px;
@@ -739,7 +741,7 @@ header{
     text-transform: uppercase;
     position: relative;
     transition: .5s ease;
-    font-style: 'Raleway',normal;
+    font-family: helvetica;
     /*font-size: 14px;
     transition: 0.5s ease all;
     padding-bottom: 4px;
@@ -786,7 +788,9 @@ header{
     display:flex;
     align-items: center;
     img{
-      width: 50px;
+      width: 65px;
+      border-radius: 25px;
+      box-shadow: 1px 1px 1px 1px rgba(32,32,32,0.3);
       transition: 0.5s ease all;
     }
   }
@@ -824,7 +828,7 @@ header{
     max-width: 200px;
     height: 100%;
     background-color: #ffd717;
-    opacity: 0.9;
+    //opacity: 0.9;
     top: 0;
     left: 0;
     padding-top: 80px;
@@ -887,6 +891,13 @@ header{
 }
 .Icono:hover{
   color: #ffffff;
-
+}
+.link:hover .icono {
+  display: inline-block;
+}
+.icono {
+  display: none;
+  margin-left: -20px;
+  transition: 1s ease-in-out 1s; 
 }
 </style>

@@ -191,7 +191,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+*{
+  font-family: "Helvetica";
+}
 .section1{
   width: 100%;
   height: 750px;

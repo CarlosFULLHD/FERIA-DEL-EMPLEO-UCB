@@ -37,6 +37,9 @@ export default {
   },
   created() {
     this.initialize()
+    this.$router.afterEach((to) => {
+    document.title = to.meta.title || 'webMi sitio ';
+  });
   },
   methods: {
     initialize(){
@@ -46,7 +49,9 @@ export default {
     goToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
+
   },
+  
 };
 </script>
 
@@ -55,7 +60,7 @@ export default {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Raleway", sans-serif;
+  font-family:'Helvetica';
   font-weight: 400;
 }
 .Contenido{
