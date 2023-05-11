@@ -5,7 +5,7 @@ export const getDatosCompletos = async (req, res) => {
     //creamos una const para guardar el parametro 
     const { id } = req.params;
     const [rows] = await pool.query(
-      "SELECT a.nombre, b.url, c.nombrecharla, c.fechaInicio, c.fechaFina,c.Cupos_disponibles FROM instituciones a,Charla_tiene_links b,charlas c WHERE a.instituciones_id=? AND c.instituciones_instituciones_id=a.instituciones_id AND c.charlas_id=b.charlas_charlas_id ",
+      "SELECT a.nombre, b.url, c.nombrecharla, c.fechaInicio, c.fechaFina,c.Cupos_charla FROM instituciones a,Charla_tiene_links b,charlas c WHERE a.instituciones_id=? AND c.instituciones_instituciones_id=a.instituciones_id AND c.charlas_id=b.charlas_charlas_id ",
       [id]
     );
 
@@ -45,7 +45,7 @@ export const getCupos = async (req, res) => {
     //creamos una const para guardar el parametro 
     const { id } = req.params;
     const [rows] = await pool.query(
-      "SELECT a.nombre,c.Cupos_disponibles, c.fechaInicio, c.fechaFina,c.Cupos_disponibles FROM instituciones a,charlas c WHERE a.instituciones_id = ? AND c.instituciones_instituciones_id = a.instituciones_id",
+      "SELECT a.nombre, c.fechaInicio, c.fechaFina,c.Cupos_charla FROM instituciones a,charlas c WHERE a.instituciones_id = ? AND c.instituciones_instituciones_id = a.instituciones_id",
       [id]
     );
 

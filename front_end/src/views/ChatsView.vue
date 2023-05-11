@@ -1,104 +1,13 @@
-<!--<template>
-   <v-app id="inspire">
-    <div class="wrapper">
-      <nav class="navChat">
-        <ul>
-          <li v-for="(chat, index) in chats" :key="index">
-            <a href="#" @click="selectChat(index)">
-              {{ chat.name }}
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div class="main">
-        <div class="chat-container">
-          <div class="head">
-            <h2>{{ selectedChat.name }}</h2>
-          </div>
-          <div class="messages">
-            <div v-for="(message, index) in selectedChat.messages" :key="index">
-              <div :class="['message', message.type]">{{ message.text }}</div>
-            </div>
-          </div>
-          <div class="input">
-            <input type="text" v-model="newMessage" @keyup.enter="sendMessage" v-on:input="validateNumber" placeholder="Escribe tu mensaje...">
-            <button class="send" @click="sendMessage">Enviar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </v-app>
-  </template>-->
-  <!--
-  <script>
-  import Chat from '@/services/Chat'
-  export default {
-    data() {
-      return {
-        chats: [
-          {
-            name: "Chatbot 1",
-            messages: [
-              { text: "Bienvenido!", type: "bot" },
-              { text: "Este es el link?", type: "bot" }
-            ]
-          },
-          {
-            name: "Chatbot 2",
-            messages: [
-              { text: "Hola!", type: "bot" },
-              { text: "Este es el link?", type: "bot" }
-            ]
-          }
-        ],
-        selectedChatIndex: 0,
-        newMessage: ""
-      };
-    },
-    computed: {
-      selectedChat() {
-        return this.chats[this.selectedChatIndex];
-      }
-    },
-    methods: {
-      selectChat(index) {
-        this.selectedChatIndex = index;
-      },
-      sendMessage() {
-        const message = { text: this.newMessage, type: "user" };
-        this.selectedChat.messages.push(message);
-        this.newMessage = "";
-        setTimeout(() => {
-          if (this.newMessage === '1') {
-            const reply = { text: "Que tal este es mi link", type: "bot" };
-            this.selectedChat.messages.push(reply);
-          }
-          else if (this.newMessage == '2') {
-            const reply = { text: "Que tal esta es mi informacion de contacto 777XXXXX ", type: "bot" };
-            this.selectedChat.messages.push(reply);
-          }
-          else{
-            const reply = { text: "Lo siento, porfavor ingresa solo numeros", type: "bot" };
-            this.selectedChat.messages.push(reply);
-          }
-        }, 1000);
-      },
-      validateNumber: function () {
-        if (this.selectedNumber !== '1' && this.selectedNumber !== '2') {
-          this.selectedNumber = '';
-        }
-      }
-      
-    }
-  };
-  </script>-->
   <template>
     <v-app id="inspire">
       <div class="wrapper">
         <nav class="navChat">
+          <p>Total de chats: {{ chatsLength }}</p>
           <ul>
-            <li v-for="chatbot in chatbots" :key="chatbot.id" @click="selectChatbot(chatbot.id)">
-              {{ chatbot.name || 'Cargando...' }}
+            <li v-for="chatbot in chatbots" :key="chatbot.id">
+              <a  @click="selectChatbot(chatbot.id)">
+                {{ chatbot.nombre || 'Cargando...' }}
+              </a>
             </li>
           </ul>
         </nav>
@@ -106,13 +15,13 @@
           <div class="chat-container">
             <div v-if="selectedChatbot">
               <div class="head">
-                <h2>Aqui el nombre del chat seleccionado: {{ selectedChat.nombre }}</h2>
+                <h2>Aqui el nombre del chat seleccionado: {{ selectedChatbot.nombre }}</h2>
               </div>
               <div class="message" v-for="message in selectedChatbot.messages" :key="message.id" :class="{ 'bot-message': message.isBot, 'user-message': !message.isBot }">
                 {{ message.content }}
               </div>
               <div class="input">
-                <input type="text" v-model="newMessage" @keyup.enter="sendMessage" v-on:input="validateNumber" placeholder="Escribe tu mensaje...">
+                <input type="text" v-model="newMessage" @keyup.enter="sendMessage"  placeholder="Escribe tu mensaje...">
                 <button class="send" @click="sendMessage" style="background-color: #71a1f4;color: black;pa">Enviar</button>
               </div>
             </div>
@@ -124,62 +33,61 @@
       </div>
     </v-app>
   </template>
-<script>
-import axios from 'axios';
-import Chat from '@/services/Chat';
-import Instituciones from '@/services/Instituciones';
-
-export default {
-  name: 'ChatsView',
-  data() {
-    return {
-      chatsObject: {},
-      selectedChat: {
-        nombre: '',
-        messages: []
-      },
-      newMessage: '',
-      selectedChatbotId: null,
-      chatbots: []
-    };
-  },
-  mounted() {
-    this.loadChats();
-  },
-  created() {
-    this.initialize();
-  },
-  computed: {
-    chatsLength() {
-      return Object.keys(this.chatsObject).length;
+  
+  <script>
+  import Chat from '@/services/Chat';
+  import Instituciones from '@/services/Instituciones';
+  
+  export default {
+    name: 'ChatsView',
+    data() {
+      return {
+        selectedChat: {
+          nombre: '',
+          messages: []
+        },
+        newMessage: '',
+        selectedChatbotId: null,
+        chatbots: []
+      };
     },
-    selectedChatbot() {
-      return this.chatbots.find(chatbot => chatbot.id === this.selectedChatbotId);
-    }
-  },
-  methods: {
-    async initialize() {
-      Chat.listarIns()
-        .then(result => {
-          this.chatsObject = result.data;
-        })
-        .catch(error => {
+    mounted() {
+      this.loadChats();
+    },
+    created() {
+      this.initialize();
+    },
+    computed: {
+      chatsLength() {
+        return Object.keys(this.chatbots).length;
+      },
+      selectedChatbot() {
+        return this.chatbots.find(chatbot => chatbot.id === this.selectedChatbotId);
+      }
+    },
+    methods: {
+      async initialize() {
+        Chat.listarIns().then((result) => {
+          this.chatbots = result.data
+        }).catch((error) => {
           console.log(error);
         });
-    },
-    async selectChat(id) {
+      },
+      async selectChat(id) {
       let xd = await Instituciones.listarIns(id);
       this.infoId = xd.data.instituciones_id;
       this.infoNombre = xd.data.nombre;
-      if (this.infoNombre == this.chatsObject) {
-        this.selectedChat = this.infoId;
+      if (this.infoNombre === this.selectedChat.nombre) {
+        this.selectedChatbotId = this.infoId;
       }
     },
+
     sendMessage() {
       if (this.newMessage.trim() !== '') {
         this.selectedChat.messages.push({
-          text: this.newMessage.trim(),
-          type: 'outgoing'
+          id: 'user-message-' + Date.now(),
+          content: this.newMessage.trim(),
+          isBot: false
         });
         this.newMessage = '';
       }
@@ -240,11 +148,28 @@ export default {
         });
     },
     getNombreDeEmpresa(chatbotId) {
-      return axios.get(`/api/chats_empresas/${chatbotId}`);
+        return Chat.listarIns()
+          .then(response => {
+            return response.data.find(item => item.id === chatbotId);
+          })
+          .catch(error => {
+            console.error(error);
+            throw error;
+          });
     },
+
     getDatosCompletos(chatbotId) {
-      return axios.get(`/api/chats_empresas/datos/${chatbotId}`);
+        return Chat.chatDatos(chatbotId)
+          .then(response => {
+            return response.data;
+          })
+          .catch(error => {
+            console.error(error);
+            throw error;
+          });
     }
+
+
   }
 };
 
