@@ -317,7 +317,7 @@ export default {
   
   
   
-  <style>
+  <style scoped>
   .head{
     background-color: #2e3748;
     opacity: 0.9;

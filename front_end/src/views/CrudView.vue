@@ -1,27 +1,24 @@
 <template>
   <div id="app">
     <v-app id="inspire">
-  <v-data-table
-    :headers="headers"
-    :items="axiosJson"
-    :class="['elevation-1', 'overflow-x-auto']"
-  >
-    <template v-slot:top>
-      <v-toolbar
-        flat
+      <v-data-table
+  :headers="headers"
+  :items="axiosJson"
+  :class="['elevation-1', 'overflow-x-auto']"
+>
+  <template v-slot:top>
+    <h1 id="titulo" style="text-align: center; font-size: xx-large; font-weight: bolder; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">INSTITUCIONES</h1>
+    <v-toolbar
+      flat
+    >
+    
+      
+      
+      
+      <v-dialog
+        v-model="dialog"
+        max-width="500px"
       >
-        <v-toolbar-title>Instituciones</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-        
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
 
           <template v-slot:activator="{ on, attrs }">
             
@@ -663,6 +660,8 @@ import firebase from "firebase";
               await this.initialize()
               setTimeout(() => {
                 alert("HOLA")
+                
+           
               }, 2500)
         }
         

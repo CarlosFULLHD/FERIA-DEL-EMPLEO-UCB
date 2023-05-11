@@ -1,15 +1,20 @@
 <template>
-    <v-app>
-        <v-main>
-            <template>
+  
   <v-app>
     <v-main>
-      <v-container fluid>
+      <template>
+        <head>
+          <link href="https://fonts.googleapis.com/css?family=Cabin:400&display=swap" rel="stylesheet">
+        </head>
+      <v-container class="px-4 py-8" fluid> 
+        <!-- añadí un padding y margin a la container para mejorar la ergonomía -->
         <v-row justify="center">
           <v-col cols="12">
-            <h1 class="display-2 text-center">{{ infoNombre }}</h1>
-            <h3 class="text-center">{{ infoRubro }}</h3>
-            <v-divider class="my-5"></v-divider>
+            <h1 class="display-2 text-center mb-2" style="color: #0051a9;">{{ infoNombre }}</h1> <!-- cambié el color del texto del título y añadí un margin bottom -->
+            <h3 class="text-center" style="color: #5c5c5c;">{{ infoRubro }}</h3> 
+            <!-- cambié el color del texto del subtítulo -->
+            <v-divider class="my-5" color="#0051a9"></v-divider> 
+            <!-- añadí un color a la línea divisoria -->
           </v-col>
           <v-col cols="12" md="6">
             <v-carousel :cycle="true" :interval="2500" show-arrows show-indicators>
@@ -17,36 +22,56 @@
             </v-carousel>
           </v-col>
           <v-col cols="12" md="6">
-            <h2 class="headline text-center">Conócenos</h2>
-            <v-divider class="my-3"></v-divider>
-            <p>{{ infoResena }}</p>
-            <v-divider class="my-3"></v-divider>
-            <h2 class="headline text-center">Contactos</h2>
+            <h2 class="headline text-center mb-2" style="color: #0051a9;">Conócenos</h2> 
+            <!-- cambié el color y añadí un margin bottom -->
+            <v-divider class="my-3" color="#0051a9"></v-divider>
+            <p style="color: #5c5c5c;">{{ infoResena }}</p> 
+            <!-- cambié el color del texto de la reseña -->
+            <v-divider class="my-3" color="#0051a9"></v-divider>
+            <h2 class="headline text-center mb-2" style="color: #0051a9;">Contactos</h2> 
+            <!-- cambié el color y añadí un margin bottom -->
             <v-card-actions class="d-flex justify-center flex-wrap">
               <v-btn v-for="(link, index) in infoLinksObject" :key="index" :href="link.url" class="mx-2" fab>
                 <v-icon>{{ logos[link.llave] }}</v-icon>
               </v-btn>
             </v-card-actions>
           </v-col>
-          <v-col cols="12">
-            <v-divider class="my-5"></v-divider>
-            <h2 class="headline text-center">Nuestros videos</h2>
-            <v-row class="video-row" no-gutters>
-              <v-col v-for="(video, index) in videoImgObject" :key="index" cols="12" sm="6" md="4" lg="3" xl="2">
-                <LazyYoutube ref="youtubeLazyVideo" :src="video.url" max-width="720px" aspect-ratio="16:9" thumbnail-quality="standard" />
-              </v-col>
-            </v-row>
-          </v-col>
+          <v-col cols="12" xl="12">
+  <v-divider class="my-5" color="#0051a9"></v-divider>
+  <h2 class="headline text-center mb-2" style="color: #0051a9;">Nuestros videos</h2>
+  <v-row class="video-row" no-gutters>
+    <v-col v-for="(video, index) in videoImgObject" :key="index" cols="12" sm="6" md="4" lg="3" xl="2">
+      <LazyYoutube ref="youtubeLazyVideo" :src="video.url" max-width="100%" aspect-ratio="4:3" thumbnail-quality="standard" />
+    </v-col>
+  </v-row>
+</v-col>
+
         </v-row>
       </v-container>
+    </template>
     </v-main>
   </v-app>
 </template>
 
+<style scoped>
+body {
+  font-family: 'Cabin', sans-serif;
+  font-weight: 400;
+  font-size: 60px;
+}
 
-    </v-main>
-    </v-app>
-</template>
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cabin', sans-serif;
+  font-weight: 400;
+  font-size: 50px;
+}
+
+p {
+  font-family: 'Cabin', sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+}
+</style>
 
 <script>
 import Tarjetas from '@/services/Tarjetas'

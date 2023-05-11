@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="card-background">
     <v-container fluid>
       <v-row justify="center" align="stretch" class="mt-10">
         <v-col cols="12" md="8" lg="6">
@@ -14,6 +14,7 @@
                     :rules="[rules.required]"
                     label="Cuenta"
                     autofocus="true"
+                    outlined
                     clearable
                     required
                   ></v-text-field>
@@ -27,6 +28,7 @@
                     prepend-icon="mdi mdi-lock-outline"
                     hint="Al menos 8 caracteres "
                     label="Contraseña"
+                    outlined
                     clearable
                     @click:append="showPassword = !showPassword"
                   ></v-text-field>
@@ -36,6 +38,7 @@
                     prepend-icon="mdi mdi-email-outline"
                     :rules="[rules.required, rules.email]"
                     label="E-mail"
+                    outlined
                     clearable
                   ></v-text-field>
 
@@ -65,6 +68,12 @@
 
 
 <style scoped>
+.card-background {
+  background-image: url("../assets/fondologin.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
 @media (min-width: 1024px) {
   .login {
     min-height: 100vh;
