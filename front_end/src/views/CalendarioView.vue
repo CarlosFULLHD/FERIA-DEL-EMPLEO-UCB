@@ -54,7 +54,7 @@
         <v-dialog v-model="dialog" max-width="550">
         <v-card>
           <v-container>
-            <h1 class="cool-title">Nuevo </h1>
+            <h1 class="cool-title">Crearción de evento </h1>
             <v-form @submit.prevent="addEvent">
               
               <v-combobox 
@@ -84,7 +84,7 @@
             ref="calendar"
             v-model="focus"
             color="primary"
-            :events="events"
+            :events="eventsShowCalendar"
             :now="today"
             :type="type"
             @click:event="showEvent"
@@ -133,12 +133,12 @@
               <v-btn text color="secondary" @click="selectedOpen = false">
                 Cancelar
               </v-btn>
-              <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
-                Editar
+              <!-- <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
+               
               </v-btn>
               <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
                 Guardar
-              </v-btn>
+              </v-btn> -->
             </v-card-actions>
             </v-card>
           </v-menu>
@@ -181,12 +181,19 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+
+
     events: [], // ARRAY OF ALL THE TALKS
+    
+    
+    
+    
     dialog: false,
     dialogDate: false
   }),
   mounted () {
-    this.getEvents()
+    this.$store.dispatch('changeCalendarioEventsObject',[])
+    //this.getEvents()
   },
   created() {
     this.loadComboBox()
@@ -199,9 +206,10 @@ export default {
     IdArray() {
       return this.comboboxArray.map((item) => item.instituciones_id);
     },
-
-
-
+    eventsShowCalendar() {
+      return this.$store.getters.getCalendarioEventsObject
+    },
+    
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -238,11 +246,8 @@ export default {
     async getEvents () {
       let xd = await Calendario.getAllCharlas()
       let snapshot = xd.data
-  
       Object.keys(snapshot).forEach(async key => {
-  
           let xd = await  Instituciones.getInstById(snapshot[key].instituciones_instituciones_id)
-     
           this.events.push({
             id: snapshot[key].charlas_id,
             name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
@@ -251,7 +256,16 @@ export default {
             details: snapshot[key].link,
             color: snapshot[key].Color,
             timed: true,
-          })
+          }) 
+          // this.events.push({
+          //   id: snapshot[key].charlas_id,
+          //   name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
+          //   start: new Date(snapshot[key].fechaInicio),
+          //   end: new Date(snapshot[key].fechaFina),
+          //   details: snapshot[key].link,
+          //   color: snapshot[key].Color,
+          //   timed: true,
+          // })
 
           //  let addData = snapshot
           //  addData.id = snapshot[key].charlas_id
@@ -318,9 +332,10 @@ export default {
         Color: this.color,
         instituciones_instituciones_id: id
       }
-      console.log(dataUp)
-      Calendario.addCharla(dataUp)
+      await Calendario.addCharla(dataUp)
       this.$store.dispatch('successAlertAsync',`El evento ${this.titleTalk} de la institución ${this.name} fue creado exitosamente`)
+      
+      this.$store.dispatch('changeCalendarioEventsObject',[])
       } catch(error) {
         this.$store.dispatch('errorAlertAsync',`Fallo de conexión con base de datos`)
       }
@@ -328,6 +343,7 @@ export default {
       else {
         this.$store.dispatch('errorAlertAsync',`Llene todos los campos requeridos`)
       }
+      
     },
 
     // EDITAR CHARLA
@@ -344,12 +360,16 @@ export default {
     },
     // BORRAR CHARLA
     async deleteEvent (ev) {
-      console.log(ev)
+    
       await Calendario.deleteCharlaById(ev)
       this.$store.dispatch('successAlertAsync',`El evento fue eliminado exitosamente`)
       // await db.collection("calEvent").doc(ev).delete()
       // this.selectedOpen = false,
       // this.getEvents()
+      this.selectedOpen = false
+      this.$store.dispatch('changeCalendarioEventsObject',[])
+
+
     },
     // MOSTRAR EVENTO
     showEvent ({ nativeEvent, event }) {

@@ -2,18 +2,25 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
-
+import Charlas from '@/services/Charlas'
+import Calendario from '@/services/Calendario'
+import Instituciones from './services/Instituciones';
 export default new Vuex.Store({
   // STATE OBJECT THAT HOLDS INITIAL STATE WHEN OUR APPLICATIONS STARTS
   state: {
 
         // SESSION HANDLER
-        cuentaId: null,
+        cuentaId: 1,
         cuentaU : 'jpv',
         passwordU: '1234',
         superU: true,
         emailU: 'juan.via@ucb.edu.bo',
         loggedinFlag: true,
+
+        navigation: null,
+        calendarioEventsObject: [],
+        charlasInscritasObj: {},
+        charlasAdminObj: {},
         // cuentaId:null,
         // cuentaU : '',
         // passwordU: '',
@@ -34,6 +41,22 @@ export default new Vuex.Store({
   },
   // EVENTS OVER STATES 
   mutations: {
+
+    setNavigation(state, navigation ) {
+      state.navigation   = navigation 
+    },
+
+    setCalendarioEventsObject(state, data){
+      state.calendarioEventsObject = data
+    },
+
+    setCharlasInscritasObj (state, data){
+     state.charlasInscritasObj = data
+    },
+    setCharlasAdminObj (state, data){
+      state.charlasAdminObj = data
+    },
+
     setloggedinFlag(state,nCu) {
       state.loggedinFlag = nCu
     },
@@ -114,6 +137,51 @@ export default new Vuex.Store({
       context.commit('setSuccessAlert')
     },
 
+    async changeCalendarioEventsObject(context, data) {
+      let xd = await Calendario.getAllCharlas()
+      let snapshot = xd.data
+      
+      Object.keys(snapshot).forEach(async key => {
+        let xd = await  Instituciones.getInstById(snapshot[key].instituciones_instituciones_id)
+        data.push({
+          id: snapshot[key].charlas_id,
+          name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
+          start: new Date(snapshot[key].fechaInicio),
+          end: new Date(snapshot[key].fechaFina),
+          details: snapshot[key].link,
+          color: snapshot[key].Color,
+          timed: true,
+        }) 
+      });
+      
+      context.commit('setCalendarioEventsObject',data)
+    },
+
+    async changeCharlasAdminObj(context,id){
+      try {
+        let xd = await Charlas.getCharlaAdmiByIdInstitucion(id)
+        console.log("HOLA")
+        console.log(xd.data)
+        context.commit('setCharlasAdminObj',xd.data)
+        
+      } catch(error) {
+        console.log("ERROR")
+        context.commit('setCharlasAdminObj',{})
+      }
+    },
+
+    
+    async changeCharlasInscritasObj(context, id){
+      try {
+        let xd = await Charlas.getCharlaByIdCuenta(id)
+  
+      context.commit('setCharlasInscritasObj',xd.data)
+      } catch (error){
+        context.commit('setCharlasInscritasObj',{})
+      }
+      
+    },
+
     changeUserId(context,id){
       context.commit('setcuentaId',id)
     },
@@ -138,6 +206,16 @@ export default new Vuex.Store({
   },
   getters: {
     // Define your getters to retrieve computed state values here
+    getCalendarioEventsObject: state => {
+      return state.calendarioEventsObject
+    },
+
+    getCharlasAdminObj: state => {
+      return state.charlasAdminObj
+    },
+    getCharlasInscritasObj: state => {
+      return state.charlasInscritasObj
+    },
     getloggedinFlag: state => {
       return state.loggedinFlag
     },

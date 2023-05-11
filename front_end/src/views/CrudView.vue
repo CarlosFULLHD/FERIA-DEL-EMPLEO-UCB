@@ -663,8 +663,6 @@ import firebase from "firebase";
               await this.initialize()
               setTimeout(() => {
                 alert("HOLA")
-                
-           
               }, 2500)
         }
         

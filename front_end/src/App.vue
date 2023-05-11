@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <div class="app">
-      <Navigation />
+      <Navigation ref="navigationComponent"/>
       <div class="Contenido">
       <AlertsPopup />
       <router-view />
@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     initialize(){
+      this.$store.dispatch('initialize')
     
     },
     goToTop() {

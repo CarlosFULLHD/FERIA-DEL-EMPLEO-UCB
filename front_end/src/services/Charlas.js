@@ -18,5 +18,9 @@ export default {
     // DELETE CHARLA TIENE ESTUDIANTES POR ID DE CHARLA ESTUDIANTES
     deleteCharlaCuentaById:(id)=>{
         return Api().delete(`api/deletecharlacuenta/${id}`)
+    },
+    // GET CHARLAS ADMINISTRADOR POR ID DE INSTITUCIÓN
+    getCharlaAdmiByIdInstitucion:(id) => {
+        return Api().get(`api/getcharlasadmi/${id}`)
     }
 }

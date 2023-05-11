@@ -182,6 +182,7 @@
 
 
   <script>
+  import { mapState } from 'vuex';
   import Tarjetas from '@/services/Tarjetas'
   import Charlas from '@/services/Charlas'
     export default {
@@ -232,6 +233,9 @@
         this.cleanInitObjects();
       },
       computed: {
+
+        ...mapState(['navigation']),
+
         // TARJETAS LENGTH
         tarjetasLength() {
           return Object.keys(this.tarjetasObject).length
@@ -256,10 +260,10 @@
           try {
             let xd = await Charlas.getAllCharlasById(this.idDialog)
             this.charlasObject = xd.data
-            console.log(this.charlasObject)
+     
           } catch(error){
             this.charlasObject = null
-            console.log(this.charlasObject)
+        
           }
         },
 
@@ -289,6 +293,14 @@
             });
             this.$store.dispatch('errorAlertAsync',`Problemas al inscribir, intente de nuevo`)
           }
+          const navigationComponent = this.$store.state.navigationComponent;
+          if (navigationComponent){
+            navigationComponent.loadCharlasSubscritas()
+          }
+          if (this.navigation) {
+        this.navigation.doSomething();
+      }
+          //this.$store.dispatch('changeCharlasInscritasObj',this.userId)
         },
 
         

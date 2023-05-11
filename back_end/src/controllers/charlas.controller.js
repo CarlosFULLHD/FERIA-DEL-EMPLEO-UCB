@@ -179,3 +179,29 @@ export const deleteCharlaCuentaPorId = async (req, res) => {
   }
 };
 
+
+export const getCharlasPorIdAdmi = async (req, res) => {
+  try {
+    //creamos una const para guardar el parametro 
+    const { instituciones_instituciones_id} = req.params;
+    const [rows] = await pool.query(
+      `select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, b.cupos_charla, count(c.estudcha_id) as 'inscritos', b.cupos_charla - count(c.estudcha_id) as 'libres'
+      from instituciones a
+      right join charlas b on a.instituciones_id = b.instituciones_instituciones_id
+      left join charla_tiene_estudiantes c on b.charlas_id = c.charlas_charlas_id
+      where b.instituciones_instituciones_id = ?
+      group by b.charlas_id;`,
+      [instituciones_instituciones_id]
+    );
+
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "No existen links" });
+    }
+    res.json(rows);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({error, message: "Algo fue mal al charlas" });
+  }
+};
+

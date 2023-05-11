@@ -2,21 +2,29 @@
 USE feria;
 CREATE DATABASE IF NOT EXISTS feria;
 
-
-SELECT * FROM INSTITUCIONES;
-
-SELECT * FROM INSTITUCIONES_TIENE_VIDEOS;
-
-
-SELECT llave, url FROM Institucion_tiene_links WHERE instituciones_instituciones_id = 1;
-
-SELECT i.instituciones_id,m.url FROM instituciones_tiene_imagenes m RIGHT JOIN instituciones i ON i.INSTITUCIONES_ID = m.instituciones_instituciones_id ORDER BY i.INSTITUCIONES_ID ASC, m.imagenin_id ASC
+select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, b.cupos_charla, count(c.estudcha_id) as 'inscritos', b.cupos_charla - count(c.estudcha_id) as 'libres'
+from instituciones a, charlas b, charla_tiene_estudiantes c
+where a.instituciones_id = b.instituciones_instituciones_id and b.charlas_id = c.charlas_charlas_id
+group by b.charlas_id;
 
 
-SELECT a.instituciones_id, b.llave, b.url FROM Institucion_tiene_links b RIGHT JOIN instituciones a on a.INSTITUCIONES_ID = b.instituciones_instituciones_id ORDER BY a.INSTITUCIONES_ID asc;
+select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, b.cupos_charla, count(c.estudcha_id) as 'inscritos', b.cupos_charla - count(c.estudcha_id) as 'libres'
+from instituciones a
+left join charlas b on a.instituciones_id = b.instituciones_instituciones_id 
+left join charla_tiene_estudiantes c on b.charlas_id = c.charlas_charlas_id
+group by b.charlas_id;
 
-select * from institucion_tiene_links;
 
+select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, b.cupos_charla, count(c.estudcha_id) as 'inscritos', b.cupos_charla - count(c.estudcha_id) as 'libres'
+from instituciones a
+right join charlas b on a.instituciones_id = b.instituciones_instituciones_id
+left join charla_tiene_estudiantes c on b.charlas_id = c.charlas_charlas_id
+where b.instituciones_instituciones_id = 7
+group by b.charlas_id;
+
+select * from instituciones;
+
+select * from charlas;
 
 SELECT instituciones_id, nombre, email, institucion, telefono, resena, telefonowp, ubicacion,  
 GROUP_CONCAT(DISTINCT l.llave) AS links_llaves, 
@@ -85,11 +93,21 @@ CREATE TABLE charlas (
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT charlas_pk PRIMARY KEY (charlas_id)
 );
-
+select * from cuenta;
 SELECT * FROM CHARLAS WHERE INSTITUCIONES_INSTITUCIONES_ID = 4;
 
 
 SELECT * FROM CHARLAS;
+select * from Charla_tiene_estudiantes;
+
+select a.nombre, b.nombrecharla, b.fechainicio, b.fechafina, b.link, c.estudcha_id
+from instituciones a, charlas b, charla_tiene_estudiantes c
+where a.instituciones_id = b.instituciones_instituciones_id and
+	  b.charlas_id = c.charlas_charlas_id and 
+      c.cuenta_cuenta_id = 1;
+      
+DELETE FROM charla_tiene_estudiantes WHERE estudcha_id = 12;
+SELECT * FROM charla_tiene_estudiantes;
 TRUNCATE TABLE CHARLAS;
 desc charlas;
 select now();
@@ -143,6 +161,15 @@ CREATE TABLE instituciones_tiene_videos (
     instituciones_instituciones_id bigint  NOT NULL,
     CONSTRAINT instituciones_tiene_videos_pk PRIMARY KEY (videoin_id)
 );
+
+CREATE TABLE IF NOT EXISTS CHARLA_NOTIFICACION_ESTUDIANTES(
+	notiestu_id bigint not null auto_increment primary key,
+    flag int not null,
+    estudcha_id bigint not null,
+    constraint fk_estudiantescharlanotificacion foreign key (estudcha_id)
+    REFERENCES Charla_tiene_estudiantes(estudcha_id) on delete cascade);
+    
+DESC CHARLA_NOTIFICACION_ESTUDIANTES;
 
 SELECT * FROM INSTITUCIONES_TIENE_VIDEOS;
 

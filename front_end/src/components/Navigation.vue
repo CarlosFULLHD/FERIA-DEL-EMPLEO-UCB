@@ -348,11 +348,11 @@
 
       <v-card>
         <v-card-title>Charlas inscritas de {{ userName }}</v-card-title>
-        <v-card-text v-if="userCharlaObject.length > 0" >
+        <v-card-text v-if="charlasObjectUser.length > 0" >
           <v-container>
             <v-data-table
               :headers="headersCharlasUser"
-              :items="userCharlaObject"
+              :items="charlasObjectUser"
               :items-per-page="5"
             >
               <template v-slot:[`item.institucionCharlaUser`]="{ item }">
@@ -411,30 +411,70 @@
       </template>
       
       <v-card>
-        <v-card-title>Hola choco</v-card-title>
-        <v-card-text>
+       
+        <v-card-title>Datos de charlas</v-card-title>
+        <v-row align="center" justify="center">
+        <v-col cols="12" sm="6" md="4">
+            <v-combobox
+            v-model="comboName"
+            label="Institución"
+            :items="nombreArray"
+            :item-value="IdArray"
+            outlined
+          ></v-combobox>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-btn color="#ffc506"
+            rounded
+            @click="charlasDialogo()"
+            >
+              <strong>Buscar</strong>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-card-text v-if="charlasObjectAdmin.length > 0" >
+          <v-card-title>{{ this.comboName }}</v-card-title>
           <v-container>
             <v-data-table
-              :headers="headers2"
-              :items="items2"
+              :headers="headersCharlasSuperUser"
+              :items="charlasObjectAdmin"
               :items-per-page="5"
             >
               <template v-slot:[`item.header`]="{ item }">
                 {{ item.header }}
               </template>
-              <template v-slot:[`item.col1`]="{ item }">
-                <template v-if="item.col1.includes('http')">
-                  <a :href="item.col1" target="_blank">{{ item.col1 }}</a>
-                </template>
-                <template v-else>
-                  {{ item.col1 }}
-                </template>
+              <template v-slot:[`item.institucionCharlaAdmin`]="{ item }">
+                {{ item.nombre }}
               </template>
-              <template v-slot:[`item.col2`]="{ item }">
-                {{ item.col2 }}
+              <template v-slot:[`item.tituloCharlaAdmin`]="{ item }">
+                {{ item.nombrecharla }}
               </template>
+              <template v-slot:[`item.fechaInicioCharlaAdmin`]="{ item }">
+                {{ item.fechainicio }}
+              </template>
+              <template v-slot:[`item.fechaFinaCharlaAdmin`]="{ item }">
+                {{ item.fechafina }}
+              </template>
+              <template v-slot:[`item.linkCharlaAdmin`]="{ item }">
+                <a v-bind:href=item.link target="_blank">{{ item.link }}</a>
+              </template>
+              <template v-slot:[`item.cupoMaximoAdmin`]="{ item }">
+                {{ item.cupos_charla }}
+              </template>
+              <template v-slot:[`item.inscritosAdmin`]="{ item }">
+                {{ item.inscritos }}
+              </template>
+              <template v-slot:[`item.libresAdmin`]="{ item }">
+                {{ item.libres }}
+              </template>
+              
+              
+            
             </v-data-table>
           </v-container>
+        </v-card-text>
+        <v-card-text v-else>
+          <h1>No existen charlas  de {{ this.comboName }}</h1>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="dialog2 = false">Cerrar</v-btn>
@@ -445,7 +485,9 @@
   </header>
 </template>
 <script>
+import { mapMutations } from 'vuex';
 import Charlas from '@/services/Charlas'
+import Calendario from '@/services/Calendario'
 export default {
   name:"navigationView",
   data(){
@@ -459,10 +501,13 @@ export default {
       dialog2:false,
       messages: 0,
       user: {
-      
-        
-        
       },
+
+
+
+      charlasAdmiObject: {},
+      comboName: null,
+      comboboxArray: [],
       notifications: [
         {
           id: 1,
@@ -483,59 +528,90 @@ export default {
         { text: 'Fecha inicio', value: 'fechaInicioCharlaUser' },
         { text: 'Fecha fin', value: 'fechaFinaCharlaUser' },
         { text: 'Link', value: 'linkCharlaUser' },
-        { text: 'id', value: 'idCharlaUser' },
         { text: 'Eliminar', value: 'actions', sortable: false },
         ],
 
-        
-    
-      items: [
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Juan Pablo', col1: 'Banco BNB', col2: 'Charla 2', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-        { header: 'Carlos', col1: 'Banco BNB', col2: 'Charla 3', col3: '07/05/23' },
-      ],
-      headers2: [
-        { text: 'Institucion', value: 'header' },
-        { text: 'Link de Reunion', value: 'col1' },
-        { text: 'Fecha', value: 'col2' },
-      ],
-      items2: [
-        { header: 'BNB', col1: 'Se subira el link lo más pronto posible :)', col2: '14 Mayo 15:00 - 14 May 16:00'},
-        { header: 'BNB', col1: 'https://us06web.zoom.us/j/84859098395', col2: '14 Mayo 15:00 - 14 May 16:00'},
-        { header: 'BNB', col1: 'Se subira el link lo más pronto posible :)', col2: '14 Mayo 15:00 - 14 May 16:00'},
-        { header: 'BNB', col1: 'Se subira el link lo más pronto posible :)', col2: '14 Mayo 15:00 - 14 May 16:00'},
-      ],
+        headersCharlasSuperUser: [
+        {text: 'Institución',align: 'start', value: 'institucionCharlaAdmin'},
+        {text: 'Título',align: 'start', value: 'tituloCharlaAdmin'},
+        { text: 'Fecha inicio', value: 'fechaInicioCharlaAdmin' },
+        { text: 'Fecha fin', value: 'fechaFinaCharlaAdmin' },
+        { text: 'Link', value: 'linkCharlaAdmin' },
+        { text: 'Cupo máximo', value: 'cupoMaximoAdmin' },
+        { text: 'Inscritos', value: 'inscritosAdmin' },
+        { text: 'Espacios libres', value: 'libresAdmin' },
+        ],
+        institucionCharlaAdmin: null,
+        tituloCharlaAdmin: null,
+        fechaInicioCharlaAdmin: null,
+        fechaFinaCharlaAdmin: null,
+        linkCharlaAdmin: null,
+        cupoMaximoAdmin: null,
+        inscritosAdmin: null,
+        libresAdmin: null,
+
     }
   },
   created(){
     window.addEventListener('resize',this.checkScreen);
+    const self = this;
+    this.$store.commit('setNavigation', self);
     this.checkScreen();
     this.loadCharlasSubscritas();
+    this.loadComboBox();
   },
   mounted(){
     window.addEventListener('scroll',this.updateScroll);
   },
   methods:{
+    ...mapMutations(['setNavigation']),
+    doSomething() {
+      this.loadCharlasSubscritas() 
+    },
+
+
+
+
+    // LOAD COMBOBOX FOR EXISTING BUSINESS
+    async loadComboBox(){
+      let xd = await Calendario.getInstituciones()
+      this.comboboxArray = xd.data
+    },
+
+    getKeyByValue (value) {
+      const item = this.comboboxArray.find(obj => obj.nombre === value);
+      return item ? item.instituciones_id : null;
+    },
+
+
+    charlasDialogo(){
+      // var instId = this.getKeyByValue(this.comboName)
+      // try {
+      //   let xd = await Charlas.getCharlaAdmiByIdInstitucion(instId)
+      //   this.charlasAdmiObject = xd.data
+      //   console.log(this.charlasAdmiObject)
+      // } catch (error) {
+      //   console.log("VACIO")
+      //   this.charlasAdmiObject = {}
+      // }
+      let id = this.getKeyByValue(this.comboName)
+      this.loadCharlasAdmin(id)
+      
+
+      
+    },
     async deleteCharlaUser(item){
       let dp = Object.assign({}, item)
       const charId = dp.estudcha_id
       try {
         await Charlas.deleteCharlaCuentaById(charId)
-        this.loadCharlasSubscritas()
+       
         this.dialog = false
         window.scrollTo({
               top: 0,
               behavior: 'smooth' // or 'auto' for instant scrolling
             });
+        
         this.$store.dispatch('successAlertAsync',`Se elimino subscripción a la charla ${dp.nombre}`)
       } catch (error) {
         this.dialog = false
@@ -544,11 +620,9 @@ export default {
               behavior: 'smooth' // or 'auto' for instant scrolling
             });
         this.$store.dispatch('errorAlertAsync',`Problemas al conectar a base de datos`)
-      }    
+      } 
+      this.loadCharlasSubscritas()   
     },
-
-
-
     toggleMobileNav(){
       this.mobileNav = !this.mobileNav;
     },
@@ -569,15 +643,28 @@ export default {
       this.mobileNav=false;
       return;
     },
-    async loadCharlasSubscritas(){
+    loadCharlasSubscritas(){
       if (this.loggedInFlag){
-        let xx = await Charlas.getCharlaByIdCuenta(this.userId)
-        this.userCharlaObject = xx.data
-        
+        this.$store.dispatch('changeCharlasInscritasObj',this.userId)
       } 
+    },
+    async loadCharlasAdmin(instId){
+      if (this.loggedInFlag){
+       
+        await this.$store.dispatch('changeCharlasAdminObj',instId)
+        console.log(this.charlasObjectAdmin)
+      }
     }
+
   },
   computed: {
+    charlasObjectAdmin(){
+      return this.$store.getters.getCharlasAdminObj.length === 0 ? {} : this.$store.getters.getCharlasAdminObj
+    },
+    
+    charlasObjectUser(){
+      return this.$store.getters.getCharlasInscritasObj.length === 0 ? {} : this.$store.getters.getCharlasInscritasObj
+    },
     userAccount(){
       return this.$store.getters.getCuenta.charAt(0) == '' ? 'UCB': this.$store.getters.getCuenta.charAt(0)
     },
@@ -595,7 +682,13 @@ export default {
     },
     loggedInFlag() {
       return this.$store.getters.getloggedinFlag
-    }
+    },
+    nombreArray(){
+      return this.comboboxArray.map((item)=> item.nombre)
+    },
+    IdArray() {
+      return this.comboboxArray.map((item) => item.instituciones_id);
+    },
   }
 };
 </script>
