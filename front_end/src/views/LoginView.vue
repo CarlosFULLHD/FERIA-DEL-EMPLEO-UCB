@@ -1,69 +1,71 @@
 <template>
-
-  <v-app>
-    <v-sheet width="300" class="mx-auto">
-      <h1>Iniciar Sesion</h1>
-      <v-form ref="form" @submit.prevent="loginForm">
-        <v-text-field
-          v-model="cuenta"
-          hint="Nombre de cuenta"
-          prepend-icon="mdi mdi-account-circle-outline"
-          :rules="[rules.required, rules.min]"
-          label="Cuenta"
-          autofocus="true"
-          clearable
-          required
-        >
-        </v-text-field>
-  
-        <v-text-field
-          v-model="password"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[rules.required, rules.min]"
-          :type="show1 ? 'text' : 'password'"
-          prepend-icon="mdi mdi-lock-outline"
-          hint="Al menos 8 caracteres "
-          label="Contraseña"
-          clearable
-          @click:append="show1 = !show1"
-        ></v-text-field>
-      
-        <v-btn
-          color="error"
-          class="mr-4"
-          @click="reset"
-        >
-          Limpiar
-        </v-btn>
-  
-        <v-btn
-          color="success"
-          class="mr-4"
-          @click="loginForm"
-        >
-          Login
-        </v-btn>
-    
-      </v-form>
-    </v-sheet>
+  <v-app class="card-background">
+    <v-container fluid>
+      <v-row justify="center" align="stretch" class="mt-10">
+        <v-col cols="12" md="8" lg="6">
+          <v-card>
+            <v-card-title class="text-center">Iniciar sesión</v-card-title>
+            <v-card-text>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field
+                  v-model="cuenta"
+                  :rules="[rules.required]"
+                  label="Nombre de cuenta"
+                  prepend-icon="mdi mdi-account-circle-outline"
+                  outlined
+                  autofocus="true"
+                  clearable
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  :rules="[rules.required]"
+                  label="Contraseña"
+                  prepend-icon="mdi mdi-lock-outline"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="showPassword ? 'text' : 'password'"
+                  outlined
+                  clearable
+                  required
+                  @click:append="showPassword = !showPassword"
+                ></v-text-field>
+              </v-form>
+            </v-card-text>
+            
+            <v-card-actions>
+              <v-btn color="primary" @click="loginForm">Iniciar sesión</v-btn>
+              
+            </v-card-actions>
+            <h4>No tienes una cuenta? Haz click  <router-link to="/cuenta/crear">aqui</router-link></h4>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-app>
-  
-  </template>
-    
-    <style>
-    @media (min-width: 1024px) {
-      .login {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        
-      }
-      
-    }
-    .error {
-        color:red;
-      }
-    </style>
+</template>
+
+<style scoped>
+.card-background {
+  background-image: url("../assets/fondologin.jpg");
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 1024px) {
+  .login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+}
+.error {
+  color:red;
+}
+h4 {
+  padding: 10px;
+}
+</style>
+
+
   
   <script>
   import Cuentas from '@/services/Cuenta'
@@ -83,6 +85,7 @@
         })
         
           return {
+            showPassword: false,//Para declararlo en el data para hacer uso del script
               form: Object.assign({}, defaultForm),
               rules: {
                   required: v => !!v || 'Requerido.',
@@ -126,6 +129,8 @@
             this.$store.dispatch('changeUserId',xd.cuenta_id)
             this.$store.dispatch('changeloggedinFlag',true)
             this.$store.dispatch('successAlertAsync',`Bienvenido ${xd.cuenta}`)
+            this.$router.push({ name: 'Home' })
+
           }
         } catch (error) {
           this.$store.dispatch('errorAlertAsync',`Cuenta inexistente, intente de nuevo`)
