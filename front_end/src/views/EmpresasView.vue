@@ -48,13 +48,11 @@
                   <v-divider></v-divider>
 
 
-                  <v-card-actions style=" justify-content: space-between;">
+                  <v-card-actions style="background-color: #001f3f;">
                     <v-btn color="#ffc506"
                     rounded
             
                     @click="charlasDialogo(value['instituciones_id'], value['nombre'])"
-                    class="botonesparapc mr-4"
-                    
                     >
                      <strong>Charlas</strong>
                     </v-btn>
@@ -62,7 +60,6 @@
                   
                     rounded
                     @click="infoDialog(value['instituciones_id'])" 
-                    class="botonesparapc mr-4"
                     >
                     <strong>Información</strong>
                     </v-btn>
@@ -97,7 +94,7 @@
         <template v-slot:default="dialog">
           <v-card>
             <v-toolbar
-              color="#primary"
+              color="primary"
               dark
             > {{ nombreCharlaDialog }}</v-toolbar>
             <v-card-text>
@@ -150,17 +147,16 @@
               </v-data-table>
             </span>
             <span v-else>
-              <h2>No existen charlas de {{ nombreCharlaDialog }} aún, espera a las ultimas noticias</h2>
+              <h2>No existen charlas de {{ nombreCharlaDialog }} aún, estate atento</h2>
             </span>
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="#ffc506" block @click="dialog.value = false">Cerrar</v-btn>
+            <v-btn color="primary" block @click="dialog.value = false">Cerrar</v-btn>
           </v-card-actions>
         
 
           </v-card>
-          
         </template>
       </v-dialog>
 
@@ -365,12 +361,6 @@
   </script>
 
 <style scoped>
-
-@media (min-width: 768px) {
-  .botonesparapc{
-    margin:0 40px;
-}
-}
 .card {
   width: 100%;
 }

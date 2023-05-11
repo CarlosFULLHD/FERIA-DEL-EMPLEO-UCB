@@ -6,20 +6,13 @@
         <v-sheet height="64">
           <v-toolbar flat color="white">
             <span v-if="userFlag">
-            <v-btn color="#ffc506"
-            rounded 
-            style="font-weight: bold;
-            font-size: 16px;" @click="dialog = true">
+            <v-btn outlined class="mr-4" color="grey darken-2" @click="dialog = true">
               Nuevo evento
             </v-btn>
             </span>
-            <v-btn color="#ffc506"
-            rounded 
-            style="font-weight: bold;
-            font-size: 16px;" @click="setToday">
+            <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
               Hoy
             </v-btn>
-
             <v-btn fab text small color="grey darken-2" @click="prev">
               <v-icon small>mdi-chevron-left</v-icon>
             </v-btn>
@@ -31,28 +24,28 @@
             <v-menu bottom right>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  color="#ffc506" 
-                  rounded 
+                  outlined
+                  color="grey darken-2"
                   v-on="on"
                 >
                   <span>{{ typeToLabel[type] }}</span>
                   <v-icon right>mdi-menu-down</v-icon>
                 </v-btn>
               </template>
-              <v-list class="my-list">
-              <v-list-item @click="type = 'day'" >
-                <v-list-item-title>Día</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Semana</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Mes</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 días</v-list-item-title>
-              </v-list-item>
-            </v-list>
+              <v-list>
+                <v-list-item @click="type = 'day'">
+                  <v-list-item-title>Día</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = 'week'">
+                  <v-list-item-title>Semana</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = 'month'">
+                  <v-list-item-title>Mes</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = '4day'">
+                  <v-list-item-title>4 días</v-list-item-title>
+                </v-list-item>
+              </v-list>
             </v-menu>
           </v-toolbar>
         </v-sheet>
@@ -117,7 +110,7 @@
                 dark
               >
               <span v-if="userFlag">
-                <v-btn color="red" @click="deleteEvent(selectedEvent.id)" icon>
+                <v-btn @click="deleteEvent(selectedEvent.id)" icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </span>
@@ -125,9 +118,9 @@
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
-              <v-card-text >
+              <v-card-text>
                 <form v-if="currentlyEditing !== selectedEvent.id">
-                  Link: <a  :v-bind:href=selectedEvent.details target="_blank">{{ selectedEvent.details }}</a>
+                  Link: <a v-bind:href=selectedEvent.details target="_blank">{{ selectedEvent.details }}</a>
                 </form>
                 <form v-else>
                   <textarea-autosize
@@ -141,7 +134,7 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="#ffc506" rounded @click="selectedOpen = false">
+              <v-btn text color="secondary" @click="selectedOpen = false">
                 Cancelar
               </v-btn>
               <!-- <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
@@ -159,14 +152,6 @@
   </v-app>
 </div>
 </template>
-
-
-<style scoped>
-
-.my-list .v-list-item {
-  background-color: #ffc506;
-  
-}</style>
 
 <script>
 
