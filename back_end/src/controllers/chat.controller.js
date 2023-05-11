@@ -24,7 +24,7 @@ export const getNombreDeEmpresa = async (req, res) => {
     //creamos una const para guardar el parametro 
     const { id } = req.params;
     const [rows] = await pool.query(
-      "SELECT nombre, resena FROM instituciones WHERE instituciones_id = ?",
+      "SELECT instituciones_id,nombre, resena FROM instituciones WHERE instituciones_id = ?",
       [id]
     );
 
@@ -63,7 +63,7 @@ export const getCupos = async (req, res) => {
 //Todas las empresas
 export const getInstituciones = async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT nombre FROM instituciones");
+      const [rows] = await pool.query("SELECT instituciones_id,nombre FROM instituciones");
       res.json(rows);
     } catch (error) {
       return res.status(500).json({ message: "Algo fue mal" });
