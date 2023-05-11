@@ -8,9 +8,10 @@ import VueTextareaAutosize from 'vue-textarea-autosize'
 import firebase from 'firebase'
 import store from '@/store'
 
-//import LazyTube from "vue-lazytube";
-//Vue.use(LazyTube);
+export const EventBus = new Vue()
 
+import LazyTube from "vue-lazytube";
+Vue.use(LazyTube);
 
 Vue.use(VueTextareaAutosize); // VUE TEXT AREA INITIALIZER
 

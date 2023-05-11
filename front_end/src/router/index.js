@@ -8,6 +8,8 @@ import EmpresasView from "../views/EmpresasView.vue";
 import ChatsView from "../views/ChatsView.vue";
 import CrudView from "../views/CrudView.vue";
 import ContactoView from "../views/ContactoView.vue";
+import EmpresasInfoView from "@/views/EmpresasInfoView.vue"
+//import CharlasPorEmpresaView from "@/views/CharlasPorEmpresaView.vue"
 
 Vue.use(VueRouter)
 
@@ -15,42 +17,56 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView
+    component: HomeView,
+    meta: { title: 'Inicio' }
   },
   {
     path: "/cuenta/login",
     name: "Login",
     component: LoginView,
+    meta: { title: 'Iniciar Sesion' }
   },
   {
     path: "/cuenta/crear",
     name: "CuentaCrear",
     component: CuentaCrearView,
+    meta: { title: 'Crear Cuenta' }
   },
   {
     path: "/calendario",
     name: "Calendario",
     component: CalendarioView,
+    meta: { title: 'Calendario' }
   },
   {
     path: "/empresas",
     name: "Empresas",
     component: EmpresasView,
+    meta: { title: 'Empresas' }
   },
   {
-    path: "/chats_empresas",
+    path: "/chats",
     name: "Chat",
     component: ChatsView,
+    meta: { title: 'Chat' }
   },
   {
     path: "/crud",
     name: "Crud",
     component: CrudView,
+    meta: { title: 'Admin' }
   },
   {
     path: "/contacto",
     name: "Contacto",
     component: ContactoView,
+    meta: { title: 'Contacto' }
+  },
+  {
+    path:"/empresas/:parameter",
+    name: 'EmpresasInfo',
+    component:EmpresasInfoView,
+    meta: { title: 'Info' }
   },
 ]
 

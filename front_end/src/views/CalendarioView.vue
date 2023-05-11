@@ -51,17 +51,27 @@
 
         <!-- ADD EVENT DIALOG -->
 
-        <v-dialog v-model="dialog" max-width="500">
+        <v-dialog v-model="dialog" max-width="550">
         <v-card>
           <v-container>
+            <h1 class="cool-title">Crearción de evento </h1>
             <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="name" type="text" label="Título (Requerido)"></v-text-field>
-              <v-text-field v-model="details" type="text" label="Detalles"></v-text-field>
-              <v-text-field v-model="start" type="date" label="Inicio (Requerido)"></v-text-field>
-              <v-text-field v-model="end" type="date" label="Fin (Requerido)"></v-text-field>
+              
+              <v-combobox 
+                v-model="name"
+                label="Institución"
+                :items="nombreArray"
+                :item-value="IdArray"
+                variant="outlined"
+              ></v-combobox>
+              <v-text-field v-model="titleTalk" type="text" label="Título charla"></v-text-field>
+              <v-text-field v-model="start" type="datetime-local" label="Fecha Inicio (Requerido)"></v-text-field>
+              <v-text-field v-model="end" type="datetime-local" label="Fin (Requerido)"></v-text-field>
+              <v-text-field v-model="cupo" type="number" label="Cupo máximo (Requerido)"></v-text-field>
+              <v-text-field v-model="link" type="text" label="Link (Requerido)"></v-text-field>
               <v-text-field v-model="color" type="color" label="Color (click para abrir menú colores)"></v-text-field>
               <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
-                create event
+                Crear charla
               </v-btn>
             </v-form>
           </v-container>
@@ -74,7 +84,7 @@
             ref="calendar"
             v-model="focus"
             color="primary"
-            :events="events"
+            :events="eventsShowCalendar"
             :now="today"
             :type="type"
             @click:event="showEvent"
@@ -106,7 +116,7 @@
               </v-toolbar>
               <v-card-text>
                 <form v-if="currentlyEditing !== selectedEvent.id">
-                  {{ selectedEvent.details }}
+                  Link: <a v-bind:href=selectedEvent.details target="_blank">{{ selectedEvent.details }}</a>
                 </form>
                 <form v-else>
                   <textarea-autosize
@@ -123,12 +133,12 @@
               <v-btn text color="secondary" @click="selectedOpen = false">
                 Cancelar
               </v-btn>
-              <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
-                Editar
+              <!-- <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
+               
               </v-btn>
               <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
                 Guardar
-              </v-btn>
+              </v-btn> -->
             </v-card-actions>
             </v-card>
           </v-menu>
@@ -140,9 +150,16 @@
 </template>
 
 <script>
+
+import Calendario from '@/services/Calendario'
+import Instituciones from '@/services/Instituciones'
+
 import { db } from '@/main'
 export default {
   data: () => ({
+    comboboxArray: [],
+
+
     today: new Date().toISOString().substr(0, 10),
     focus: new Date().toISOString().substr(0, 10),
     type: 'month',
@@ -152,23 +169,47 @@ export default {
       day: 'Día',
       '4day': '4 días',
     },
-    name: null,
+    name: null,// BUSINESS NAME (COMBOBOX)
     details: null,
-    start: null,
-    end: null,
-    color: '#1976D2', // default event color
+    titleTalk: null, // TALK TITLE
+    start: null, // INITIAL DATE
+    end: null,  // END DATE
+    cupo: null, // MAX CAP
+    link: null, // LINK OF THE TALK
+    color: '#1976D2', // EVENTO COLOR
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [],
+
+
+    events: [], // ARRAY OF ALL THE TALKS
+    
+    
+    
+    
     dialog: false,
     dialogDate: false
   }),
   mounted () {
-    this.getEvents()
+    this.$store.dispatch('changeCalendarioEventsObject',[])
+    //this.getEvents()
+  },
+  created() {
+    this.loadComboBox()
   },
   computed: {
+    // CARGADO COMBOBOX NOMBRES E ID
+    nombreArray(){
+      return this.comboboxArray.map((item)=> item.nombre)
+    },
+    IdArray() {
+      return this.comboboxArray.map((item) => item.instituciones_id);
+    },
+    eventsShowCalendar() {
+      return this.$store.getters.getCalendarioEventsObject
+    },
+    
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -200,16 +241,62 @@ export default {
     }
   },
   methods: {
+    // METHOD TO RETRIEVE EVENTS FROM DATA BASE
+
     async getEvents () {
-      let snapshot = await db.collection('calEvent').get()
-      const events = []
-      snapshot.forEach(doc => {
-        let appData = doc.data()
-        appData.id = doc.id
-        events.push(appData)
-      })
-      this.events = events
+      let xd = await Calendario.getAllCharlas()
+      let snapshot = xd.data
+      Object.keys(snapshot).forEach(async key => {
+          let xd = await  Instituciones.getInstById(snapshot[key].instituciones_instituciones_id)
+          this.events.push({
+            id: snapshot[key].charlas_id,
+            name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
+            start: new Date(snapshot[key].fechaInicio),
+            end: new Date(snapshot[key].fechaFina),
+            details: snapshot[key].link,
+            color: snapshot[key].Color,
+            timed: true,
+          }) 
+          // this.events.push({
+          //   id: snapshot[key].charlas_id,
+          //   name: `${xd.data.nombre} - ${snapshot[key].nombrecharla}`,
+          //   start: new Date(snapshot[key].fechaInicio),
+          //   end: new Date(snapshot[key].fechaFina),
+          //   details: snapshot[key].link,
+          //   color: snapshot[key].Color,
+          //   timed: true,
+          // })
+
+          //  let addData = snapshot
+          //  addData.id = snapshot[key].charlas_id
+          //  addData.color = snapshot[key].Color
+          //  addData.name = snapshot[key].nombrecharla
+          //  addData.details = "HOLA HOLA MARIO SISISISIS"
+          //  addData.start = snapshot[key].fechaInicio
+          //  addData.end = snapshot[key].fechaFina
+          //  console.log(addData)
+           
+           //this.events.push(addData) 
+          
+      });
+
+
+
+      //const events = []
+      
+      // let snapshot = await db.collection('calEvent').get()
+      // const events = []
+      // snapshot.forEach(doc => {
+      //   let appData = doc.data()
+      //   appData.id = doc.id
+      //   events.push(appData)
+      // })
+      // this.events = events
     },
+
+
+
+
     setDialogDate( { date }) {
       this.dialogDate = true
       this.focus = date
@@ -230,28 +317,40 @@ export default {
     next () {
       this.$refs.calendar.next()
     },
+
+    // GUARDAR CHARLA
     async addEvent () {
-      if (this.name && this.start && this.end) {
-        await db.collection("calEvent").add({
-          name: this.name,
-          details: this.details,
-          start: this.start,
-          end: this.end,
-          color: this.color
-        })
-        this.getEvents()
-        this.name = '',
-        this.details = '',
-        this.start = '',
-        this.end = '',
-        this.color = '#1976D2'
-      } else {
-        alert('Debes ingresar el título, inicio y fin')
+     if (this.titleTalk && this.start && this.end && this.link && this.cupo ){
+      let id = this.getKeyByValue(this.name)
+      try {
+        const dataUp = {
+        nombrecharla: this.titleTalk,
+        link: this.link,
+        fechaInicio: this.start,
+        fechaFina: this.end,
+        Cupos_charla: this.cupo,
+        Color: this.color,
+        instituciones_instituciones_id: id
       }
+      await Calendario.addCharla(dataUp)
+      this.$store.dispatch('successAlertAsync',`El evento ${this.titleTalk} de la institución ${this.name} fue creado exitosamente`)
+      
+      this.$store.dispatch('changeCalendarioEventsObject',[])
+      } catch(error) {
+        this.$store.dispatch('errorAlertAsync',`Fallo de conexión con base de datos`)
+      }
+      }
+      else {
+        this.$store.dispatch('errorAlertAsync',`Llene todos los campos requeridos`)
+      }
+      
     },
+
+    // EDITAR CHARLA
     editEvent (ev) {
       this.currentlyEditing = ev.id
     },
+
     async updateEvent (ev) {
       await db.collection('calEvent').doc(this.currentlyEditing).update({
         details: ev.details
@@ -259,11 +358,20 @@ export default {
       this.selectedOpen = false,
       this.currentlyEditing = null
     },
+    // BORRAR CHARLA
     async deleteEvent (ev) {
-      await db.collection("calEvent").doc(ev).delete()
-      this.selectedOpen = false,
-      this.getEvents()
+    
+      await Calendario.deleteCharlaById(ev)
+      this.$store.dispatch('successAlertAsync',`El evento fue eliminado exitosamente`)
+      // await db.collection("calEvent").doc(ev).delete()
+      // this.selectedOpen = false,
+      // this.getEvents()
+      this.selectedOpen = false
+      this.$store.dispatch('changeCalendarioEventsObject',[])
+
+
     },
+    // MOSTRAR EVENTO
     showEvent ({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event
@@ -286,7 +394,30 @@ export default {
       return d > 3 && d < 21
       ? 'th'
       : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
+    },
+    // LOAD COMBOBOX FOR EXISTING BUSINESS
+    async loadComboBox(){
+      let xd = await Calendario.getInstituciones()
+      this.comboboxArray = xd.data
+    },
+
+    getKeyByValue (value) {
+      const item = this.comboboxArray.find(obj => obj.nombre === value);
+      return item ? item.instituciones_id : null;
     }
-  }
+
+    
+   
+
+  },
+
+
+    
+   
+
+
+
+
+
 }
 </script>

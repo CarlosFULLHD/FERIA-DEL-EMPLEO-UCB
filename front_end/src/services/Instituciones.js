@@ -6,6 +6,10 @@ export default {
     listarIns : (parameters) => {
         return Api().get('api/instituciones',parameters)
     },
+    // OBTENER INSTITUCION POR ID
+    getInstById : (id) => {
+        return Api().get(`api/instituciones/${id}`)
+    },
     borrarIns: (id) => {
         return Api().delete(`api/instituciones/${id}`)
     },
@@ -19,7 +23,7 @@ export default {
     crearImg: (data) => {
         return Api().post('api/institucionesimages',data)
     },
-    // SERVICIOS PARA MANEJO DE VIDEOS INSTITUCIONES
+       // SERVICIOS PARA MANEJO DE VIDEOS INSTITUCIONES
     crearVid: (data) => {
         return Api().post('api/institucionesvideos',data)
     },
@@ -27,6 +31,7 @@ export default {
     crearLink: (data) => {
         return Api().post('api/institucioneslinks',data)
     }
+
 }
 
 
